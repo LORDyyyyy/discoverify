@@ -40,5 +40,7 @@
         ]
     },
     "scripts": {
+        "do-db": "php ./sql/do_db.php",
+        "do-data": "php ./sql/do_dummy_data.php"
     }
 }

@@ -1,10 +1,10 @@
-DROP DATABASE IF EXISTS `facebook`;
+DROP DATABASE IF EXISTS `discoverify`;
 
-CREATE DATABASE `facebook`
+CREATE DATABASE `discoverify`
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
 
-use `facebook`;
+use `discoverify`;
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
