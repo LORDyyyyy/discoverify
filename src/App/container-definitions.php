@@ -5,15 +5,17 @@ declare(strict_types=1);
 use App\Config\Paths;
 use App\Services\{
     ValidatorService,
-    UserService,
-    TransactionService,
-    ReceiptService
+};
+use App\Models\{
+    UserModel
 };
 use Framework\{
     TemplateEngine,
     Database,
     Container
 };
+
+use App\Models\Storage\DBStorage;
 
 
 $db_config = [
@@ -30,5 +32,6 @@ return [
         $db_config,
         $_ENV['DB_USER'] ?? 'root',
         $_ENV['DB_PASS'] ?? ''
-    )
+    ),
+    UserModel::class => fn (Container $container) => new UserModel($container->get(Database::class)),
 ];
