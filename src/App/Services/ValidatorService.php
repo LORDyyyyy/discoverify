@@ -50,4 +50,13 @@ class ValidatorService
         $this->validator->add('filename', new FileNameCheckRule());
         $this->validator->add('filealowedtypes', new AllowedFileTypesRule());
     }
+
+
+    public function validateLogin(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+    }
 }

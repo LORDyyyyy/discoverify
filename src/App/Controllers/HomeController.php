@@ -20,6 +20,6 @@ class HomeController
 
     public function homeView()
     {
-        print_r($this->userModel->create(['name' => 'John Doe', 'email' => 'test@mail.com', 'password' => '123456']));
+        echo "User logged in.";
     }
 }
