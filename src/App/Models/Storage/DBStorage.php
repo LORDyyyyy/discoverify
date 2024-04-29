@@ -55,7 +55,9 @@ class DBStorage
 
         $query = "INSERT INTO {$this->__tablename__} ({$fields}) VALUES (:{$values})";
 
-        return $query;
+        $this->db->query($query, $data);
+
+        return $this->db->id();
     }
 
     /**

@@ -51,8 +51,27 @@ class AuthController
     {
         // Middlewares: GuestOnlyMiddleware
 
+        $this->validatorService->validateSignup($_POST);
+
+        $this->userModel->isEmailTaken($_POST['email']);
+
         echo 'Signup';
-        debug($_POST);
+
+        $data = $_POST;
+        unset($data['confirmPassword']);
+        unset($data['token']);
+
+        $id = $this->userModel->create($data);
+
+        if (!$id) {
+            throw new \Exception('User was not created');
+        }
+
+        session_regenerate_id();
+
+        $_SESSION['user'] = $id;
+
+        redirectTo('/');
     }
 
     public function signupView()

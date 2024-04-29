@@ -2,20 +2,35 @@
 
 declare(strict_types=1);
 
-
 namespace App\Models;
 
-
 use Framework\Database;
+use Framework\Exceptions\ValidationException;
+
 use App\Interfaces\ModelInterface;
 use App\Models\Storage\DBStorage;
 
-use Framework\Exceptions\ValidationException;
+use \DateTime;
 
 class UserModel extends DBStorage implements ModelInterface
 {
     protected Database $db;
     public string $__tablename__;
+
+    private int $id;
+    private string $email;
+    private int $email_verified;
+    private string $first_name;
+    private string $last_name;
+    private string $password;
+    private string $profile_picture;
+    private string $cover_picture;
+    private DateTime $created_at;
+    private DateTime $date_of_birth;
+    private string $bio;
+    private string $gender;
+    private string $lives_in;
+    private string $works_at;
 
     public function __construct(Database $db)
     {
@@ -42,9 +57,33 @@ class UserModel extends DBStorage implements ModelInterface
         return $user;
     }
 
+    public function isEmailTaken(string $email)
+    {
+        $query = "SELECT * FROM {$this->__tablename__} WHERE email = :email";
+        $user = $this->db->query($query, [
+            'email' => $email
+        ])->find();
+
+        if ($user) {
+            throw new ValidationException([
+                'email' => ['Email is already taken']
+            ]);
+        }
+    }
+
     public function create(array $data)
     {
         $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+
+        $data['first_name'] = ucfirst($data['fname']);
+        unset($data['fname']);
+
+        $data['last_name'] = ucfirst($data['lname']);
+        unset($data['lname']);
+
+        $data['date_of_birth'] = $data['dateOfBirth'];
+        unset($data['dateOfBirth']);
+
         return parent::create($data);
     }
 }

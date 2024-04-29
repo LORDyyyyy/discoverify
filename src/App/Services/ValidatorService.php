@@ -10,13 +10,17 @@ use Framework\Rules\{
     RequiredRules,
     EmailRule,
     MinRule,
+    MaxRule,
     InRule,
     URLRule,
     MatchRule,
     LengthMaxRule,
+    LengthMinRule,
     NumericRule,
     DateFormatRule,
-    NoSpacesOnlyRule
+    NoSpacesOnlyRule,
+    NoSpacesAtAll,
+    NamesRule
 };
 
 use Framework\Rules\FileRules\{
@@ -37,13 +41,17 @@ class ValidatorService
         $this->validator->add('required', new RequiredRules());
         $this->validator->add('email', new EmailRule());
         $this->validator->add('min', new MinRule());
+        $this->validator->add('max', new MaxRule());
         $this->validator->add('in', new InRule());
         $this->validator->add('url', new URLRule());
         $this->validator->add('match', new MatchRule());
         $this->validator->add('maxlen', new LengthMaxRule());
+        $this->validator->add('minlen', new LengthMinRule());
         $this->validator->add('numeric', new NumericRule());
         $this->validator->add('dateformat', new DateFormatRule());
         $this->validator->add('nospaces', new NoSpacesOnlyRule());
+        $this->validator->add('nospaceatall', new NoSpacesAtAll());
+        $this->validator->add('names', new NamesRule());
 
         $this->validator->add('filemaxsize', new MaxFileSizeRule());
         $this->validator->add('filerequired', new FileRequiredRule());
@@ -57,6 +65,20 @@ class ValidatorService
         $this->validator->validate($formData, [
             'email' => ['required', 'email'],
             'password' => ['required'],
-        ]);
+        ], false);
+    }
+
+    public function validateSignup(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'fname' => ['required', 'nospaceatall', 'names'],
+            'lname' => ['required', 'nospaceatall', 'names'],
+            'email' => ['required', 'email'],
+            'password' => ['required', 'minlen:8', 'nospaceatall'],
+            'confirmPassword' => ['required', 'match:password'],
+            'gender' => ['required', 'in:male,female'],
+            'dateOfBirth' => ['required', 'dateformat:Y-m-d']
+
+        ], false);
     }
 }
