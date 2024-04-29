@@ -20,6 +20,10 @@ class HomeController
 
     public function homeView()
     {
-        echo "User logged in.";
+        $user = $this->userModel->getCurrUser(intval($_SESSION['user']));
+        echo $this->view->render('index.php', [
+            'title' => 'Home | Discoverify',
+            'user' => $user,
+        ]);
     }
 }

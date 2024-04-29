@@ -23,12 +23,35 @@ class DBStorage
      * @param int|string $id The ID of the record to retrieve.
      * @return mixed The retrieved record.
      */
-    protected function get(string|int $id)
+    protected function getID(string|int $id)
     {
         $query = "SELECT * FROM {$this->__tablename__} WHERE id = :id";
 
         return $this->db->query($query, ['id' => intval($id)])->find();
     }
+
+    /**
+     * Get the fields for the query and execute it.
+     *
+     * @param array $data The data to be used in the query.
+     * @param string $operator The operator to be used in the query (default: 'AND').
+     * @return mixed The result of the query execution.
+     */
+    protected function getWithFields(array $data, string $operator = 'AND')
+    {
+        $fields = '';
+
+        foreach ($data as $key => $value) {
+            $fields .= "{$key} = :{$key}, {$operator}";
+        }
+
+        $fields = rtrim($fields, ", {$operator}");
+
+        $query = "SELECT * FROM {$this->__tablename__} WHERE {$fields}";
+
+        return $this->db->query($query, $data)->find();
+    }
+
 
     /**
      * Retrieve all records from the database table.

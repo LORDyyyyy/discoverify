@@ -86,4 +86,21 @@ class UserModel extends DBStorage implements ModelInterface
 
         return parent::create($data);
     }
+
+    public function getCurrUser(int $id)
+    {
+        $query = "SELECT id,
+        first_name as fname,
+        last_name as lname,
+        email,
+        profile_picture as profilePicture,
+        cover_picture as coverPicture,
+        bio,
+        DATE_FORMAT(date_of_birth, '%Y-%m-%d') as dateOfBirth,
+        gender,
+        lives_in as livesIn
+        FROM {$this->__tablename__} WHERE id = :id";
+
+        return $this->db->query($query, ['id' => $id])->find();
+    }
 }
