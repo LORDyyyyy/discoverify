@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Framework;
 
+use Exception;
+
 class TemplateEngine
 {
     private string $basePath;
@@ -26,13 +28,18 @@ class TemplateEngine
         // foreach ($data as $key => &$value) {
         //     $data[$key] = esc($value);
         // }
-
         extract($data, EXTR_SKIP);
         extract($this->globalTemplateData, EXTR_SKIP);
 
         ob_start();
 
-        include $this->resolve($template);
+        $templatePath = $this->resolve($template);
+
+        if (!file_exists($templatePath)) {
+            throw new Exception("Template {$template} was not found");
+        }
+
+        include $templatePath;
 
         $output = ob_get_contents();
 
