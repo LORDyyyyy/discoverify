@@ -38,4 +38,23 @@ class ChatController
             ]
         );
     }
+
+    public function fetchChat()
+    {
+        // Middlewares: AuthRequiredMiddleware
+
+        echo json_encode([
+            'status' => 'success',
+        ]);
+    }
+
+    public function chat()
+    {
+        // Middlewares: AuthRequiredMiddleware
+
+        echo json_encode([
+            'status' => 'success',
+            'post' => $_POST,
+        ]);
+    }
 }

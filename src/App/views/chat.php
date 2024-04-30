@@ -312,14 +312,16 @@
                                 </div>
                                 <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar" class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">
                             </li>
-                            <form action="">
+                            <form action="" id="chatForm">
                                 <li class="bg-white mb-3">
                                     <div data-mdb-input-init class="form-floating">
-                                        <input style="height: 100px" class="form-control" id="sendMessage" rows="4" />
-                                        <label class="form-label" for="sendMessage">Message</label>
+                                        <textarea style="height: 100px" class="form-control" id="messageBox" name="message" rows="4"></textarea>
+                                        <label class="form-label" for="messageBox">Message</label>
+                                        <div class="invalid-feedback" id="messageBoxError">
+                                        </div>
                                     </div>
                                 </li>
-                                <button type="submit" class="btn btn-info btn-rounded float-end">Send</button>
+                                <button type=" submit" class="btn btn-info btn-rounded float-end">Send</button>
                             </form>
                         </ul>
                     </div>
