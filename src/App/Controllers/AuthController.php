@@ -31,6 +31,7 @@ class AuthController
         );
     }
 
+    // POST : /login
     public function login()
     {
         // Middlewares: GuestOnlyMiddleware
@@ -54,8 +55,6 @@ class AuthController
         $this->validatorService->validateSignup($_POST);
 
         $this->userModel->isEmailTaken($_POST['email']);
-
-        echo 'Signup';
 
         $data = $_POST;
         unset($data['confirmPassword']);

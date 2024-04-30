@@ -9,6 +9,7 @@ use Framework\App;
 use App\Controllers\{
     HomeController,
     ErrorController,
+    ChatController
 };
 
 use App\Middleware\{
@@ -38,5 +39,8 @@ function registerRoutes(App $app)
         ->add([GuestOnlyMiddleware::class]);
 
     $app->get('/logout', [AuthController::class, 'logout'], false)
+        ->add([AuthRequiredMiddleware::class]);
+
+    $app->get('/chat', [ChatController::class, 'chatView'])
         ->add([AuthRequiredMiddleware::class]);
 }

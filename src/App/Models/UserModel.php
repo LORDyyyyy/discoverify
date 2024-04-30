@@ -87,7 +87,7 @@ class UserModel extends DBStorage implements ModelInterface
         return parent::create($data);
     }
 
-    public function getCurrUser(int $id)
+    public function getCurrUser(string|int $id)
     {
         $query = "SELECT id,
         first_name as fname,
@@ -101,6 +101,6 @@ class UserModel extends DBStorage implements ModelInterface
         lives_in as livesIn
         FROM {$this->__tablename__} WHERE id = :id";
 
-        return $this->db->query($query, ['id' => $id])->find();
+        return $this->db->query($query, ['id' => intVal($id)])->find();
     }
 }
