@@ -20,15 +20,15 @@ class FriendsModel extends DBStorage implements ModelInterface
     public function __construct(Database $db)
     {
         parent::__construct($db);
-        $this->__tablename__ = 'users';
+        $this->__tablename__ = 'friends';
     }
 
     public function sendRequest(int $receiverId, int $senderId)
     {
-        $query = "SELECT id FROM {$this->__tablename__} WHERE id = :id";
+        $query = "SELECT id FROM users WHERE id = :id";
         $user = $this->db->query($query, ['id' => $receiverId])->find();
 
-        $exist = "SELECT receiverId FROM friends WHERE receiverId = :receiverId AND senderId = :senderId";
+        $exist = "SELECT receiverId FROM {$this->__tablename__} WHERE receiverId = :receiverId AND senderId = :senderId";
         $existReuest = $this->db->query($exist, ['receiverId' => $receiverId, 'senderId' => $senderId])->find();
 
         if (!$user || $receiverId === $senderId || $existReuest) {
