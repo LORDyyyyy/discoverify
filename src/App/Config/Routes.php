@@ -9,6 +9,7 @@ use Framework\App;
 use App\Controllers\{
     HomeController,
     ErrorController,
+    FriendsController
 };
 
 use App\Middleware\{
@@ -37,6 +38,9 @@ function registerRoutes(App $app)
     $app->post('/signup', [AuthController::class, 'signup'], false)
         ->add([GuestOnlyMiddleware::class]);
 
-    $app->get('/logout', [AuthController::class, 'logout'], false)
+    $app->get('/friends', [FriendsController::class, 'sendRequsetView'], false)
+        ->add([AuthRequiredMiddleware::class]);
+
+    $app->get('/friends', [FriendsController::class, 'sendRequset'], false)
         ->add([AuthRequiredMiddleware::class]);
 }
