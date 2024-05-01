@@ -7,7 +7,8 @@ use App\Services\{
     ValidatorService,
 };
 use App\Models\{
-    UserModel
+    UserModel,
+    FriendsModel,
 };
 use Framework\{
     TemplateEngine,
@@ -34,4 +35,5 @@ return [
         $_ENV['DB_PASS'] ?? ''
     ),
     UserModel::class => fn (Container $container) => new UserModel($container->get(Database::class)),
+    FriendsModel::class => fn (Container $container) => new FriendsModel($container->get(Database::class)),
 ];

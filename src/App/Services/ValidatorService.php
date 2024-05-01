@@ -78,7 +78,13 @@ class ValidatorService
             'confirmPassword' => ['required', 'match:password'],
             'gender' => ['required', 'in:male,female'],
             'dateOfBirth' => ['required', 'dateformat:Y-m-d']
-
+            
+        ], false);
+    }
+    public function VaildateRequest(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'id' => ['required', 'nospaceatall']
         ], false);
     }
 }
