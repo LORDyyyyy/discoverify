@@ -39,7 +39,7 @@ class FriendsController
 
         $senderId = $_SESSION['user'];
 
-        $user = $this->friendModel->sendRequest($_POST['id'], $senderId);
+        $user = $this->friendModel->sendRequest((int)$_POST['id'], (int)$senderId);
 
         redirectTo('auth/friends');
     }
