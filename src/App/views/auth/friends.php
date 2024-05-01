@@ -9,8 +9,8 @@
 
 <body>
     <h2>Send Friend Request</h2>
-    <?php include $this->resolve('partials/_csrf.php'); ?>
     <form action="/friends" method="POST">
+        <?php include $this->resolve('partials/_csrf.php'); ?>
         <label for="id">Friend's ID:</label><br>
         <input type="text" id="id" name="id" required><br><br>
         <input type="submit" value="Send Request">
