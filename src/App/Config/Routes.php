@@ -40,7 +40,9 @@ function registerRoutes(App $app)
 
     $app->get('/logout', [AuthController::class, 'logout'], false)
         ->add([AuthRequiredMiddleware::class]);
-    
-    $app->get('/friends', [FriendsController::class, 'sendRequest'], false);
-    $app->get('/friends', [FriendsController::class, 'sendRequestView'], false);
+
+    $app->get('/friends', [FriendsController::class, 'sendRequestView'], false)
+        ->add([AuthRequiredMiddleware::class]);
+    $app->post('/friends', [FriendsController::class, 'sendRequest'], false)
+        ->add([AuthRequiredMiddleware::class]);
 }
