@@ -206,7 +206,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-7 col-xl-8" id="chat-box-div" style="max-height: 35em; overflow-y: scroll;">
-                        <ul class="list-unstyled">
+                        <ul class="list-unstyled" id="chatMessagesBox">
                             <li class="d-flex justify-content-between mb-4">
                                 <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
                                 <div class="card">
@@ -333,5 +333,5 @@
 </section>
 
 <script src="/assets/js/socket.io.min.js"></script>
-<script defer src="/assets/js/chat.js"></script>
+<script src="/assets/js/chat.js"></script>
 <?php include $this->resolve('partials/_footer.php'); ?>

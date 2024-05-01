@@ -6,10 +6,14 @@ namespace App\Controllers;
 
 use Framework\TemplateEngine;
 use App\Services\ValidatorService;
-use App\Models\UserModel;
+use App\Models\{
+    UserModel,
+    ChatModel
+};
 
-use ElephantIO\Client;
-use ElephantIO\Engine\SocketIO\Version2X;
+use Framework\HTTP;
+
+use \DateTime;
 
 $port = $_ENV['SOCKET_PORT'];
 
@@ -18,15 +22,18 @@ class ChatController
     private TemplateEngine $templateEngine;
     private ValidatorService $validatorService;
     private UserModel $userModel;
+    private ChatModel $chatModel;
 
     public function __construct(
         TemplateEngine $templateEngine,
         ValidatorService $validatorService,
-        UserModel $userModel
+        UserModel $userModel,
+        ChatModel $chatModel
     ) {
         $this->templateEngine = $templateEngine;
         $this->validatorService = $validatorService;
         $this->userModel = $userModel;
+        $this->chatModel = $chatModel;
     }
 
     public function chatView()
@@ -44,45 +51,32 @@ class ChatController
         );
     }
 
-    public function fetchChat()
+    public function emit(array $pramas)
     {
         // Middlewares: AuthRequiredMiddleware
 
-        echo json_encode([
-            'status' => 'success',
-        ]);
-    }
+        $this->validatorService->chatMessage($_POST);
 
-    public function chat()
-    {
-        // Middlewares: AuthRequiredMiddleware
+        date_default_timezone_set("Africa/Cairo");
+        $timestamp = new DateTime();
 
-        echo json_encode([
-            'status' => 'success',
-            'post' => $_POST,
-        ]);
-    }
-
-    public function emit()
-    {
         $client = createClient();
 
-        $client->emit('private_chat', [
+        $senderUser = $this->chatModel->getUserInfo($_SESSION['user']);
+
+        $client->emit('chat', [
+            'room' => $pramas['room'],
             'message' => $_POST['message'],
-            'sender' => $_POST['from'],
-            'recipient' => $_POST['to'],
+            'sender' => intval($_SESSION['user']),
+            'timestamp' => $timestamp->format('h:i:s A'),
+            'senderName' => $senderUser['fname'] . " " . $senderUser['lname'],
         ]);
 
         closeClient($client);
 
         echo json_encode([
             'status' => 'success',
-            'post' => $_POST,
+            'code' => HTTP::OK_STATUS_CODE,
         ]);
-    }
-
-    public function testChat()
-    {
-        echo $this->templateEngine->render('test.php');
     }
 }

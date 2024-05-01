@@ -12,36 +12,23 @@ logger.info('Socket Server is running');
 
 const PORT = process.env.SOCKET_PORT || 3000;
 
-
 const app = express();
-const server = http.createServer(app).listen(3000);
+const server = http.createServer(app).listen(PORT);
 const io = socketIo(server);
 
-/*
+
 io.on('connection', (socket) => {
+    socket.on('join', (data) => {
+        socket.join(data.room);
+        socket
+            .to(data.room)
+            .emit(
+                'chat',
+                `${data.userID} has joined the chat`
+            );
+    });
+
     socket.on('chat', (data) => {
-        io.emit('chat', data);
-        console.log(data);
+        socket.broadcast.to(data.room).emit('read chat', data);
     });
 });
-*/
-
-let users = {};
-io.on('connection', (socket) => {
-    socket.on('private_chat', (data) => {
-        let room = getRoom(data.sender, data.recipient);
-        users[data.sender].join("A");
-        users[data.recipient].join("A");
-        io.to("A").emit(data.message);
-        //io.to().emit(data.message);
-        //io.emit('chat', data.message);
-        console.log(data);
-        console.log(room);
-    });
-});
-
-function getRoom(user1, user2) {
-    // This function should return a string that is unique to user1 and user2.
-    // For example, you could sort the user IDs and concatenate them.
-    return [user1, user2].sort().join('-');
-}

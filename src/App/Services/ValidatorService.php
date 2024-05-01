@@ -85,6 +85,6 @@ class ValidatorService
     {
         $this->validator->validate($formData, [
             'message' => ['required', 'nospaces'],
-        ], false);
+        ], true);
     }
 }

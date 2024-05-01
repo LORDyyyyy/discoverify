@@ -41,13 +41,12 @@ function registerRoutes(App $app)
     $app->get('/logout', [AuthController::class, 'logout'], false)
         ->add([AuthRequiredMiddleware::class]);
 
-    $app->get('/chat', [ChatController::class, 'chatView'])
-        ->add([AuthRequiredMiddleware::class]);
-    $app->get('/api/chat', [ChatController::class, 'fetchChat'], true)
-        ->add([AuthRequiredMiddleware::class]);
-    $app->post('/api/chat', [ChatController::class, 'emit'], true)
+
+    $app->get('/chat', [ChatController::class, 'chatView']) // temporary, will be removed
         ->add([AuthRequiredMiddleware::class]);
 
-    // $app->get('/emit', [ChatController::class, 'emit'], false);
-    $app->get('/test', [ChatController::class, 'testChat'], false);
+    $app->get('/chat/{room}', [ChatController::class, 'chatView'])
+        ->add([AuthRequiredMiddleware::class]);
+    $app->post('/api/chat/{room}', [ChatController::class, 'emit'], true)
+        ->add([AuthRequiredMiddleware::class]);
 }
