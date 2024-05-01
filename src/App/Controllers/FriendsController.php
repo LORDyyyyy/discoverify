@@ -23,7 +23,7 @@ class FriendsController
 
     public function sendRequestView()
     {
-        // Middlewares: GuestOnlyMiddleware
+        // Middlewares: AuthRequiredMiddleware
 
         echo $this->view->render(
             'auth/friends.php',
@@ -33,7 +33,7 @@ class FriendsController
 
     public function sendRequest()
     {
-        // Middlewares: GuestOnlyMiddleware
+        // Middlewares: AuthRequiredMiddleware
 
         $this->validatorService->VaildateRequest($_POST);
 
