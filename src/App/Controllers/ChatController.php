@@ -8,6 +8,11 @@ use Framework\TemplateEngine;
 use App\Services\ValidatorService;
 use App\Models\UserModel;
 
+use ElephantIO\Client;
+use ElephantIO\Engine\SocketIO\Version2X;
+
+$port = $_ENV['SOCKET_PORT'];
+
 class ChatController
 {
     private TemplateEngine $templateEngine;
@@ -56,5 +61,28 @@ class ChatController
             'status' => 'success',
             'post' => $_POST,
         ]);
+    }
+
+    public function emit()
+    {
+        $client = createClient();
+
+        $client->emit('private_chat', [
+            'message' => $_POST['message'],
+            'sender' => $_POST['from'],
+            'recipient' => $_POST['to'],
+        ]);
+
+        closeClient($client);
+
+        echo json_encode([
+            'status' => 'success',
+            'post' => $_POST,
+        ]);
+    }
+
+    public function testChat()
+    {
+        echo $this->templateEngine->render('test.php');
     }
 }

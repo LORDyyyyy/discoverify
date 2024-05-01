@@ -45,6 +45,9 @@ function registerRoutes(App $app)
         ->add([AuthRequiredMiddleware::class]);
     $app->get('/api/chat', [ChatController::class, 'fetchChat'], true)
         ->add([AuthRequiredMiddleware::class]);
-    $app->post('/api/chat', [ChatController::class, 'chat'], true)
+    $app->post('/api/chat', [ChatController::class, 'emit'], true)
         ->add([AuthRequiredMiddleware::class]);
+
+    // $app->get('/emit', [ChatController::class, 'emit'], false);
+    $app->get('/test', [ChatController::class, 'testChat'], false);
 }

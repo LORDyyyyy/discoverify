@@ -313,6 +313,7 @@
                                 <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar" class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">
                             </li>
                             <form action="" id="chatForm">
+                                <input type="hidden" name="me" id="myId" value="<?php echo $user['id']; ?>">
                                 <li class="bg-white mb-3">
                                     <div data-mdb-input-init class="form-floating">
                                         <textarea style="height: 100px" class="form-control" id="messageBox" name="message" rows="4"></textarea>
@@ -331,5 +332,6 @@
     </div>
 </section>
 
+<script src="/assets/js/socket.io.min.js"></script>
 <script defer src="/assets/js/chat.js"></script>
 <?php include $this->resolve('partials/_footer.php'); ?>

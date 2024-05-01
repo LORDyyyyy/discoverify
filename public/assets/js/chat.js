@@ -2,6 +2,16 @@ const chatBox = document.getElementById('chat-box-div');
 
 chatBox.scrollTop = chatBox.scrollHeight;
 
+let socket = io.connect('http://localhost:3000');
+
+$(document).ready(() => {
+    socket.emit('join', { userId: $('#myId').val() });
+});
+
+socket.on('chat', function (data) {
+    console.log(data);
+});
+
 $('#chatForm').on('submit', (e) => {
     e.preventDefault();
 
@@ -15,22 +25,22 @@ $('#chatForm').on('submit', (e) => {
         $('#messageBoxError').html('Message cannot be empty');
         return;
     }
-
+    $('#message-input').val('');
     message = message.trim().replace(/\s+/g, ' ');
-
-    data = JSON.stringify({
-        message,
-        user_id: 5,
-        chat_id: 1
-    });
 
     $.ajax({
         url: '/api/chat',
         type: 'POST',
-        data: data,
+        data: JSON.stringify({
+            message,
+            from: parseInt($('#myId').val()),
+            to: parseInt($('#myId').val()) == 4 ? 1 : 4
+        }),
         success: (response) => {
             console.log(response);
         }
     });
+
+
 });
 
