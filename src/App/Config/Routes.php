@@ -47,6 +47,9 @@ function registerRoutes(App $app)
 
     $app->get('/chat/{room}', [ChatController::class, 'chatView'])
         ->add([AuthRequiredMiddleware::class]);
-    $app->post('/api/chat/{room}', [ChatController::class, 'emit'], true)
+
+    $app->post('/api/chat/join/{room}', [ChatController::class, 'joinChatRoom'], true)
+        ->add([AuthRequiredMiddleware::class]);
+    $app->post('/api/chat/{room}', [ChatController::class, 'emitToChat'], true)
         ->add([AuthRequiredMiddleware::class]);
 }

@@ -12,7 +12,7 @@ use App\Models\{
 };
 
 use Framework\HTTP;
-
+use Framework\Exceptions\APIStatusCodeSend;
 use \DateTime;
 
 $port = $_ENV['SOCKET_PORT'];
@@ -51,7 +51,23 @@ class ChatController
         );
     }
 
-    public function emit(array $pramas)
+    public function joinChatRoom(array $params)
+    {
+        // Middlewares: AuthRequiredMiddleware
+
+        if ($params['room'] === '8as' && $_SESSION['user'] == 1) {
+            throw new APIStatusCodeSend([
+                'errors' => ['You are not allowed to join this room']
+            ], HTTP::FORBIDDEN_STATUS_CODE);
+        }
+
+        echo json_encode([
+            'status' => 'success',
+            'code' => HTTP::OK_STATUS_CODE,
+        ]);
+    }
+
+    public function emitToChat(array &$pramas)
     {
         // Middlewares: AuthRequiredMiddleware
 
@@ -77,6 +93,7 @@ class ChatController
         echo json_encode([
             'status' => 'success',
             'code' => HTTP::OK_STATUS_CODE,
+            'message' => 'Message sent successfully'
         ]);
     }
 }

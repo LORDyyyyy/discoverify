@@ -16,7 +16,6 @@ const app = express();
 const server = http.createServer(app).listen(PORT);
 const io = socketIo(server);
 
-
 io.on('connection', (socket) => {
     socket.on('join', (data) => {
         socket.join(data.room);
@@ -29,6 +28,6 @@ io.on('connection', (socket) => {
     });
 
     socket.on('chat', (data) => {
-        socket.broadcast.to(data.room).emit('read chat', data);
+        socket.to(data.room).emit('read chat', data);
     });
 });

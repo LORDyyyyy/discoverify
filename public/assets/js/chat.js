@@ -5,10 +5,30 @@ let socket = io.connect('http://localhost:3000');
 let userID = parseInt($('#myId').val());
 let room = window.location.pathname.split('/').pop();
 
-socket.emit('join', { room, userID });
+$.ajax({
+    url: `/api/chat/join/${room}`,
+    type: 'POST',
+    success: (response) => {
+        if (response.code !== 200) {
+            console.log(response);
+            return;
+        }
+
+        socket.emit('join', { room, userID });
+        //response.forEach((data) => {
+        //appendMessage(data);
+        //});
+        console.log(response);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    },
+    error: (error) => {
+        console.log('error');
+        console.log(error.responseJSON);
+    },
+});
 
 socket.on('read chat', (data) => {
-    console.log(data);
+    //console.log(data);
     appendMessage(data);
     chatBox.scrollTop = chatBox.scrollHeight;
 });
@@ -39,6 +59,7 @@ $('#chatForm').on('submit', (e) => {
             from: userID,
         }),
         success: (response) => {
+            //console.log(response);
         },
         error: (error) => {
             $('#messageBox').addClass('is-invalid');
