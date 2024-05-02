@@ -45,4 +45,17 @@ function registerRoutes(App $app)
         ->add([AuthRequiredMiddleware::class]);
     $app->post('/friends', [FriendsController::class, 'sendRequest'], false)
         ->add([AuthRequiredMiddleware::class]);
+
+
+    $app->get('/requests', [FriendsController::class, 'showRequestsView'], false)
+        ->add([AuthRequiredMiddleware::class]);
+    $app->post('/requests', [FriendsController::class, 'showRequests'], false)
+        ->add([AuthRequiredMiddleware::class]);
+
+    $app->get('/requests', [FriendsController::class, 'handleRequestAction'], false)
+        ->add([AuthRequiredMiddleware::class]);
+    $app->post('/requests', [FriendsController::class, 'handleRequestAction'], false)
+        ->add([AuthRequiredMiddleware::class]);
+
+    
 }

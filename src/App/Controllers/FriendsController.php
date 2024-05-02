@@ -43,4 +43,33 @@ class FriendsController
 
         redirectTo('/friends');
     }
+
+    public function showRequestsView()
+    {
+        // Middlewares: AuthRequiredMiddleware
+
+        $requests = $this->friendModel->showRequest($_SESSION['user']);
+        echo $this->view->render(
+            'auth/requests.php',
+            ['title' => 'Requests | Discoverify', 'requests' => $requests]
+        );
+    }
+
+    public function showRequests() 
+    {
+        // Middlewares: AuthRequiredMiddleware
+
+        $resivedId = $_SESSION['user'];
+        $this->friendModel->showRequest($resivedId);
+    }
+
+    public function handleRequestAction()
+    {
+        // Middlewares: AuthRequiredMiddleware
+
+        $receiverId = $_SESSION['user'];
+        $this->friendModel->updateRequestStatus($receiverId, (int)$_POST['status']);
+    
+        redirectTo('/requests');
+   }
 }
