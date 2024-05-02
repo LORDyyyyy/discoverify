@@ -82,7 +82,7 @@ class ChatController
 
         $client->emit('chat', [
             'room' => $pramas['room'],
-            'message' => $_POST['message'],
+            'message' => nl2br($_POST['message']),
             'sender' => intval($_SESSION['user']),
             'timestamp' => $timestamp->format('h:i:s A'),
             'senderName' => $senderUser['fname'] . " " . $senderUser['lname'],

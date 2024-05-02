@@ -36,16 +36,18 @@ $('#chatForm').on('submit', (e) => {
 
     $('#messageBox').removeClass('is-invalid');
     $('#messageBoxError').html('');
+
     /*
         if (message.trim() === '') {
             $('#messageBox').addClass('is-invalid');
             $('#messageBoxError').html('Message cannot be empty');
             return;
         }
-        $('#message-input').val('');
-        message = message.trim().replace(/\s+/g, ' ');
-    
-        $('#messageBox').val('');*/
+    */
+
+    message = message.trim();
+
+    $('#messageBox').val('');
 
     $.ajax({
         url: `/api/chat/${room}`,
