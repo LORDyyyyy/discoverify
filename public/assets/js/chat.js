@@ -9,11 +9,6 @@ $.ajax({
     url: `/api/chat/join/${room}`,
     type: 'POST',
     success: (response) => {
-        if (response.code !== 200) {
-            console.log(response);
-            return;
-        }
-
         socket.emit('join', { room, userID });
         //response.forEach((data) => {
         //appendMessage(data);
@@ -24,6 +19,7 @@ $.ajax({
     error: (error) => {
         console.log('error');
         console.log(error.responseJSON);
+        window.location.href = '/';
     },
 });
 

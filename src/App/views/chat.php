@@ -332,6 +332,5 @@
     </div>
 </section>
 
-<script src="/assets/js/socket.io.min.js"></script>
 <script src="/assets/js/chat.js"></script>
 <?php include $this->resolve('partials/_footer.php'); ?>
