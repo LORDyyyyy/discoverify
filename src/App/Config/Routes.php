@@ -52,4 +52,6 @@ function registerRoutes(App $app)
         ->add([AuthRequiredMiddleware::class]);
     $app->post('/api/chat/{room}', [ChatController::class, 'emitToChat'], true)
         ->add([AuthRequiredMiddleware::class]);
+
+    $app->put('/api/test/{id}', [ChatController::class, 'testA'], true);
 }

@@ -96,4 +96,23 @@ class ChatController
             'message' => 'Message sent successfully'
         ]);
     }
+
+
+    public function testA(array $params)
+    {
+        if ($params['id'] != '123') {
+            throw new APIStatusCodeSend([
+                'errors' => ['Invalid ID']
+            ], HTTP::BAD_REQUEST_STATUS_CODE);
+        }
+
+        echo json_encode([
+            'status' => 'success',
+            'code' => HTTP::OK_STATUS_CODE,
+            'message' => 'Test A',
+            'params' => $params,
+            'method' => 'DELETE',
+            'dateFromRequest' => $_POST
+        ]);
+    }
 }
