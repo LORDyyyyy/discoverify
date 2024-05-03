@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Framework\Database;
-use Framework\Exceptions\ValidationException;
+use Framework\Exceptions\APIValidationException;
 
 use App\Interfaces\ModelInterface;
 use App\Models\Storage\DBStorage;
@@ -32,7 +32,7 @@ class FriendsModel extends DBStorage implements ModelInterface
         $existReuest = $this->db->query($exist, ['receiverId' => $receiverId, 'senderId' => $senderId])->find();
 
         if (!$user || $receiverId === $senderId || $existReuest) {
-            throw new ValidationException([
+            throw new APIValidationException([
                 'id' => ['User was not found or request already exists']
             ]);
         }
@@ -55,14 +55,15 @@ class FriendsModel extends DBStorage implements ModelInterface
         return $this->db->query($query, ['receiverId' => $receiverId])->findAll();
     }
 
-    public function updateRequestStatus(int $receiverId, int $status)
+    public function acceptRequestStatus(int $receiverId)
     {
-        if ($status == 3) {
-            $query = "DELETE FROM {$this->__tablename__} WHERE id = :requestId";
-            $this->db->query($query, ['requestId' => $receiverId]);
-        } else {
-            $query = "UPDATE {$this->__tablename__} SET status = :status WHERE id = :requestId";
-            $this->db->query($query, ['status' => $status, 'requestId' => $receiverId]);
-        }
+            $query = "UPDATE {$this->__tablename__} SET status = :2 WHERE id = :requestId";
+            $this->db->query($query, ['status' => 2, 'requestId' => $receiverId]);
+    }
+
+    public function declineRequestStatus(int $receiverId) 
+    {
+        $query = "DELETE FROM {$this->__tablename__} WHERE id = :requestId";
+        $this->db->query($query, ['requestId' => $receiverId]);
     }
 }
