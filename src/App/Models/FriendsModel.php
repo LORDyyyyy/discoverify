@@ -38,7 +38,7 @@ class FriendsModel extends DBStorage implements ModelInterface
         }
 
         $query = "INSERT INTO friends (receiverId, senderId, status, timestamp)
-          VALUES (:receiverId, :senderId, 1, NOW())";
+            VALUES (:receiverId, :senderId, 1, NOW())";
 
         $this->db->query($query, [
             'receiverId' => $receiverId,
@@ -49,19 +49,18 @@ class FriendsModel extends DBStorage implements ModelInterface
     public function showRequest(int $receiverId)
     {
         $query = "SELECT f.*, u.first_name, u.last_name, u.profile_picture 
-              FROM {$this->__tablename__} f 
-              JOIN users u ON f.senderId = u.id 
-              WHERE f.receiverId = :receiverId AND f.status = 1";
+                FROM {$this->__tablename__} f 
+                JOIN users u ON f.senderId = u.id 
+                WHERE f.receiverId = :receiverId AND f.status = 1";
         return $this->db->query($query, ['receiverId' => $receiverId])->findAll();
-    }  
+    }
 
     public function updateRequestStatus(int $receiverId, int $status)
     {
         if ($status == 3) {
             $query = "DELETE FROM {$this->__tablename__} WHERE id = :requestId";
             $this->db->query($query, ['requestId' => $receiverId]);
-        }
-        else {
+        } else {
             $query = "UPDATE {$this->__tablename__} SET status = :status WHERE id = :requestId";
             $this->db->query($query, ['status' => $status, 'requestId' => $receiverId]);
         }

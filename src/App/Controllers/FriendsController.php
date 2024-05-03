@@ -55,13 +55,13 @@ class FriendsController
         );
     }
 
-    public function showRequests() 
+    public function showRequests()
     {
         // Middlewares: AuthRequiredMiddleware
 
         $resivedId = $_SESSION['user'];
         $results = $this->friendModel->showRequest($resivedId);
-    
+
         echo json_encode([
             'results' => $results
         ]);
@@ -73,7 +73,7 @@ class FriendsController
 
         $receiverId = $_SESSION['user'];
         $this->friendModel->updateRequestStatus($receiverId, (int)$_POST['status']);
-    
+
         redirectTo('/requests');
-   }
+    }
 }
