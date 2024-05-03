@@ -60,7 +60,11 @@ class FriendsController
         // Middlewares: AuthRequiredMiddleware
 
         $resivedId = $_SESSION['user'];
-        $this->friendModel->showRequest($resivedId);
+        $results = $this->friendModel->showRequest($resivedId);
+    
+        echo json_encode([
+            'results' => $results
+        ]);
     }
 
     public function handleRequestAction()
