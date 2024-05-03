@@ -9,6 +9,7 @@ use Framework\App;
 use App\Controllers\{
     HomeController,
     ErrorController,
+    ChatController
 };
 
 use App\Middleware\{
@@ -57,5 +58,18 @@ function registerRoutes(App $app)
     $app->post('/requests', [FriendsController::class, 'handleRequestAction'], true)
         ->add([AuthRequiredMiddleware::class]);
 
-    
+
+
+    $app->get('/chat', [ChatController::class, 'chatView']) // temporary, will be removed
+        ->add([AuthRequiredMiddleware::class]);
+
+    $app->get('/chat/{room}', [ChatController::class, 'chatView'])
+        ->add([AuthRequiredMiddleware::class]);
+
+    $app->post('/api/chat/join/{room}', [ChatController::class, 'joinChatRoom'], true)
+        ->add([AuthRequiredMiddleware::class]);
+    $app->post('/api/chat/{room}', [ChatController::class, 'emitToChat'], true)
+        ->add([AuthRequiredMiddleware::class]);
+
+    $app->put('/api/test/{id}', [ChatController::class, 'testA'], true);
 }

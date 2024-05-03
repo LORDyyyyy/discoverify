@@ -78,7 +78,7 @@ class ValidatorService
             'confirmPassword' => ['required', 'match:password'],
             'gender' => ['required', 'in:male,female'],
             'dateOfBirth' => ['required', 'dateformat:Y-m-d']
-            
+
         ], false);
     }
 
@@ -87,5 +87,12 @@ class ValidatorService
         $this->validator->validate($formData, [
             'id' => ['required', 'nospaceatall']
         ], false);
+    }
+
+    public function chatMessage(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'message' => ['required', 'nospaces'],
+        ], true);
     }
 }

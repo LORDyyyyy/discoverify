@@ -31,7 +31,20 @@ class DBStorage
     }
 
     /**
-     * Get the fields for the query and execute it.
+     * Retrieve all records from the database based on the given ID.
+     *
+     * @param int|string $id The ID of the record to retrieve.
+     * @return mixed The retrieved record.
+     */
+    protected function getIDAll(string|int $id): array
+    {
+        $query = "SELECT * FROM {$this->__tablename__} WHERE id = :id";
+
+        return $this->db->query($query, ['id' => intval($id)])->findAll();
+    }
+
+    /**
+     * Get one record with a specific columns for the query and execute it.
      *
      * @param array $data The data to be used in the query.
      * @param string $operator The operator to be used in the query (default: 'AND').
@@ -50,6 +63,28 @@ class DBStorage
         $query = "SELECT * FROM {$this->__tablename__} WHERE {$fields}";
 
         return $this->db->query($query, $data)->find();
+    }
+
+    /**
+     * Get all the records with a specific columns for the query and execute it.
+     *
+     * @param array $data The data to be used in the query.
+     * @param string $operator The operator to be used in the query (default: 'AND').
+     * @return mixed The result of the query execution.
+     */
+    protected function getAllWithFields(array $data, string $operator = 'AND')
+    {
+        $fields = '';
+
+        foreach ($data as $key => $value) {
+            $fields .= "{$key} = :{$key}, {$operator}";
+        }
+
+        $fields = rtrim($fields, ", {$operator}");
+
+        $query = "SELECT * FROM {$this->__tablename__} WHERE {$fields}";
+
+        return $this->db->query($query, $data)->findAll();
     }
 
 

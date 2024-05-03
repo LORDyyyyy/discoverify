@@ -1,0 +1,33 @@
+const express = require('express');
+const http = require('http');
+const https = require('https');
+const socketIo = require('socket.io');
+const logger = require('winston');
+
+require('dotenv').config()
+
+logger.remove(logger.transports.Console);
+logger.add(new logger.transports.Console, { colorize: true, timestamp: true });
+logger.info('Socket Server is running');
+
+const PORT = process.env.SOCKET_PORT || 3000;
+
+const app = express();
+const server = http.createServer(app).listen(PORT);
+const io = socketIo(server);
+
+io.on('connection', (socket) => {
+    socket.on('join', (data) => {
+        socket.join(data.room);
+        socket
+            .to(data.room)
+            .emit(
+                'chat',
+                `${data.userID} has joined the chat`
+            );
+    });
+
+    socket.on('chat', (data) => {
+        socket.to(data.room).emit('read chat', data);
+    });
+});
