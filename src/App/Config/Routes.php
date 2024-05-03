@@ -41,20 +41,20 @@ function registerRoutes(App $app)
     $app->get('/logout', [AuthController::class, 'logout'], false)
         ->add([AuthRequiredMiddleware::class]);
 
-    $app->get('/friends', [FriendsController::class, 'sendRequestView'], false)
+    $app->get('/friends', [FriendsController::class, 'sendRequestView'], true)
         ->add([AuthRequiredMiddleware::class]);
-    $app->post('/friends', [FriendsController::class, 'sendRequest'], false)
-        ->add([AuthRequiredMiddleware::class]);
-
-
-    $app->get('/requests', [FriendsController::class, 'showRequestsView'], false)
-        ->add([AuthRequiredMiddleware::class]);
-    $app->post('/requests', [FriendsController::class, 'showRequests'], false)
+    $app->post('/friends', [FriendsController::class, 'sendRequest'], true)
         ->add([AuthRequiredMiddleware::class]);
 
-    $app->get('/requests', [FriendsController::class, 'handleRequestAction'], false)
+
+    $app->get('/requests', [FriendsController::class, 'showRequestsView'], true)
         ->add([AuthRequiredMiddleware::class]);
-    $app->post('/requests', [FriendsController::class, 'handleRequestAction'], false)
+    $app->post('/requests', [FriendsController::class, 'showRequests'], true)
+        ->add([AuthRequiredMiddleware::class]);
+
+    $app->get('/requests', [FriendsController::class, 'handleRequestAction'], true)
+        ->add([AuthRequiredMiddleware::class]);
+    $app->post('/requests', [FriendsController::class, 'handleRequestAction'], true)
         ->add([AuthRequiredMiddleware::class]);
 
     
