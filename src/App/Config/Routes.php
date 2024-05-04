@@ -41,20 +41,20 @@ function registerRoutes(App $app)
     $app->get('/logout', [AuthController::class, 'logout'], false)
         ->add([AuthRequiredMiddleware::class]);
 
-    $app->get('/friends', [FriendsController::class, 'sendRequestView'], true)
+    $app->get('/friends', [FriendsController::class, 'sendRequestView'], true) // good
         ->add([AuthRequiredMiddleware::class]);
-    $app->post('/friends', [FriendsController::class, 'sendRequest'], true)
-        ->add([AuthRequiredMiddleware::class]);
-
-
-    $app->get('/requests', [FriendsController::class, 'showRequests'], true)
+    $app->post('/friends', [FriendsController::class, 'sendRequest'], true) // good
         ->add([AuthRequiredMiddleware::class]);
 
-    $app->put('/requests', [FriendsController::class, 'accecpRequest'], true)
+    $app->post('/requests', [FriendsController::class, 'checkStatus'], true) // good
         ->add([AuthRequiredMiddleware::class]);
-    $app->delete('/requests', [FriendsController::class, 'declineRequest'], true)
+    $app->get('/requests', [FriendsController::class, 'showRequests'], true) // good
         ->add([AuthRequiredMiddleware::class]);
 
+    $app->put('/requests', [FriendsController::class, 'accecpRequest'], true) // good
+        ->add([AuthRequiredMiddleware::class]);
+    $app->delete('/requests', [FriendsController::class, 'declineRequest'], true) // good
+        ->add([AuthRequiredMiddleware::class]);
 
 
     $app->get('/chat', [ChatController::class, 'chatView']) // temporary, will be removed
