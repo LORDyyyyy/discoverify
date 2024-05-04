@@ -71,7 +71,7 @@ class UserModel extends DBStorage implements ModelInterface
         }
     }
 
-    public function create(array $data)
+    public function create(array $data): string|false
     {
         $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
