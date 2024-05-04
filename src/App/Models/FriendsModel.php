@@ -134,4 +134,3 @@ class FriendsModel extends DBStorage implements ModelInterface
         return $this->db->query($query, ['userId' => $userId])->findAll();
     }
 }
- 

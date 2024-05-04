@@ -24,6 +24,7 @@ function registerRoutes(App $app)
 {
     $app->setErrorHandler([ErrorController::class, 'notFound']);
 
+
     $app->get('/', [HomeController::class, 'homeView'], false)
         ->add([AuthRequiredMiddleware::class]);
 

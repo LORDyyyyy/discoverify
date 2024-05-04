@@ -8,7 +8,8 @@ use Framework\TemplateEngine;
 use App\Services\ValidatorService;
 use App\Models\{
     UserModel,
-    ChatModel
+    ChatModel,
+    FriendsModel
 };
 
 use Framework\HTTP;
@@ -19,19 +20,22 @@ $port = $_ENV['SOCKET_PORT'];
 
 class ChatController
 {
-    private TemplateEngine $templateEngine;
     private ValidatorService $validatorService;
+    private TemplateEngine $templateEngine;
+    private FriendsModel $friendsModel;
     private UserModel $userModel;
     private ChatModel $chatModel;
 
     public function __construct(
-        TemplateEngine $templateEngine,
         ValidatorService $validatorService,
+        TemplateEngine $templateEngine,
+        FriendsModel $friendsModel,
         UserModel $userModel,
         ChatModel $chatModel
     ) {
-        $this->templateEngine = $templateEngine;
         $this->validatorService = $validatorService;
+        $this->templateEngine = $templateEngine;
+        $this->friendsModel = $friendsModel;
         $this->userModel = $userModel;
         $this->chatModel = $chatModel;
     }
