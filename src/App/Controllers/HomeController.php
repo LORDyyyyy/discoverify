@@ -20,6 +20,8 @@ class HomeController
 
     public function homeView()
     {
+        // Middlewares: AuthRequiredMiddleware
+
         $user = $this->userModel->getCurrUser(intval($_SESSION['user']));
         echo $this->view->render('index.php', [
             'title' => 'Home | Discoverify',

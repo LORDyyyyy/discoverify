@@ -9,14 +9,51 @@ use Framework\HTTP;
 
 class ErrorController
 {
-    public function __construct(private TemplateEngine $view)
+    private TemplateEngine $view;
+
+    public function __construct(TemplateEngine $view)
     {
+        $this->view = $view;
     }
 
-    public function notFound()
+    public function notFound(array $params)
+    {
+        /*
+        if (strpos($_SERVER['REQUEST_URI'], '/api/') === 0) {
+            $this->apiError();
+        } else {
+            $this->routeError();
+        }
+        */
+
+        if ($params['isAPI']) {
+            $this->apiError();
+        } else {
+            $this->routeError();
+        }
+    }
+
+    public function apiError()
     {
         http_response_code(HTTP::NOT_FOUND_STATUS_CODE);
 
-        echo $this->view->render("errors/not-found.php");
+        echo json_encode([
+            'error' => HTTP::RESPONSE_CODES_TEXT[HTTP::NOT_FOUND_STATUS_CODE],
+            'status' => HTTP::NOT_FOUND_STATUS_CODE,
+            'message' => 'The requested resource was not found'
+        ]);
+    }
+
+    public function routeError()
+    {
+        http_response_code(HTTP::NOT_FOUND_STATUS_CODE);
+
+        echo $this->view->render(
+            "errors/not-found.php",
+            [
+                'title' => HTTP::RESPONSE_CODES_TEXT[HTTP::NOT_FOUND_STATUS_CODE] . " | Discoverify",
+                'message' => 'The requested resource was not found'
+            ]
+        );
     }
 }

@@ -9,6 +9,7 @@ use Framework\Interfaces\{
     APIValidation
 };
 use Framework\Exceptions\APIValidationException;
+use Framework\HTTP;
 
 /**
  * Class APIValidationExceptionMiddleware
@@ -33,6 +34,8 @@ class APIValidationExceptionMiddleware implements MiddlewareInterface, APIValida
             $_SESSION['errors'] = $e->errors;
 
             echo json_encode(['errors' => $e->errors]);
+
+            http_response_code(HTTP::BAD_REQUEST_STATUS_CODE);
 
             exit;
         }

@@ -1,0 +1,26 @@
+{
+  "name": "discoverify",
+  "version": "1.0.0",
+  "description": "Social Network website",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/App/Socket/server.js",
+    "dev": "nodemon ./src/App/Socket/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LORDyyyyy/discoverify.git"
+  },
+  "author": "Mohammed Khalid, Mostafa Mokhtar, Mohamed Medhat, Mostafa Abdou, Malak Hossam, Menna Esmat",
+  "license": "MIT",
+  "homepage": "https://github.com/LORDyyyyy/discoverify#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "socket.io": "^2.2.0",
+    "winston": "^3.13.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

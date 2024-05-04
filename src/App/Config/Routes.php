@@ -10,6 +10,9 @@ use App\Controllers\{
     HomeController,
     ErrorController,
     PagesController
+    ChatController,
+    AuthController,
+    FriendsController,
 };
 
 
@@ -19,13 +22,11 @@ use App\Middleware\{
     GuestOnlyMiddleware,
 };
 
-use App\Controllers\{
-    AuthController
-};
-
 
 function registerRoutes(App $app)
 {
+    $app->setErrorHandler([ErrorController::class, 'notFound']);
+
     $app->get('/', [HomeController::class, 'homeView'], false)
         ->add([AuthRequiredMiddleware::class]);
 
@@ -45,4 +46,32 @@ function registerRoutes(App $app)
 
     
     $app->get('/Pages' , [PagesController::class , 'pagesview'] , false  );
+    $app->get('/friends', [FriendsController::class, 'sendRequestView'], true)
+        ->add([AuthRequiredMiddleware::class]);
+    $app->post('/friends', [FriendsController::class, 'sendRequest'], true)
+        ->add([AuthRequiredMiddleware::class]);
+
+
+    $app->get('/requests', [FriendsController::class, 'showRequests'], true)
+        ->add([AuthRequiredMiddleware::class]);
+
+    $app->put('/requests', [FriendsController::class, 'accecpRequest'], true)
+        ->add([AuthRequiredMiddleware::class]);
+    $app->delete('/requests', [FriendsController::class, 'declineRequest'], true)
+        ->add([AuthRequiredMiddleware::class]);
+
+
+
+    $app->get('/chat', [ChatController::class, 'chatView']) // temporary, will be removed
+        ->add([AuthRequiredMiddleware::class]);
+
+    $app->get('/chat/{room}', [ChatController::class, 'chatView'])
+        ->add([AuthRequiredMiddleware::class]);
+
+    $app->post('/api/chat/join/{room}', [ChatController::class, 'joinChatRoom'], true)
+        ->add([AuthRequiredMiddleware::class]);
+    $app->post('/api/chat/{room}', [ChatController::class, 'emitToChat'], true)
+        ->add([AuthRequiredMiddleware::class]);
+
+    $app->put('/api/test/{id}', [ChatController::class, 'testA'], true);
 }
