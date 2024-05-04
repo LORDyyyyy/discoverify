@@ -53,7 +53,7 @@ CREATE TABLE `friends` (
   `receiverId` int unsigned NOT NULL,
   `senderId` int unsigned NOT NULL,
   `status` tinyint(1) DEFAULT 1,
-  `uuid_socket_secret_key` varchar(64) UNIQUE NOT NULL,
+  `uuid_socket_secret_key` varchar(64) DEFAULT NULL,
   `timestamp` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`receiverId`, `senderId`),
   FOREIGN KEY (`receiverId`) REFERENCES `users`(`id`) ON DELETE CASCADE,
