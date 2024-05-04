@@ -9,7 +9,10 @@ use Framework\App;
 use App\Controllers\{
     HomeController,
     ErrorController,
+    PagesController
 };
+
+
 
 use App\Middleware\{
     AuthRequiredMiddleware,
@@ -39,4 +42,7 @@ function registerRoutes(App $app)
 
     $app->get('/logout', [AuthController::class, 'logout'], false)
         ->add([AuthRequiredMiddleware::class]);
+
+    
+    $app->get('/Pages' , [PagesController::class , 'pagesview'] , false  );
 }
