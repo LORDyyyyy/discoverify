@@ -112,7 +112,8 @@ class ChatController
             'message' => 'Test A',
             'params' => $params,
             'method' => 'DELETE',
-            'dateFromRequest' => $_POST
+            'dateFromRequest' => $_POST,
+            'uuid' => gen_uuid()
         ]);
     }
 }
