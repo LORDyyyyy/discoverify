@@ -47,7 +47,8 @@ function registerRoutes(App $app)
     $app->post('/friends', [FriendsController::class, 'sendRequest'], true)
         ->add([AuthRequiredMiddleware::class]);
 
-
+    $app->post('/requests', [FriendsController::class, 'checkStatus'], true)
+        ->add([AuthRequiredMiddleware::class]);
     $app->get('/requests', [FriendsController::class, 'showRequests'], true)
         ->add([AuthRequiredMiddleware::class]);
 
@@ -56,8 +57,7 @@ function registerRoutes(App $app)
     $app->delete('/requests', [FriendsController::class, 'declineRequest'], true)
         ->add([AuthRequiredMiddleware::class]);
 
-
-
+        
     $app->get('/chat', [ChatController::class, 'chatView']) // temporary, will be removed
         ->add([AuthRequiredMiddleware::class]);
 

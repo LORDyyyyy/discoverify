@@ -38,11 +38,12 @@ class FriendsModel extends DBStorage implements ModelInterface
         }
 
         $query = "INSERT INTO friends (receiverId, senderId, status, timestamp)
-            VALUES (:receiverId, :senderId, 1, NOW())";
+            VALUES (:receiverId, :senderId, 1, NOW(), :uuid_socket_secret_key)";
 
         $this->db->query($query, [
             'receiverId' => $receiverId,
-            'senderId' => $senderId
+            'senderId' => $senderId,
+            'uuid_socket_secret_key' => gen_uuid(),
         ]);
 
         return true;
@@ -57,15 +58,21 @@ class FriendsModel extends DBStorage implements ModelInterface
         return $this->db->query($query, ['receiverId' => $receiverId])->findAll();
     }
 
-    public function acceptRequestStatus(int $receiverId)
+    public function acceptRequestStatus(int $receiverId, $senderId)
     {
-        $query = "UPDATE {$this->__tablename__} SET status = :2 WHERE id = :requestId";
-        $this->db->query($query, ['status' => 2, 'requestId' => $receiverId]);
+        $query = "UPDATE {$this->__tablename__} SET status = :2 WHERE id = :requestId AND senderId = :senderId";
+        $this->db->query($query, ['status' => 2, 'requestId' => $receiverId, 'senderId' => $senderId]);
     }
 
-    public function declineRequestStatus(int $receiverId)
+    public function declineRequestStatus(int $receiverId, $senderId)
     {
-        $query = "DELETE FROM {$this->__tablename__} WHERE id = :requestId";
-        $this->db->query($query, ['requestId' => $receiverId]);
+        $query = "DELETE FROM {$this->__tablename__} WHERE id = :requestId AND senderId = :senderId";
+        $this->db->query($query, ['requestId' => $receiverId, 'senderId' => $senderId]);
+    }
+
+    public function getStatus(int $receiverId, int $senderId)
+    {
+        $query = "SELECT status FROM {$this->__tablename__} WHERE receiverId = :receiverId AND senderId = :senderId";
+        return $this->db->query($query, ['receiverId' => $receiverId, 'senderId' => $senderId])->find();
     }
 }

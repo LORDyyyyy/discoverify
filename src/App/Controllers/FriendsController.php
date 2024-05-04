@@ -49,12 +49,24 @@ class FriendsController
         ]);
     }
 
+    public function checkStatus()
+    {
+        $this->validatorService->VaildateRequest($_POST);
+        $resivedId = $_SESSION['user'];
+        $results = $this->friendModel->getStatus($resivedId, (int)$_POST['senderId']);
+
+        echo json_encode([
+            'results' => $results
+        ]);
+    }
+
     public function accecpRequest()
     {
         // Middlewares: AuthRequiredMiddleware
 
+        $this->validatorService->VaildateRequest($_POST);
         $receiverId = $_SESSION['user'];
-        $this->friendModel->acceptRequestStatus($receiverId);
+        $this->friendModel->acceptRequestStatus($receiverId, (int)$_POST['senderId']);
 
         echo json_encode([
             'status' => 'success',
@@ -64,8 +76,11 @@ class FriendsController
 
     public function declineRequest()
     {
+
+        $this->validatorService->VaildateRequest($_POST);
         $receiverId = $_SESSION['user'];
-        $this->friendModel->declineRequestStatus($receiverId);
+        $this->friendModel->declineRequestStatus($receiverId, (int)$_POST['senderId']);
+
 
         echo json_encode([
             'status' => 'success',
