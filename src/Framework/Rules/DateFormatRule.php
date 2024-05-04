@@ -27,7 +27,7 @@ class DateFormatRule implements RuleInterface
             throw new InvalidArgumentException("Date format is not provided.");
         }
 
-        $parsedDate = date_parse_from_format($params[0], $data[$field]);
+        $parsedDate = date_parse_from_format($params[0], $data[$field] ?? '');
 
         return $parsedDate['error_count'] === 0 &&
             $parsedDate['warning_count'] === 0;

@@ -3,12 +3,17 @@
 declare(strict_types=1);
 
 use App\Config\Paths;
+
 use App\Services\{
     ValidatorService,
 };
+
 use App\Models\{
-    UserModel
+    UserModel,
+    FriendsModel,
+    ChatModel
 };
+
 use Framework\{
     TemplateEngine,
     Database,
@@ -16,7 +21,6 @@ use Framework\{
 };
 
 use App\Models\Storage\DBStorage;
-
 
 $db_config = [
     'host' => $_ENV['DB_HOST'] ?? 'localhost',
@@ -34,4 +38,6 @@ return [
         $_ENV['DB_PASS'] ?? ''
     ),
     UserModel::class => fn (Container $container) => new UserModel($container->get(Database::class)),
+    FriendsModel::class => fn (Container $container) => new FriendsModel($container->get(Database::class)),
+    ChatModel::class => fn (Container $container) => new ChatModel($container->get(Database::class))
 ];

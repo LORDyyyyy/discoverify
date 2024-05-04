@@ -12,7 +12,8 @@ use App\Middleware\{
     SessionMiddleware,
     FlashMiddleware,
     CsrfTokenMiddleware,
-    CsrfGuardMiddleware
+    CsrfGuardMiddleware,
+    APISendResponseCode
 };
 
 /**
@@ -27,6 +28,7 @@ function registerMiddleware(App $app)
     $app->addMiddleware(CsrfGuardMiddleware::class);
     $app->addMiddleware(CsrfTokenMiddleware::class);
     $app->addMiddleware(TemplateDataMiddleware::class);
+    $app->addMiddleware(APISendResponseCode::class);
     $app->addMiddleware(APIValidationExceptionMiddleware::class);
     $app->addMiddleware(ValidationExceptionMiddleware::class);
     $app->addMiddleware(FlashMiddleware::class);
