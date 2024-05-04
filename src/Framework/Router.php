@@ -17,6 +17,8 @@ class Router
     private array $middlewares = [];
     private array $errorHandler;
 
+    private array $nonReadMethods = ['POST', 'PUT', 'DELETE', 'PATCH'];
+
     /**
      * Adds a new route to the router.
      *
@@ -88,9 +90,9 @@ class Router
                 header('Access-Control-Allow-Origin: *');
                 header('Content-Type: application/json; charset=UTF-8');
 
-                $nonReadMethods = ['POST', 'PUT', 'DELETE', 'PATCH'];
 
-                if (in_array($method, $nonReadMethods)) {
+
+                if (in_array($method, $this->nonReadMethods)) {
                     header('Access-Control-Allow-Methods: ' . $method);
                     header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods, Authorization, X-Requested-With');
 
@@ -133,21 +135,18 @@ class Router
 
             $action($params);
 
-            if ($route['isAPI']) {
+            if ($route['isAPI'])
                 exit;
-            }
-
             return;
         }
 
-        $this->dispathNotFound($container);
+        $this->dispathNotFound($container, in_array($method, $this->nonReadMethods));
     }
 
     /**
      * Add a Global Middleware and add it to the Middleware list
      *
      * @param string $middleware The middleware function to be called
-     *
      * @return void
      */
     public function addMiddleware(string $middleware)
@@ -183,25 +182,40 @@ class Router
      * Dispatches the "not found" error to the appropriate error handler.
      *
      * @param Container|null $container The dependency injection container (optional).
+     * @param bool $isAPI Indicates if the request is an API request (optional).
      * @return void
      */
-    public function dispathNotFound(?Container $container)
+    public function dispathNotFound(?Container $container, ?bool $isAPI = false)
     {
         [$class, $function] = $this->errorHandler;
+
+        $params = ['isAPI' => $isAPI];
+
+        if ($isAPI) {
+            header('HTTP_API_REQUEST');
+            header('Access-Control-Allow-Origin: *');
+            header('Content-Type: application/json; charset=UTF-8');
+        }
 
         $controllerInstance = $container ?
             $container->resolve($class) :
             new $class;
 
-        $action = fn () => $controllerInstance->{$function}();
+        $action = fn ($params) => $controllerInstance->{$function}($params);
 
         foreach ($this->middlewares as $middleware) {
             $middlewareInstance = $container ?
                 $container->resolve($middleware) :
                 new $middleware();
-            $action = fn () => $middlewareInstance->process($action);
+
+            if (($middlewareInstance instanceof APIValidation && !$isAPI)
+                || ($middlewareInstance instanceof NonAPIValidation && $isAPI)
+            ) {
+                continue;
+            }
+            $action = fn ($params) => $middlewareInstance->process($action, $params);
         }
 
-        $action();
+        $action($params);
     }
 }

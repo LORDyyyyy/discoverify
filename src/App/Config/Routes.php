@@ -9,7 +9,9 @@ use Framework\App;
 use App\Controllers\{
     HomeController,
     ErrorController,
-    ChatController
+    ChatController,
+    AuthController,
+    FriendsController,
 };
 
 use App\Middleware\{
@@ -17,14 +19,11 @@ use App\Middleware\{
     GuestOnlyMiddleware,
 };
 
-use App\Controllers\{
-    AuthController,
-    FriendsController,
-};
-
 
 function registerRoutes(App $app)
 {
+    $app->setErrorHandler([ErrorController::class, 'notFound']);
+
     $app->get('/', [HomeController::class, 'homeView'], false)
         ->add([AuthRequiredMiddleware::class]);
 
