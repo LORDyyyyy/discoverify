@@ -95,4 +95,42 @@ class ValidatorService
             'message' => ['required', 'nospaces'],
         ], true);
     }
+
+
+    public function postsValidation($formData)
+    {
+        $this->validator->validate($formData, [
+            'content' => ['required']
+        ]);
+    }
+
+    public function Mediavalidator($formData,string $type)
+    {
+        $singleFileInfo = [];
+        $paramsToValidate = [];
+        /* $type = "photo"; */
+        
+        $length = count($formData["name"]);
+        $photoRules = ['filemaxsize:1', 'filealowedtypes:png,jpg,jpeg'];
+        $videoRules = ['filemaxsize:1', 'filealowedtypes:png,jpg,jpeg'];
+        
+        for ($i = 0; $i < $length; $i++) {
+            $singleFileInfo["$i"] = [
+                "name" => $formData["name"][$i],
+                "full_path" => $formData["full_path"][$i],
+                "type" => $formData["type"][$i],
+                "tmp_name" => $formData["tmp_name"][$i],
+                "error" => $formData["error"][$i],
+                "size" => $formData["size"][$i]
+            ];
+        
+            $paramsToValidate[] = $type == 'photo' ? $photoRules : $videoRules;
+        }
+        // debug($singleFileInfo);
+        if($type=="photo"){
+            
+            $this->validator->validate($singleFileInfo,$paramsToValidate);
+        }
+
+    }
 }

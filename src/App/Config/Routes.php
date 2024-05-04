@@ -9,7 +9,10 @@ use Framework\App;
 use App\Controllers\{
     HomeController,
     ErrorController,
-    ChatController
+    ChatController,
+    PostsController,
+    AuthController,
+    FriendsController
 };
 
 use App\Middleware\{
@@ -17,10 +20,6 @@ use App\Middleware\{
     GuestOnlyMiddleware,
 };
 
-use App\Controllers\{
-    AuthController,
-    FriendsController,
-};
 
 
 function registerRoutes(App $app)
@@ -72,4 +71,22 @@ function registerRoutes(App $app)
         ->add([AuthRequiredMiddleware::class]);
 
     $app->put('/api/test/{id}', [ChatController::class, 'testA'], true);
+
+
+    $app->get('/api/posts',[PostsController::class,'test'],false);
+   
+    $app->post('/api/posts/',[PostsController::class,'addPost'],false)
+    ->add([AuthRequiredMiddleware::class]);
+   
+    $app->post('/api/posts/',[PostsController::class,'addComment'],true)
+    ->add([AuthRequiredMiddleware::class]);
+    
+    
+
+   
+
+   
+
+
+        
 }
