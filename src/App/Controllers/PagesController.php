@@ -28,7 +28,7 @@ class PagesController
 
         public function pagesview ()
         {
-            echo $this->view->render("Pages.php",
+            echo $this->view->render("pages.php",
         [
             'title' => 'Pages | discoverify'
         ]);

@@ -9,7 +9,7 @@ use Framework\App;
 use App\Controllers\{
     HomeController,
     ErrorController,
-    PagesController
+    PagesController,
     ChatController,
     AuthController,
     FriendsController,
