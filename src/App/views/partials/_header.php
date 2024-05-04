@@ -14,7 +14,7 @@
     <script src="/assets/js/dev/socket.io.min.js"></script>
     <script src="/assets/js/dev/socket.io.min.js.map"></script>
 
-    <title> <?php echo esc($title); ?> </title>
+    <title> <?= $title ?? 'Discoverify' ?> </title>
 </head>
 
 <body>

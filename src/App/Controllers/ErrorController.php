@@ -38,7 +38,9 @@ class ErrorController
         http_response_code(HTTP::NOT_FOUND_STATUS_CODE);
 
         echo json_encode([
-            'error' => 'Not Found'
+            'error' => HTTP::RESPONSE_CODES_TEXT[HTTP::NOT_FOUND_STATUS_CODE],
+            'status' => HTTP::NOT_FOUND_STATUS_CODE,
+            'message' => 'The requested resource was not found'
         ]);
     }
 
@@ -46,6 +48,12 @@ class ErrorController
     {
         http_response_code(HTTP::NOT_FOUND_STATUS_CODE);
 
-        echo $this->view->render("errors/not-found.php");
+        echo $this->view->render(
+            "errors/not-found.php",
+            [
+                'title' => HTTP::RESPONSE_CODES_TEXT[HTTP::NOT_FOUND_STATUS_CODE] . " | Discoverify",
+                'message' => 'The requested resource was not found'
+            ]
+        );
     }
 }

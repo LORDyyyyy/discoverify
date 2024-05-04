@@ -217,5 +217,8 @@ class Router
         }
 
         $action($params);
+
+        if ($isAPI)
+            exit;
     }
 }
