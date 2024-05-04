@@ -124,4 +124,14 @@ class FriendsModel extends DBStorage implements ModelInterface
 
         return $result;
     }
+
+    public function getFriends(int $userId)
+    {
+        $query = "SELECT u.first_name, u.last_name, u.profile_picture, f.*
+            FROM users u
+            INNER JOIN friends f ON u.id IN (f.receiverId, f.senderId)
+            WHERE u.id != :userId AND :userId IN (f.receiverId, f.senderId) AND status = 2;";
+        return $this->db->query($query, ['userId' => $userId])->findAll();
+    }
 }
+ 

@@ -87,4 +87,14 @@ class FriendsController
             'code' => HTTP::OK_STATUS_CODE,
         ]);
     }
+
+    public function getFriends()
+    {
+        $receiverId = $_SESSION['user'];
+        $results = $this->friendModel->getFriends($receiverId);
+
+        echo json_encode([
+            'results' => $results
+        ]);
+    }
 }
