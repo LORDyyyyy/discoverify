@@ -23,7 +23,7 @@ class FriendsModel extends DBStorage implements ModelInterface
         $this->__tablename__ = 'friends';
     }
 
-    public function sendRequest(int $receiverId, int $senderId)
+    public function sendRequest(int $receiverId, int $senderId): bool
     {
         $query = "SELECT id FROM users WHERE id = :id";
         $user = $this->db->query($query, ['id' => $receiverId])->find();
@@ -44,6 +44,8 @@ class FriendsModel extends DBStorage implements ModelInterface
             'receiverId' => $receiverId,
             'senderId' => $senderId
         ]);
+
+        return true;
     }
 
     public function showRequest(int $receiverId)
@@ -57,11 +59,11 @@ class FriendsModel extends DBStorage implements ModelInterface
 
     public function acceptRequestStatus(int $receiverId)
     {
-            $query = "UPDATE {$this->__tablename__} SET status = :2 WHERE id = :requestId";
-            $this->db->query($query, ['status' => 2, 'requestId' => $receiverId]);
+        $query = "UPDATE {$this->__tablename__} SET status = :2 WHERE id = :requestId";
+        $this->db->query($query, ['status' => 2, 'requestId' => $receiverId]);
     }
 
-    public function declineRequestStatus(int $receiverId) 
+    public function declineRequestStatus(int $receiverId)
     {
         $query = "DELETE FROM {$this->__tablename__} WHERE id = :requestId";
         $this->db->query($query, ['requestId' => $receiverId]);

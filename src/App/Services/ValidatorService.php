@@ -86,7 +86,7 @@ class ValidatorService
     {
         $this->validator->validate($formData, [
             'id' => ['required', 'nospaceatall']
-        ], false);
+        ], true);
     }
 
     public function chatMessage(array $formData)
