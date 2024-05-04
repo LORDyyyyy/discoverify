@@ -21,7 +21,7 @@ class NoSpacesOnlyRule implements RuleInterface
      */
     public function validate(array $data, string $field, array $params): bool
     {
-        return !!preg_match('/\S/', $data[$field]);
+        return !!preg_match('/\S/', $data[$field] ?? '');
     }
 
     /**

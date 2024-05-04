@@ -23,7 +23,7 @@ class NamesRule implements RuleInterface
      */
     public function validate(array $data, string $field, array $params): bool
     {
-        return !!preg_match('/^[a-zA-Z]+$/', $data[$field]);
+        return !!preg_match('/^[a-zA-Z]+$/', $data[$field] ?? '');
     }
 
     /**
