@@ -53,7 +53,7 @@ class FriendsController
     {
         $this->validatorService->VaildateRequest($_POST);
         $resivedId = $_SESSION['user'];
-        $results = $this->friendModel->getStatus($resivedId, (int)$_POST['senderId']);
+        $results = $this->friendModel->getStatus($resivedId, (int)$_POST['id']);
 
         echo json_encode([
             'results' => $results
@@ -66,7 +66,7 @@ class FriendsController
 
         $this->validatorService->VaildateRequest($_POST);
         $receiverId = $_SESSION['user'];
-        $this->friendModel->acceptRequestStatus($receiverId, (int)$_POST['senderId']);
+        $this->friendModel->acceptRequestStatus($receiverId, (int)$_POST['id']);
 
         echo json_encode([
             'status' => 'success',
@@ -79,7 +79,7 @@ class FriendsController
 
         $this->validatorService->VaildateRequest($_POST);
         $receiverId = $_SESSION['user'];
-        $this->friendModel->declineRequestStatus($receiverId, (int)$_POST['senderId']);
+        $this->friendModel->declineRequestStatus($receiverId, (int)$_POST['id']);
 
 
         echo json_encode([
