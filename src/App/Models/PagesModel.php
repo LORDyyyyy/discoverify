@@ -13,17 +13,7 @@ use Framework\Database;
 use \DateTime;
 
 
-// CREATE TABLE `pages` (
-//     `id` int unsigned NOT NULL AUTO_INCREMENT,
-//     `user_id` int unsigned NOT NULL,
-//     `name` varchar(50) NOT NULL,
-//     `page_picture` varchar(256),
-//     `cover_picture` varchar(256),
-//     `description` varchar(256),
-//     `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-//     PRIMARY KEY (`id`),
-//     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
-//   );
+
 
 class PagesModel extends DBStorage implements ModelInterface
 {
