@@ -157,4 +157,17 @@ class FriendsModel extends DBStorage implements ModelInterface
 
         return $result['uuid_socket_secret_key'];
     }
+
+    public function removeFriend(int $receiverId, int $senderId)
+    {
+        if ($receiverId === $senderId) {
+            throw new APIValidationException([
+                'id' => ['You can not remove yourself']
+            ]);
+        }
+        $query = "DELETE FROM {$this->__tablename__}
+        WHERE (receiverId = :receiverId AND senderId = :senderId)
+        OR (receiverId = :senderId AND senderId = :receiverId)";
+        $this->db->query($query, ['receiverId' => $receiverId, 'senderId' => $senderId]);
+    }
 }

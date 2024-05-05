@@ -43,6 +43,9 @@ function registerRoutes(App $app)
     $app->get('/friends', [FriendsController::class, 'getFriends'], true) // not implemented yet
         ->add([AuthRequiredMiddleware::class]);
 
+    $app->post('/removeFriend', [FriendsController::class, 'removeFriend'], true) // not implemented yet
+        ->add([AuthRequiredMiddleware::class]);
+
     $app->get('/api/friends', [FriendsController::class, 'getFriends'], true) // good
         ->add([AuthRequiredMiddleware::class]);
     $app->post('/api/friends', [FriendsController::class, 'sendRequest'], true) // good

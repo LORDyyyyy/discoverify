@@ -124,4 +124,19 @@ class FriendsController
             ]
         );
     }
+
+    public function removeFriend()
+    {
+        // Middlewares: AuthRequiredMiddleware
+
+        $this->validatorService->VaildateRequest($_POST);
+
+        $userId = $_SESSION['user'];
+        $this->friendModel->removeFriend($userId, (int)$_POST['id']);
+
+        echo json_encode([
+            'status' => 'success',
+            'code' => HTTP::OK_STATUS_CODE,
+        ]);
+    }
 }
