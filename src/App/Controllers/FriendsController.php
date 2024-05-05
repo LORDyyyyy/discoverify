@@ -136,4 +136,48 @@ class FriendsController
 
         redirectTo('/friends');
     }
+
+    public function blockFriend()
+    {
+        $this->validatorService->VaildateRequest($_POST);
+        $blockedBy = $_SESSION['user'];
+        $this->friendModel->blockFriend((int)$blockedBy, (int)$_POST['id']);
+
+        echo json_encode([
+            'status' => 'success',
+            'code' => HTTP::OK_STATUS_CODE,
+        ]);
+    }
+
+    public function showBlocked()
+    {
+        $blockedBy = $_SESSION['user'];
+        $resurlts = $this->friendModel->showBlocked($blockedBy);
+        echo json_encode([
+            'resurlt' => $resurlts,
+        ]);
+    }
+
+    public function unblockFriend()
+    {
+        $this->validatorService->VaildateRequest($_POST);
+        $blockedBy = $_SESSION['user'];
+        $this->friendModel->unblockFriend((int)$blockedBy, (int)$_POST['id']);
+
+        echo json_encode([
+            'status' => 'success',
+            'code' => HTTP::OK_STATUS_CODE,
+        ]);
+    }
+
+    public function checkBlock()
+    {
+        $this->validatorService->VaildateRequest($_POST);
+        $blockedBy = $_SESSION['user'];
+        $results = $this->friendModel->checkBlock((int)$blockedBy, (int)$_POST['id']);
+        echo json_encode([
+            'results' => $results,
+        ]);
+    }
+
 }

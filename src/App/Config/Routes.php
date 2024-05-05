@@ -59,6 +59,15 @@ function registerRoutes(App $app)
     $app->delete('/api/requests', [FriendsController::class, 'declineRequest'], true) // good
         ->add([AuthRequiredMiddleware::class]);
 
+    $app->post('/block', [FriendsController::class, 'blockFriend'], true)
+        ->add([AuthRequiredMiddleware::class]);
+    $app->get('/block', [FriendsController::class, 'showBlocked'], true)
+        ->add([AuthRequiredMiddleware::class]);
+    $app->delete('/block', [FriendsController::class, 'unblockFriend'], true)
+        ->add([AuthRequiredMiddleware::class]);
+    $app->post('/checkBlocck', [FriendsController::class, 'checkBlock'], true)
+        ->add([AuthRequiredMiddleware::class]);
+
     $app->get('/chat', [ChatController::class, 'chatView'])
         ->add([AuthRequiredMiddleware::class]);
     $app->get('/chat/{room}', [ChatController::class, 'chatBoxView'])

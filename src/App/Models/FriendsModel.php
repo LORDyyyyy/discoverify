@@ -179,4 +179,43 @@ class FriendsModel extends DBStorage implements ModelInterface
             ]);
         }
     }
+
+    public function blockFriend(int $blockedBy, int $blocked)
+    {
+        if ($blockedBy === $blocked) {
+            throw new APIValidationException([
+                'id' => ['You can not block yourself']
+            ]);
+        }
+
+        $query = "INSERT INTO blocked_users (blocked, blocked_by) VALUES (:blocked, :blocked_by)";
+        $this->db->query($query, ['blocked' => $blocked, 'blocked_by' => $blockedBy]);
+
+
+        $query = "DELETE FROM {$this->__tablename__}
+        WHERE (receiverId = :receiverId AND senderId = :senderId)
+        OR (receiverId = :senderId AND senderId = :receiverId)";
+        $this->db->query($query, ['receiverId' => $blocked, 'senderId' => $blockedBy]);
+    }
+
+    public function showBlocked(int $blocked_by)
+    {
+        $query = "SELECT  u.first_name as fname,
+                u.last_name as lname,
+                u.profile_picture as pfp FROM users u
+                JOIN blocked_users b ON u.id = b.blocked WHERE b.blocked_by = :blocked_by";
+        return $this->db->query($query, ['blocked_by' => $blocked_by])->findAll();
+    }
+
+    public function unblockFriend(int $blockedBy, int $blocked)
+    {
+        $query = "DELETE FROM blocked_users WHERE blocked = :blocked AND blocked_by = :blocked_by";
+        $this->db->query($query, ['blocked' => $blocked, 'blocked_by' => $blockedBy]);
+    }
+
+    public function checkBlock(int $blocked_by, int $blocked)
+    {
+        $query = "SELECT * FROM blocked_users WHERE (blocked = :blocked AND blocked_by = :blocked_by) OR (blocked = :blocked_by AND blocked_by = :blocked)";
+        return $this->db->query($query, ['blocked_by' => $blocked_by, 'blocked' => $blocked])->findAll();
+    }
 }
