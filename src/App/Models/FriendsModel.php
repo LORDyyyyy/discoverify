@@ -6,6 +6,8 @@ namespace App\Models;
 
 use Framework\Database;
 use Framework\Exceptions\APIValidationException;
+use Framework\Exceptions\ValidationException;
+
 
 use App\Interfaces\ModelInterface;
 use App\Models\Storage\DBStorage;
@@ -161,13 +163,20 @@ class FriendsModel extends DBStorage implements ModelInterface
     public function removeFriend(int $receiverId, int $senderId)
     {
         if ($receiverId === $senderId) {
-            throw new APIValidationException([
+            throw new ValidationException([
                 'id' => ['You can not remove yourself']
             ]);
         }
         $query = "DELETE FROM {$this->__tablename__}
         WHERE (receiverId = :receiverId AND senderId = :senderId)
         OR (receiverId = :senderId AND senderId = :receiverId)";
-        $this->db->query($query, ['receiverId' => $receiverId, 'senderId' => $senderId]);
+        $result = $this->db->query($query, ['receiverId' => $receiverId, 'senderId' => $senderId]);
+
+        if (!$result)
+        {
+            throw new ValidationException([
+                'id' => ['Friend not found']
+            ]);
+        }
     }
 }

@@ -134,9 +134,6 @@ class FriendsController
         $userId = $_SESSION['user'];
         $this->friendModel->removeFriend($userId, (int)$_POST['id']);
 
-        echo json_encode([
-            'status' => 'success',
-            'code' => HTTP::OK_STATUS_CODE,
-        ]);
+        redirectTo('/friends');
     }
 }
