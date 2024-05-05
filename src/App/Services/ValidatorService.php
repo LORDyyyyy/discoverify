@@ -95,4 +95,11 @@ class ValidatorService
             'message' => ['required', 'nospaces'],
         ], true);
     }
+
+    public function validatepage(array $formData) {
+        $this->validator->validate($formData , [
+            'name' => ['required' , 'nospaces']
+        ]);
+    }
+
 }

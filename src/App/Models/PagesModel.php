@@ -7,8 +7,13 @@ namespace App\Models;
 
 use App\Models\Storage\DBStorage;
 use App\Interfaces\ModelInterface;
+use App\Config\Paths;
 
+
+
+use Framework\Exceptions\ValidationException;
 use Framework\Database;
+
 
 use \DateTime;
 
@@ -24,7 +29,7 @@ class PagesModel extends DBStorage implements ModelInterface
     public int  $user_id;
     public string  $name;
     public string  $page_picture;
-    public string  $cover_picture;
+    public string  $cover_picture;   //
     public string  $description;
     public DateTime  $created_at;
 
@@ -34,4 +39,44 @@ class PagesModel extends DBStorage implements ModelInterface
     {
         parent::__construct($db);
     }
+
+    
+
+
+    
+    // create page for fetch the data!!!
+
+    //  create page
+
+    public function create(array $data)
+    {
+        $data['name'] = $this->name;
+        $data['description'] = $this->description;
+        $data['page_picture'] = $this->page_picture;
+        $data['cover_picture'] = $this->cover_picture;
+        $data['created_at'] = $this->created_at;
+        
+        return parent::create($data);
+    }
+
+    
+
+
+    // delete page 
+
+
+    // list users   ==  friends
+
+    
+    // follow  AND unfollow  feature 
+
+    // like and comment   mstf
+
+    //  create post....  implement it ?   mstf
+
+    
+    
+    
+
+
 }

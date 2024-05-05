@@ -11,26 +11,32 @@ use App\Services\ValidatorService;
 
 class PagesController
 {
-        private TemplateEngine $view;
-        private PagesModel $PagesModel;
-        private ValidatorService $validator;
+    private TemplateEngine $view;
+    private PagesModel $PagesModel;
+    private ValidatorService $validator;
 
-        public function __construct(
+    public function __construct(
         TemplateEngine $view,
         PagesModel $PagesModel,
         ValidatorService $validator
-        )
-        {
-            $this->view = $view;
-            $this->PagesModel = $PagesModel;
-            $this->validator = $validator;
-        }
+    ) {
+        $this->view = $view;
+        $this->PagesModel = $PagesModel;
+        $this->validator = $validator;
+    }
 
-        public function pagesview ()
-        {
-            echo $this->view->render("pages.php",
-        [
-            'title' => 'Pages | discoverify'
-        ]);
-        }
+    public function pagesview()
+    {
+        echo $this->view->render(
+            "pages.php",
+            [
+                'title' => 'Pages | discoverify'
+            ]
+        );
+    }
+
+    public function createpage()
+    {
+        $this->validator->validatepage($_POST);
+    }
 }
