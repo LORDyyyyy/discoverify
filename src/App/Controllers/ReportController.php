@@ -29,7 +29,7 @@ class ReportController
 
         $reporterId = $_SESSION['user'];
 
-        $this->reportModel->sendReport((int)$reporterId, (int)$_POST['id'], $_POST['type'], $_POST['message']);
+        $this->reportModel->sendReport($reporterId, (int)$_POST['id'], (string)$_POST['type'], (string)$_POST['message']);
 
         echo json_encode([
             'status' => 'success',
