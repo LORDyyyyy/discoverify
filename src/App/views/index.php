@@ -4,7 +4,9 @@
         <div class="col-lg-3">
             <div class="shadow p-3 rounded mb-4">
                 <div class="h5 text-center">My Profile</div>
-                <div class="text-center py-3 border-bottom"><img src="/assets/img/e1.jpg" alt="My profile" class="rounded-circle" width="128" height="128"></div>
+                <div class="text-center py-3 border-bottom">
+                    <img src="<?= $user['pfp'] ?>" alt="My profile" class="rounded-circle" width="128" height="128">
+                </div>
 
                 <div>
                     <div class="my-3">
@@ -60,7 +62,6 @@
         </div>
         <div class="col-lg-7">
             <div class="shadow p-3 rounded mb-4">
-                <p class="text-muted">Social Media Template by bootstrap</p>
                 <div class="mb-2">
                     <input type="text" class="form-control" placeholder="Status: Feeling Blue">
                 </div>

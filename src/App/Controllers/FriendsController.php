@@ -49,11 +49,11 @@ class FriendsController
         ]);
     }
 
-    public function checkStatus()
+    public function checkStatus(array $params)
     {
-        $this->validatorService->VaildateRequest($_POST);
+        $this->validatorService->VaildateRequest($params);
         $resivedId = $_SESSION['user'];
-        $results = $this->friendModel->getStatus($resivedId, (int)$_POST['id']);
+        $results = $this->friendModel->getStatus((int)$resivedId, (int)$params['id']);
 
         echo json_encode([
             'results' => $results
@@ -85,6 +85,16 @@ class FriendsController
         echo json_encode([
             'status' => 'success',
             'code' => HTTP::OK_STATUS_CODE,
+        ]);
+    }
+
+    public function getFriends()
+    {
+        $receiverId = $_SESSION['user'];
+        $results = $this->friendModel->getFriends($receiverId);
+
+        echo json_encode([
+            'results' => $results
         ]);
     }
 }

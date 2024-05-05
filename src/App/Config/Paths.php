@@ -37,14 +37,21 @@ class Paths
      * 
      * @var string
      */
-    public const STORAGE = __DIR__ . "/../../../storage";
+    public const STORAGE = __DIR__ . "/../../../public/storage";
 
     /**
      * The storage uploads directory path.
      * 
      * @var string
      */
-    public const STORAGE_UPLOADS = __DIR__ . "/../../../storage/uploads";
+    public const STORAGE_UPLOADS = __DIR__ . "/../../../public/storage/uploads";
+
+    /**
+     * The storage defaults directory path.
+     * 
+     * @var string
+     */
+    public const STORAGE_DEFAULTS = __DIR__ . "/../../../public/storage/defaults";
 
     /**
      * The SQL scripts directory path.

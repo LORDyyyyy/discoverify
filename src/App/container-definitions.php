@@ -11,7 +11,9 @@ use App\Services\{
 use App\Models\{
     UserModel,
     FriendsModel,
-    ChatModel
+    ChatModel,
+    PostsModel,
+    ReportModel,
 };
 
 use Framework\{
@@ -39,5 +41,7 @@ return [
     ),
     UserModel::class => fn (Container $container) => new UserModel($container->get(Database::class)),
     FriendsModel::class => fn (Container $container) => new FriendsModel($container->get(Database::class)),
-    ChatModel::class => fn (Container $container) => new ChatModel($container->get(Database::class))
+    ChatModel::class => fn (Container $container) => new ChatModel($container->get(Database::class)),
+    PostsModel::class => fn (Container $container) => new PostsModel($container->get(Database::class)),
+    ReportModel::class => fn (Container $container) => new ReportModel($container->get(Database::class)),
 ];

@@ -21,36 +21,27 @@ class DBStorage
      * Retrieve a record from the database based on the given ID.
      *
      * @param int|string $id The ID of the record to retrieve.
-     * @return mixed The retrieved record.
+     * @param bool $all Whether to return all records or just one (default: false).
+     * @return array|false The retrieved record.
      */
-    protected function getID(string|int $id)
+    protected function getWithID(string|int $id, bool $all = false): array|false
     {
         $query = "SELECT * FROM {$this->__tablename__} WHERE id = :id";
 
-        return $this->db->query($query, ['id' => intval($id)])->find();
+        return $all ?
+            $this->db->query($query, ['id' => $id])->findAll() :
+            $this->db->query($query, ['id' => $id])->find();
     }
 
     /**
-     * Retrieve all records from the database based on the given ID.
-     *
-     * @param int|string $id The ID of the record to retrieve.
-     * @return mixed The retrieved record.
-     */
-    protected function getIDAll(string|int $id): array
-    {
-        $query = "SELECT * FROM {$this->__tablename__} WHERE id = :id";
-
-        return $this->db->query($query, ['id' => intval($id)])->findAll();
-    }
-
-    /**
-     * Get one record with a specific columns for the query and execute it.
+     * Get one/all record with a specific columns for the query and execute it.
      *
      * @param array $data The data to be used in the query.
      * @param string $operator The operator to be used in the query (default: 'AND').
-     * @return mixed The result of the query execution.
+     * @param bool $all Whether to return all records or just one (default: false).
+     * @return array|false The result of the query execution.
      */
-    protected function getWithFields(array $data, string $operator = 'AND')
+    protected function getWithFields(array $data, string $operator = 'AND', bool $all = false): array|false
     {
         $fields = '';
 
@@ -62,38 +53,17 @@ class DBStorage
 
         $query = "SELECT * FROM {$this->__tablename__} WHERE {$fields}";
 
-        return $this->db->query($query, $data)->find();
+        return $all ?
+            $this->db->query($query, $data)->findAll() :
+            $this->db->query($query, $data)->find();
     }
-
-    /**
-     * Get all the records with a specific columns for the query and execute it.
-     *
-     * @param array $data The data to be used in the query.
-     * @param string $operator The operator to be used in the query (default: 'AND').
-     * @return mixed The result of the query execution.
-     */
-    protected function getAllWithFields(array $data, string $operator = 'AND')
-    {
-        $fields = '';
-
-        foreach ($data as $key => $value) {
-            $fields .= "{$key} = :{$key}, {$operator}";
-        }
-
-        $fields = rtrim($fields, ", {$operator}");
-
-        $query = "SELECT * FROM {$this->__tablename__} WHERE {$fields}";
-
-        return $this->db->query($query, $data)->findAll();
-    }
-
 
     /**
      * Retrieve all records from the database table.
      *
      * @return array An array containing all the records from the table.
      */
-    protected function getAll()
+    protected function getAll(): array
     {
         $query = "SELECT * FROM {$this->__tablename__}";
 
@@ -104,9 +74,9 @@ class DBStorage
      * Creates a new record in the database table.
      *
      * @param array $data The data to be inserted into the table.
-     * @return string The SQL query for inserting the data.
+     * @return string|false The ID of the newly created record, or false on failure.
      */
-    protected function create(array $data)
+    protected function create(array $data): string|false
     {
         $fields = implode(', ', array_keys($data));
         $values = implode(', :', array_keys($data));
@@ -123,9 +93,9 @@ class DBStorage
      *
      * @param int|string $id The ID of the record to update.
      * @param array $data The data to be updated in the table.
-     * @return string The SQL query for updating the data.
+     * @return void
      */
-    protected function update(string|int $id, array $data)
+    protected function update(string|int $id, array $data): void
     {
         $fields = '';
 
@@ -137,19 +107,19 @@ class DBStorage
 
         $query = "UPDATE {$this->__tablename__} SET {$fields} WHERE id = :id";
 
-        return $query;
+        $this->db->query($query, array_merge($data, ['id' => $id]));
     }
 
     /**
      * Deletes a record from the database table.
      *
      * @param int|string $id The ID of the record to delete.
-     * @return string The SQL query for deleting the record.
+     * @return void
      */
-    protected function delete(string|int $id)
+    protected function delete(string|int $id): void
     {
         $query = "DELETE FROM {$this->__tablename__} WHERE id = :id";
 
-        return $query;
+        $this->db->query($query, ['id' => $id]);
     }
 }
