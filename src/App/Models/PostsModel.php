@@ -35,6 +35,25 @@ class PostsModel extends DBStorage implements ModelInterface
 
         return parent::create($postContent);
     }
+    public function deletePost(int $id, int $user_id )
+    {
+        $query = "SELECT * FROM posts WHERE id = :post_id AND user_id = :user_id";
+        $result = $this->db->query($query, [
+            'post_id' => $id,
+            'user_id' => $user_id
+        ])->count();
+
+        if (!$result) {
+            throw new APIValidationException([
+                'message' => "unothorized user"
+            ],HTTP::FORBIDDEN_STATUS_CODE);
+        }
+
+        $query = "DELETE FROM posts WHERE id =:id";
+        $this->db->query($query, [
+            'id' => $id
+        ]);
+    }
 
     public function addMedia(array $info, string $type)
     {
@@ -70,16 +89,23 @@ class PostsModel extends DBStorage implements ModelInterface
             'content' => $info['content']
         ]);
     }
-    public function toggleReacts()
+
+    public function deleteComment(int $id, int $user_id)
     {
-    }
-    public function viewReacts()
-    {
-    }
-    public function deleteComment()
-    {
-    }
-    public function editComment()
-    {
+        $query = "SELECT * FROM post_comments WHERE id = :id AND user_id = :user_id";
+        $result = $this->db->query($query, [
+            'id' => $id,
+            'user_id' => $user_id
+        ])->count();
+
+        if (!$result) {
+            throw new APIValidationException([
+                'message' => "unothorized user"
+            ],HTTP::FORBIDDEN_STATUS_CODE);
+        }
+        $query = "DELETE FROM post_comments WHERE id =:id";
+        $this->db->query($query, [
+            'id' => $id
+        ]);
     }
 }

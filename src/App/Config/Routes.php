@@ -81,9 +81,16 @@ function registerRoutes(App $app)
         ->add([AuthRequiredMiddleware::class]);
 
 
+    $app->delete('/api/posts', [PostsController::class, 'deletePost'], true)
+        ->add([AuthRequiredMiddleware::class]);
+
+
     $app->get('/api/posts/comments', [PostsController::class, 'viewcomments'],false)
         ->add([AuthRequiredMiddleware::class]);
 
     $app->post('/api/posts/comments', [PostsController::class, 'addComment'], true)
+        ->add([AuthRequiredMiddleware::class]);
+
+    $app->delete('/api/posts/comments', [PostsController::class, 'deleteComment'], true)
         ->add([AuthRequiredMiddleware::class]);
 }

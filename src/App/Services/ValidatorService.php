@@ -135,7 +135,14 @@ class ValidatorService
     public function commentValidate($formData)
     {
         $this->validator->validate($formData, [
-            'content' => ['required']
+            'content' => ['required'],
+            'page_id' => ['required', 'numeric']
         ], true);
+    }
+    public function validateIdOnly($formData)
+    {
+        $this->validator->validate($formData, [
+            'id' => ['required']
+        ],true);
     }
 }

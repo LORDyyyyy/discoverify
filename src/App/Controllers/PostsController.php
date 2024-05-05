@@ -72,7 +72,17 @@ class PostsController
             $this->addMedia($_FILES['video'], $newPostID, "video");
         }
 
-        // redirectTo("/");
+        redirectTo("/");
+    }
+
+    public function deletePost()
+    {
+        $this->validatorService->validateIdOnly($_POST);
+        $this->postModel->deletePost((int)$_POST['id'], (int)$_SESSION['user']);
+
+        echo json_encode([
+            "message" => "success"
+        ]);
     }
 
     private function addMedia(array $files, int $newPostID, string $type)
@@ -129,9 +139,17 @@ class PostsController
         $this->postModel->addComment($info);
 
         echo json_encode([
-            "message"=> "success"
+            "message" => "success"
         ]);
     }
 
-    
+    public function deleteComment()
+    {
+        $this->validatorService->validateIdOnly($_POST);
+        $this->postModel->deleteComment((int)$_POST['id'], (int)$_SESSION['user']);
+
+        echo json_encode([
+            "message" => "success"
+        ]);
+    }
 }
