@@ -50,6 +50,11 @@ class ChatController
 
         $friends = $this->friendsModel->getFriends($userID);
 
+        foreach ($friends as &$friend) {
+            $friendId = $friend['sID'] == $userID ? $friend['rID'] : $friend['sID'];
+            $friend['lastMessage'] = $this->chatModel->getLastMessage($userID, $friendId);
+        }
+
         echo $this->templateEngine->render(
             'chat.php',
             [
@@ -70,6 +75,11 @@ class ChatController
         $user = $this->userModel->getCurrUser($userID);
 
         $friends = $this->friendsModel->getFriends($userID);
+
+        foreach ($friends as &$friend) {
+            $friendId = $friend['sID'] == $userID ? $friend['rID'] : $friend['sID'];
+            $friend['lastMessage'] = $this->chatModel->getLastMessage($userID, $friendId);
+        }
 
         $socketKey = $this->friendsModel->getSocketKey(
             intval($userID),

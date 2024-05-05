@@ -49,6 +49,34 @@ class ChatModel extends DBStorage implements ModelInterface
         return $messages;
     }
 
+    public function getLastMessage(string|int $senderID, string|int $recieverID)
+    {
+        $query = "SELECT *, DATE_FORMAT(timestamp, '%h:%i:%s') as time
+        FROM messages
+        WHERE (senderId = :senderId AND receiverId = :receiverId)
+        OR (senderId = :receiverId AND receiverId = :senderId)
+        ORDER BY timestamp DESC LIMIT 1";
+        $message = $this->db->query($query, [
+            'senderId' => intval($senderID),
+            'receiverId' => intval($recieverID)
+        ])->find();
+
+        return $message;
+    }
+
+    public function insertMessage(string|int $senderID, string|int $recieverID, string $content)
+    {
+        $query = "INSERT INTO messages (senderId, receiverId, content, seen)
+        VALUES (:senderId, :receiverId, :content, 0)";
+        $this->db->query($query, [
+            'senderId' => intval($senderID),
+            'receiverId' => intval($recieverID),
+            'content' => $content,
+        ]);
+
+        return true;
+    }
+
     public function getUserInfo(string|int $userID)
     {
         $query = "SELECT id,
@@ -67,18 +95,5 @@ class ChatModel extends DBStorage implements ModelInterface
         }
 
         return $user;
-    }
-
-    public function insertMessage(string|int $senderID, string|int $recieverID, string $content)
-    {
-        $query = "INSERT INTO messages (senderId, receiverId, content, seen)
-        VALUES (:senderId, :receiverId, :content, 0)";
-        $this->db->query($query, [
-            'senderId' => intval($senderID),
-            'receiverId' => intval($recieverID),
-            'content' => $content,
-        ]);
-
-        return true;
     }
 }

@@ -18,12 +18,10 @@ const io = socketIo(server);
 
 io.on('connection', (socket) => {
     socket.on('join', (data) => {
-        console.log(data);
         socket.join(data.socketKey);
     });
 
     socket.on('chat', (data) => {
         socket.to(data.socketKey).emit('read chat', data);
-        console.log(data);
     });
 });

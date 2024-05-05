@@ -3,7 +3,7 @@ chatBox.scrollTop = chatBox.scrollHeight;
 
 let socket = io.connect('http://localhost:3000');
 let userID = parseInt($('#myId').val());
-let room = window.location.pathname.split('/').pop();
+//let room = window.location.pathname.split('/').pop();
 
 $.ajax({
     url: `/api/chat/join/${room}`,
