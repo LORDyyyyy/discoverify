@@ -77,9 +77,13 @@ function registerRoutes(App $app)
 
     $app->get('/api/posts', [PostsController::class, 'test'], false);
 
-    $app->post('/api/posts/', [PostsController::class, 'addPost'], false)
+    $app->post('/api/posts', [PostsController::class, 'addPost'], false)
         ->add([AuthRequiredMiddleware::class]);
 
-    $app->post('/api/posts/', [PostsController::class, 'addComment'], true)
+
+    $app->get('/api/posts/comments', [PostsController::class, 'viewcomments'],false)
+        ->add([AuthRequiredMiddleware::class]);
+
+    $app->post('/api/posts/comments', [PostsController::class, 'addComment'], true)
         ->add([AuthRequiredMiddleware::class]);
 }

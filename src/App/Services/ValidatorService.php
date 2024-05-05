@@ -104,16 +104,16 @@ class ValidatorService
         ]);
     }
 
-    public function Mediavalidator($formData,string $type)
+    public function Mediavalidator($formData, string $type)
     {
         $singleFileInfo = [];
         $paramsToValidate = [];
         /* $type = "photo"; */
-        
+
         $length = count($formData["name"]);
         $photoRules = ['filemaxsize:1', 'filealowedtypes:png,jpg,jpeg'];
         $videoRules = ['filemaxsize:1', 'filealowedtypes:png,jpg,jpeg'];
-        
+
         for ($i = 0; $i < $length; $i++) {
             $singleFileInfo["$i"] = [
                 "name" => $formData["name"][$i],
@@ -123,14 +123,19 @@ class ValidatorService
                 "error" => $formData["error"][$i],
                 "size" => $formData["size"][$i]
             ];
-        
+
             $paramsToValidate[] = $type == 'photo' ? $photoRules : $videoRules;
         }
         // debug($singleFileInfo);
-        if($type=="photo"){
-            
-            $this->validator->validate($singleFileInfo,$paramsToValidate);
-        }
+        if ($type == "photo") {
 
+            $this->validator->validate($singleFileInfo, $paramsToValidate);
+        }
+    }
+    public function commentValidate($formData)
+    {
+        $this->validator->validate($formData, [
+            'content' => ['required']
+        ], true);
     }
 }

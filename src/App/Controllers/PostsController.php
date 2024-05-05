@@ -15,6 +15,7 @@ use Framework\HTTP;
 use App\Config\Paths;
 use Framework\Exceptions\APIStatusCodeSend;
 use \DateTime;
+use ElephantIO\Engine\SocketIO\Session;
 use Framework\Exceptions\ValidationException;
 
 class PostsController
@@ -58,15 +59,15 @@ class PostsController
         // photo validation 
 
         if (isset($_FILES['image'])) {
-            
-                $this->validatorService->Mediavalidator($_FILES['image'],"photo");
-            
+
+            // $this->validatorService->Mediavalidator($_FILES['image'],"photo");
+
             $this->addMedia($_FILES['image'], $newPostID, "photo");
         }
 
         if (isset($_FILES['video'])) {
-            
-                $this->validatorService->Mediavalidator($_FILES['video'],"video");
+
+            // $this->validatorService->Mediavalidator($_FILES['video'],"video");
 
             $this->addMedia($_FILES['video'], $newPostID, "video");
         }
@@ -106,4 +107,31 @@ class PostsController
 
         return $uploadedFiles;
     }
+    public function viewcomments()
+    { {
+            echo $this->templateEngine->render('comments.php', [
+                'title' => 'Home | Discoverify',
+            ]);
+        }
+    }
+
+
+    public function addComment()
+    {
+        $this->validatorService->commentValidate($_POST);
+
+        $info = [
+            'user_id' =>  $_SESSION['user'],
+            'post_id' => 8,
+            'content' => $_POST['content']
+
+        ];
+        $this->postModel->addComment($info);
+
+        echo json_encode([
+            "message"=> "success"
+        ]);
+    }
+
+    
 }
