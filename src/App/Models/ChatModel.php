@@ -33,6 +33,20 @@ class ChatModel extends DBStorage implements ModelInterface
 
     public function getUsersChat(string|int $senderID, string|int $recieverID,)
     {
+        $query = "SELECT senderId, receiverId, content, seen, timestamp,
+        users.profile_picture as senderPfp,
+        CONCAT(users.first_name, ' ', users.last_name) as senderName
+        FROM messages
+        JOIN users ON users.id = messages.senderId
+        WHERE (senderId = :senderId AND receiverId = :receiverId)
+        OR (senderId = :receiverId AND receiverId = :senderId)
+        ORDER BY timestamp ASC";
+        $messages = $this->db->query($query, [
+            'senderId' => intval($senderID),
+            'receiverId' => intval($recieverID)
+        ])->findAll();
+
+        return $messages;
     }
 
     public function getUserInfo(string|int $userID)
@@ -53,5 +67,18 @@ class ChatModel extends DBStorage implements ModelInterface
         }
 
         return $user;
+    }
+
+    public function insertMessage(string|int $senderID, string|int $recieverID, string $content)
+    {
+        $query = "INSERT INTO messages (senderId, receiverId, content, seen)
+        VALUES (:senderId, :receiverId, :content, 0)";
+        $this->db->query($query, [
+            'senderId' => intval($senderID),
+            'receiverId' => intval($recieverID),
+            'content' => $content,
+        ]);
+
+        return true;
     }
 }

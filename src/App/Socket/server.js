@@ -18,16 +18,12 @@ const io = socketIo(server);
 
 io.on('connection', (socket) => {
     socket.on('join', (data) => {
-        socket.join(data.room);
-        socket
-            .to(data.room)
-            .emit(
-                'chat',
-                `${data.userID} has joined the chat`
-            );
+        console.log(data);
+        socket.join(data.socketKey);
     });
 
     socket.on('chat', (data) => {
-        socket.to(data.room).emit('read chat', data);
+        socket.to(data.socketKey).emit('read chat', data);
+        console.log(data);
     });
 });

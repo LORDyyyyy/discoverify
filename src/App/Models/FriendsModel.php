@@ -127,10 +127,34 @@ class FriendsModel extends DBStorage implements ModelInterface
 
     public function getFriends(int $userId)
     {
-        $query = "SELECT u.first_name, u.last_name, u.profile_picture, f.*
+        $query = "SELECT
+            u.first_name as fname,
+            u.last_name as lname,
+            u.profile_picture as pfp,
+            f.receiverId as rID,
+            f.senderId as sID,
+            f.uuid_socket_secret_key as uuid
             FROM users u
             INNER JOIN friends f ON u.id IN (f.receiverId, f.senderId)
             WHERE u.id != :userId AND :userId IN (f.receiverId, f.senderId) AND status = 2;";
         return $this->db->query($query, ['userId' => $userId])->findAll();
+    }
+
+    public function getSocketKey(int $receiverId, int $senderId): string
+    {
+        $query = "SELECT uuid_socket_secret_key FROM {$this->__tablename__}
+        WHERE(receiverId = :receiverId AND senderId = :senderId)
+        OR (receiverId = :senderId AND senderId = :receiverId)
+        AND status = 2";
+        $result = $this->db->query($query, [
+            'receiverId' => $receiverId,
+            'senderId' => $senderId
+        ])->find();
+
+        if (!$result) {
+            return '';
+        }
+
+        return $result['uuid_socket_secret_key'];
     }
 }

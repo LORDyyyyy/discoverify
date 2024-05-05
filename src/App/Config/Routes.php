@@ -56,16 +56,18 @@ function registerRoutes(App $app)
     $app->delete('/requests', [FriendsController::class, 'declineRequest'], true) // good
         ->add([AuthRequiredMiddleware::class]);
 
-    $app->get('/chat', [ChatController::class, 'chatView']) // temporary, will be removed
+    $app->get('/chat', [ChatController::class, 'chatView'])
+        ->add([AuthRequiredMiddleware::class]);
+    $app->get('/chat/{room}', [ChatController::class, 'chatBoxView'])
         ->add([AuthRequiredMiddleware::class]);
 
+    /*
     $app->get('/chat/{room}', [ChatController::class, 'chatView'])
         ->add([AuthRequiredMiddleware::class]);
+    */
 
     $app->post('/api/chat/join/{room}', [ChatController::class, 'joinChatRoom'], true)
         ->add([AuthRequiredMiddleware::class]);
     $app->post('/api/chat/{room}', [ChatController::class, 'emitToChat'], true)
         ->add([AuthRequiredMiddleware::class]);
-
-    $app->put('/api/test/{id}', [ChatController::class, 'testA'], true);
 }

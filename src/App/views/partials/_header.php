@@ -12,7 +12,7 @@
     <script src="/assets/js/dev/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/dev/jquery.min.js"></script>
     <script src="/assets/js/dev/socket.io.min.js"></script>
-    <script src="/assets/js/dev/socket.io.min.js.map"></script>
+    <!-- <script src="/assets/js/dev/socket.io.min.js.map"></script> -->
 
     <title> <?= $title ?? 'Discoverify' ?> </title>
 </head>
@@ -20,7 +20,7 @@
 <body>
     <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#"><i class="fa-solid fa-home"></i> Discoverify </a>
+            <a class="navbar-brand" href="/"><i class="fa-solid fa-home"></i> Discoverify </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -62,7 +62,7 @@
                 <ul class="navbar-nav  mb-2 mb-lg-0">
                     <li class="nav-item me-2">
                         <a class="nav-link" href="#">
-                            <img src="<?= $user['pfp'] ?>" alt="profile photo" class="rounded-circle d-none d-lg-inline" width="24" height="24">
+                            <img src="/<?= $user['pfp'] ?>" alt="profile photo" class="rounded-circle d-none d-lg-inline" width="24" height="24">
                             <span class="d-lg-none">My Account</span>
                         </a>
                     </li>
