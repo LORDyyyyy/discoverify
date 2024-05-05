@@ -59,14 +59,14 @@ class PostsController
 
         if (isset($_FILES['image'])) {
             
-                $this->validatorService->Mediavalidator($_FILES['image'],"photo");
+                $this->validatorService->MediaValidator($_FILES['image'],"photo");
             
             $this->addMedia($_FILES['image'], $newPostID, "photo");
         }
 
         if (isset($_FILES['video'])) {
             
-                $this->validatorService->Mediavalidator($_FILES['video'],"video");
+                $this->validatorService->MediaValidator($_FILES['video'],"video");
 
             $this->addMedia($_FILES['video'], $newPostID, "video");
         }

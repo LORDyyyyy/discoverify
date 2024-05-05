@@ -13,6 +13,7 @@ use App\Controllers\{
     PostsController,
     AuthController,
     FriendsController,
+    ReportController,
 };
 
 use App\Middleware\{
@@ -81,5 +82,8 @@ function registerRoutes(App $app)
         ->add([AuthRequiredMiddleware::class]);
 
     $app->post('/api/posts/', [PostsController::class, 'addComment'], true)
+        ->add([AuthRequiredMiddleware::class]);
+
+    $app->post('/api/reports', [ReportController::class, 'makeReport'], true)
         ->add([AuthRequiredMiddleware::class]);
 }
