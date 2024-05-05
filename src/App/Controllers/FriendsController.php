@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Models\FriendsModel;
+use App\Models\{
+    FriendsModel,
+    UserModel,
+};
 use Framework\TemplateEngine;
 use App\Services\ValidatorService;
 use Framework\HTTP;
@@ -14,10 +17,16 @@ class FriendsController
     private TemplateEngine $view;
     private FriendsModel $friendModel;
     private ValidatorService $validatorService;
+    private UserModel $userModel;
 
-    public function __construct(TemplateEngine $view, FriendsModel $friendModel, ValidatorService $validatorService)
-    {
+    public function __construct(
+        TemplateEngine $view,
+        FriendsModel $friendModel,
+        ValidatorService $validatorService,
+        UserModel $userModel
+    ) {
         $this->view = $view;
+        $this->userModel = $userModel;
         $this->friendModel = $friendModel;
         $this->validatorService = $validatorService;
     }
@@ -96,5 +105,23 @@ class FriendsController
         echo json_encode([
             'results' => $results
         ]);
+    }
+
+    public function friendsView()
+    {
+        // Middlewares: AuthRequiredMiddleware
+
+        $userId = intval($_SESSION['user']);
+        $currUser = $this->userModel->getCurrUser($userId);
+        $friends = $this->friendModel->getFriends($userId);
+
+        echo $this->view->render(
+            'friends.php',
+            [
+                'title' => 'Friends | Discoverify',
+                'user' => $currUser,
+                'friends' => $friends,
+            ]
+        );
     }
 }
