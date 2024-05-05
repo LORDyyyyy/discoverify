@@ -7,6 +7,7 @@ namespace App\Controllers;
 use App\Models\FriendsModel;
 use Framework\TemplateEngine;
 use App\Services\ValidatorService;
+use Framework\HTTP;
 
 class FriendsController
 {
@@ -21,16 +22,6 @@ class FriendsController
         $this->validatorService = $validatorService;
     }
 
-    public function sendRequestView()
-    {
-        // Middlewares: AuthRequiredMiddleware
-
-        echo $this->view->render(
-            'auth/friends.php',
-            ['title' => 'Friends | Discoverify']
-        );
-    }
-
     public function sendRequest()
     {
         // Middlewares: AuthRequiredMiddleware
@@ -39,20 +30,11 @@ class FriendsController
 
         $senderId = $_SESSION['user'];
 
-        $this->friendModel->sendRequest((int)$_POST['id'], (int)$senderId);
+        $results = $this->friendModel->sendRequest((int)$_POST['id'], (int)$senderId);
 
-        redirectTo('/friends');
-    }
-
-    public function showRequestsView()
-    {
-        // Middlewares: AuthRequiredMiddleware
-
-        $requests = $this->friendModel->showRequest($_SESSION['user']);
-        echo $this->view->render(
-            'auth/requests.php',
-            ['title' => 'Requests | Discoverify', 'requests' => $requests]
-        );
+        echo json_encode([
+            'results' => $results,
+        ]);
     }
 
     public function showRequests()
@@ -67,13 +49,52 @@ class FriendsController
         ]);
     }
 
-    public function handleRequestAction()
+    public function checkStatus(array $params)
+    {
+        $this->validatorService->VaildateRequest($params);
+        $resivedId = $_SESSION['user'];
+        $results = $this->friendModel->getStatus((int)$resivedId, (int)$params['id']);
+
+        echo json_encode([
+            'results' => $results
+        ]);
+    }
+
+    public function accecpRequest()
     {
         // Middlewares: AuthRequiredMiddleware
 
+        $this->validatorService->VaildateRequest($_POST);
         $receiverId = $_SESSION['user'];
-        $this->friendModel->updateRequestStatus($receiverId, (int)$_POST['status']);
+        $this->friendModel->acceptRequestStatus($receiverId, (int)$_POST['id']);
 
-        redirectTo('/requests');
+        echo json_encode([
+            'status' => 'success',
+            'code' => HTTP::OK_STATUS_CODE,
+        ]);
+    }
+
+    public function declineRequest()
+    {
+
+        $this->validatorService->VaildateRequest($_POST);
+        $receiverId = $_SESSION['user'];
+        $this->friendModel->declineRequestStatus($receiverId, (int)$_POST['id']);
+
+
+        echo json_encode([
+            'status' => 'success',
+            'code' => HTTP::OK_STATUS_CODE,
+        ]);
+    }
+
+    public function getFriends()
+    {
+        $receiverId = $_SESSION['user'];
+        $results = $this->friendModel->getFriends($receiverId);
+
+        echo json_encode([
+            'results' => $results
+        ]);
     }
 }

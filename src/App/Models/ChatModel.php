@@ -33,6 +33,48 @@ class ChatModel extends DBStorage implements ModelInterface
 
     public function getUsersChat(string|int $senderID, string|int $recieverID,)
     {
+        $query = "SELECT senderId, receiverId, content, seen, timestamp,
+        users.profile_picture as senderPfp,
+        CONCAT(users.first_name, ' ', users.last_name) as senderName
+        FROM messages
+        JOIN users ON users.id = messages.senderId
+        WHERE (senderId = :senderId AND receiverId = :receiverId)
+        OR (senderId = :receiverId AND receiverId = :senderId)
+        ORDER BY timestamp ASC";
+        $messages = $this->db->query($query, [
+            'senderId' => intval($senderID),
+            'receiverId' => intval($recieverID)
+        ])->findAll();
+
+        return $messages;
+    }
+
+    public function getLastMessage(string|int $senderID, string|int $recieverID)
+    {
+        $query = "SELECT *, DATE_FORMAT(timestamp, '%h:%i:%s') as time
+        FROM messages
+        WHERE (senderId = :senderId AND receiverId = :receiverId)
+        OR (senderId = :receiverId AND receiverId = :senderId)
+        ORDER BY timestamp DESC LIMIT 1";
+        $message = $this->db->query($query, [
+            'senderId' => intval($senderID),
+            'receiverId' => intval($recieverID)
+        ])->find();
+
+        return $message;
+    }
+
+    public function insertMessage(string|int $senderID, string|int $recieverID, string $content)
+    {
+        $query = "INSERT INTO messages (senderId, receiverId, content, seen)
+        VALUES (:senderId, :receiverId, :content, 0)";
+        $this->db->query($query, [
+            'senderId' => intval($senderID),
+            'receiverId' => intval($recieverID),
+            'content' => $content,
+        ]);
+
+        return true;
     }
 
     public function getUserInfo(string|int $userID)

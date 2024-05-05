@@ -3,28 +3,26 @@ chatBox.scrollTop = chatBox.scrollHeight;
 
 let socket = io.connect('http://localhost:3000');
 let userID = parseInt($('#myId').val());
-let room = window.location.pathname.split('/').pop();
+//let room = window.location.pathname.split('/').pop();
 
 $.ajax({
     url: `/api/chat/join/${room}`,
     type: 'POST',
     success: (response) => {
-        socket.emit('join', { room, userID });
-        //response.forEach((data) => {
-        //appendMessage(data);
-        //});
-        console.log(response);
+        socket.emit('join', { socketKey: response.socketKey });
+
+        response.messages.forEach((data) => {
+            appendMessage(data);
+        });
+
         chatBox.scrollTop = chatBox.scrollHeight;
     },
     error: (error) => {
-        console.log('error');
         console.log(error.responseJSON);
-        window.location.href = '/';
     },
 });
 
 socket.on('read chat', (data) => {
-    //console.log(data);
     appendMessage(data);
     chatBox.scrollTop = chatBox.scrollHeight;
 });
@@ -37,13 +35,13 @@ $('#chatForm').on('submit', (e) => {
     $('#messageBox').removeClass('is-invalid');
     $('#messageBoxError').html('');
 
-    /*
-        if (message.trim() === '') {
-            $('#messageBox').addClass('is-invalid');
-            $('#messageBoxError').html('Message cannot be empty');
-            return;
-        }
-    */
+
+    if (message.trim() === '') {
+        $('#messageBox').addClass('is-invalid');
+        $('#messageBoxError').html('Message cannot be empty');
+        return;
+    }
+
 
     message = message.trim();
 
@@ -54,10 +52,9 @@ $('#chatForm').on('submit', (e) => {
         type: 'POST',
         data: JSON.stringify({
             message,
-            from: userID,
         }),
         success: (response) => {
-            //console.log(response);
+
         },
         error: (error) => {
             $('#messageBox').addClass('is-invalid');
@@ -66,10 +63,15 @@ $('#chatForm').on('submit', (e) => {
     });
 });
 
+/**
+ * Append message to chat box
+ * 
+ * @param {*} data  Object containing message data
+ */
 function appendMessage(data) {
     $(`
 <li class="d-flex justify-content-between mb-4">
-    ${data.sender === userID ? '' : '<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">'}
+    ${data.senderId === userID ? '' : `<img src="/${data.senderPfp}" alt="avatar" class="rounded-circle d-flex align-self-start m-2 shadow-1-strong" width="50">`}
     <div class="card w-100">
         <div class="card-header d-flex justify-content-between p-3">
             <p class="fw-bold mb-0">${data.senderName}</p>
@@ -77,11 +79,11 @@ function appendMessage(data) {
         </div>
         <div class="card-body">
             <p class="mb-0">
-                ${data.message}
+                ${data.content}
             </p>
         </div>
     </div>
-    ${data.sender !== userID ? '' : '<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">'}
+    ${data.senderId !== userID ? '' : `<img src="/${data.senderPfp}" alt="avatar" class="rounded-circle d-flex align-self-start m-2 shadow-1-strong" width="50px">`}
 </li>
     `).insertBefore($('#chat-box-div form'));
 }
