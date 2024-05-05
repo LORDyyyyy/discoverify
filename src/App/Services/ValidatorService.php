@@ -104,7 +104,7 @@ class ValidatorService
         ]);
     }
 
-    public function Mediavalidator($formData,string $type)
+    public function MediaValidator($formData, string $type)
     {
         $singleFileInfo = [];
         $paramsToValidate = [];
@@ -126,11 +126,20 @@ class ValidatorService
         
             $paramsToValidate[] = $type == 'photo' ? $photoRules : $videoRules;
         }
+
         // debug($singleFileInfo);
-        if($type=="photo"){
-            
+        if ($type == "photo")
+        {    
             $this->validator->validate($singleFileInfo,$paramsToValidate);
         }
+    }
 
+    public function reportValidator(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'id' => ['required', 'numeric'],
+            'type' => ['required', 'in:users,pages,posts'],
+            'message' => ['required']
+        ], true);   
     }
 }
