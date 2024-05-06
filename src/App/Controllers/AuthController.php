@@ -125,7 +125,7 @@ class AuthController
 
         $this->validatorService->validateForgotPass($_POST);
 
-        //$this->email->sendResetCode($_POST['email']);
+        //$code = $this->email->sendResetCode($_POST['email']);
         $result = $this->userModel->emailExists($_POST['email']);
 
         if (!$result) {
