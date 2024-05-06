@@ -125,14 +125,14 @@ class FriendsController
         );
     }
 
-    public function removeFriend()
+    public function removeFriend(array $params)
     {
         // Middlewares: AuthRequiredMiddleware
 
-        $this->validatorService->VaildateRequest($_POST);
+        $this->validatorService->VaildateRequest($params);
 
         $userId = $_SESSION['user'];
-        $this->friendModel->removeFriend($userId, (int)$_POST['id']);
+        $this->friendModel->removeFriend($userId, (int)$params['id']);
 
         redirectTo('/friends');
     }

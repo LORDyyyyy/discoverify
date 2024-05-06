@@ -16,7 +16,10 @@
                             <div class="my-2">
                                 <h4><?= $friend['fname'] . " " . $friend['lname'] ?></h4>
                             </div>
-                            <form action="">
+                            <form action="/friends/<?= $friendId ?>" method="POST">
+                                <?php include $this->resolve('partials/_csrf.php'); ?>
+                                <input type="hidden" name="_METHOD" value="DELETE">
+
                                 <a href="/chat/<?= $friendId ?>" class="btn btn-primary mt-3 btn-rounded waves-effect w-md waves-light">Message Now</a>
                                 <button type="submit" class="btn btn-danger mt-3 btn-rounded waves-effect w-md waves-light">Remove Friend</button>
                             </form>
