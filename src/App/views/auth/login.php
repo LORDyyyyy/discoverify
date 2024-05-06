@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
+
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/login.css">
     <link rel="stylesheet" href="/assets/css/all.min.css">
@@ -62,7 +64,7 @@
                                 </div>
                                 <div class="d-flex align-items-center">
                                     <span class="ml-auto">
-                                        <a href="#" class="link">Forgot Password?</a>
+                                        <a href="/forgotpass" class="link">Forgot Password?</a>
                                     </span>
                                 </div>
                                 <div class="d-flex mb-3 align-items-center">
