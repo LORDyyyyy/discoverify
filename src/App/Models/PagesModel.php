@@ -13,8 +13,7 @@ use App\Config\Paths;
 
 use Framework\Exceptions\ValidationException;
 use Framework\Database;
-use Framework\HTTP;
-use Framework\Exceptions\APIValidationException;
+
 
 
 use \DateTime;
@@ -77,7 +76,7 @@ class PagesModel extends DBStorage implements ModelInterface
 
         if (!$result) {
             throw new ValidationException([
-                'message' => "unothorized user"
+                'message' => "Page not found!"
             ]);
         }
 
