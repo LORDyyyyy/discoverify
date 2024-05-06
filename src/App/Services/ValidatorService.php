@@ -102,4 +102,11 @@ class ValidatorService
         ]);
     }
 
+    public function deletePageValidation(array $data)
+    {
+        $this->validator->validate($data , [
+            'id' => ['required' , 'numeric']
+        ]);
+    }
+
 }

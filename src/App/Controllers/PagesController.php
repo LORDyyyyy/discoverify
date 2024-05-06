@@ -39,4 +39,15 @@ class PagesController
     {
         $this->validator->validatepage($_POST);
     }
+
+    
+    public function deletepage()
+    {
+        
+        $this->validator->deletePageValidation($_POST);
+        $this->PagesModel->deletePage((int)$_POST['id'], (int)$_SESSION['user']);
+
+        redirectTo('/');
+    }
+
 }

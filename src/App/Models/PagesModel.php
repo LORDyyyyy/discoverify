@@ -13,6 +13,8 @@ use App\Config\Paths;
 
 use Framework\Exceptions\ValidationException;
 use Framework\Database;
+use Framework\HTTP;
+use Framework\Exceptions\APIValidationException;
 
 
 use \DateTime;
@@ -29,7 +31,7 @@ class PagesModel extends DBStorage implements ModelInterface
     public int  $user_id;
     public string  $name;
     public string  $page_picture;
-    public string  $cover_picture;   //
+    public string  $cover_picture;   
     public string  $description;
     public DateTime  $created_at;
 
@@ -65,14 +67,34 @@ class PagesModel extends DBStorage implements ModelInterface
     // delete page 
 
 
-    // list users   ==  friends
+    public function deletePage(int $id, int $user_id )
+    {
+        $query = "SELECT * FROM pages WHERE id = :id AND user_id = :user_id";
+        $result = $this->db->query($query, [
+            'id' => $id,
+            'user_id' => $user_id
+        ])->count();
+
+        if (!$result) {
+            throw new ValidationException([
+                'message' => "unothorized user"
+            ]);
+        }
+
+        $query = "DELETE FROM pages WHERE id =:id";
+        $this->db->query($query, [
+            'id' => $id
+        ]);
+    }
+
+    //  block/unblock 
 
     
     // follow  AND unfollow  feature 
 
     // like and comment   mstf
 
-    //  create post....  implement it ?   mstf
+    //  create post....    mstf
 
     
     
