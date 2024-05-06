@@ -8,38 +8,45 @@
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/lib/fontawesome/css/all.min.css">
+    <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
+    <?php
+    if (($title ?? '') == 'Friends | Discoverify') {
+        echo '<link rel="stylesheet" href="/assets/css/friends_list.css">';
+    }
+    ?>
 
     <script src="/assets/js/dev/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/dev/jquery.min.js"></script>
     <script src="/assets/js/dev/socket.io.min.js"></script>
-    <script src="/assets/js/dev/socket.io.min.js.map"></script>
+    <!-- <script src="/assets/js/dev/socket.io.min.js.map"></script> -->
 
-    <title> <?php echo esc($title); ?> </title>
+
+    <title> <?= $title ?? 'Discoverify' ?> </title>
 </head>
 
 <body>
     <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#"><i class="fa-solid fa-home"></i> ONLINE3OOK</a>
+            <a class="navbar-brand" href="/"><i class="fa-solid fa-home"></i> Discoverify </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">
+                        <a class="nav-link active" aria-current="page" href="/">
                             <i class="fa-solid fa-earth-europe fa-lg d-none d-lg-inline"></i>
                             <span class="d-lg-none">Home</span>
                         </a>
                     </li>
                     <li class="nav-item me-2">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="/friends">
                             <i class="fa-solid fa-user fa-lg d-none d-lg-inline"></i>
-                            <span class="d-lg-none">Account</span>
+                            <span class="d-lg-none">Friends</span>
                         </a>
                     </li>
                     <li class="nav-item me-2">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="/chat">
                             <i class="fa-solid fa-envelope fa-lg d-none d-lg-inline"></i>
                             <span class="d-lg-none">Contact</span>
                         </a>
@@ -62,12 +69,12 @@
                 <ul class="navbar-nav  mb-2 mb-lg-0">
                     <li class="nav-item me-2">
                         <a class="nav-link" href="#">
-                            <img src="/assets/img/e1.jpg" alt="profile photo" class="rounded-circle d-none d-lg-inline" width="24" height="24">
+                            <img src="/<?= $user['pfp'] ?>" alt="profile photo" class="rounded-circle d-none d-lg-inline" width="24" height="24">
                             <span class="d-lg-none">My Account</span>
                         </a>
                     </li>
                     <li class="nav-item me-2">
-                        <a class="nav-link btn btn-primary" href="/logout">
+                        <a class="nav-link btn btn-danger" href="/logout">
                             Logout
                         </a>
                     </li>

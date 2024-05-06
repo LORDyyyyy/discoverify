@@ -23,7 +23,7 @@ class NoSpacesAtAll implements RuleInterface
      */
     public function validate(array $data, string $field, array $params): bool
     {
-        return !preg_match('/\s/', $data[$field]);
+        return !preg_match('/\s/', $data[$field] ?? '');
     }
 
     /**
