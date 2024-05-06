@@ -124,6 +124,11 @@ class ChatController
             intval($params['room'])
         );
 
+        $this->chatModel->markMessagesAsSeen(
+            intval($_SESSION['user']),
+            intval($params['room'])
+        );
+
         echo json_encode([
             'status' => 'success',
             'code' => HTTP::OK_STATUS_CODE,
@@ -149,8 +154,7 @@ class ChatController
 
         $senderUser = $this->chatModel->getUserInfo($_SESSION['user']);
 
-
-        $insertMessage = $this->chatModel->insertMessage(
+        $this->chatModel->insertMessage(
             intval($_SESSION['user']),
             intval($params['room']),
             $_POST['message'],

@@ -110,6 +110,7 @@ CREATE TABLE `posts` (
   `user_id` int unsigned NOT NULL,
   `page_id` int unsigned DEFAULT NULL,
   `content` varchar(1020),
+  `is_private` tinyint(1) DEFAULT 0,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,

@@ -64,6 +64,18 @@ class ChatModel extends DBStorage implements ModelInterface
         return $message;
     }
 
+    public function markMessagesAsSeen(string|int $senderID, string|int $recieverID)
+    {
+        $query = "UPDATE messages SET seen = 1
+        WHERE senderId = :receiverId AND receiverId = :senderId";
+        $this->db->query($query, [
+            'receiverId' => intval($recieverID),
+            'senderId' => intval($senderID)
+        ]);
+
+        return true;
+    }
+
     public function insertMessage(string|int $senderID, string|int $recieverID, string $content)
     {
         $query = "INSERT INTO messages (senderId, receiverId, content, seen)

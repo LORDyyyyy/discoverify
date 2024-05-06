@@ -91,6 +91,27 @@ class UserModel extends DBStorage implements ModelInterface
         return parent::create($data);
     }
 
+    public function emailExists(string $email): bool
+    {
+        $query = "SELECT * FROM {$this->__tablename__} WHERE email = :email";
+        $user = $this->db->query($query, [
+            'email' => $email
+        ])->find();
+
+        return $user ? true : false;
+    }
+
+    public function resetPassword(string $email, string $password): void
+    {
+        $password = password_hash($password, PASSWORD_DEFAULT);
+
+        $query = "UPDATE {$this->__tablename__} SET password = :password WHERE email = :email";
+        $this->db->query($query, [
+            'email' => $email,
+            'password' => $password
+        ]);
+    }
+
     public function getCurrUser(string|int $id)
     {
         $query = "SELECT id,

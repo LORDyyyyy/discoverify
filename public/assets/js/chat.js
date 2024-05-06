@@ -35,13 +35,12 @@ $('#chatForm').on('submit', (e) => {
     $('#messageBox').removeClass('is-invalid');
     $('#messageBoxError').html('');
 
-
     if (message.trim() === '') {
         $('#messageBox').addClass('is-invalid');
         $('#messageBoxError').html('Message cannot be empty');
+        chatBox.scrollTop = chatBox.scrollHeight;
         return;
     }
-
 
     message = message.trim();
 
@@ -54,6 +53,8 @@ $('#chatForm').on('submit', (e) => {
             message,
         }),
         success: (response) => {
+
+            const chatBox = document.querySelector(`#leftChatBox #`);
 
         },
         error: (error) => {
