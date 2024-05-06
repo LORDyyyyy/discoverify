@@ -13,7 +13,6 @@ use App\Controllers\{
     PostsController,
     AuthController,
     FriendsController,
-    ReportController,
 };
 
 use App\Middleware\{
@@ -39,13 +38,24 @@ function registerRoutes(App $app)
         ->add([GuestOnlyMiddleware::class]);
     $app->get('/logout', [AuthController::class, 'logout'], false)
         ->add([AuthRequiredMiddleware::class]);
+    $app->get('/forgotpass', [AuthController::class, 'forgotPassView'], false)
+        ->add([GuestOnlyMiddleware::class]);
+    $app->post('/forgotpass', [AuthController::class, 'forgotPass'], false)
+        ->add([GuestOnlyMiddleware::class]);
+    $app->get('/verifycode', [AuthController::class, 'verifycodeView'], false)
+        ->add([GuestOnlyMiddleware::class]);
+    $app->post('/verifycode', [AuthController::class, 'verifycode'], false)
+        ->add([GuestOnlyMiddleware::class]);
+    $app->get('/resetpass', [AuthController::class, 'resetPassView'], false)
+        ->add([GuestOnlyMiddleware::class]);
+    $app->post('/resetpass', [AuthController::class, 'resetPass'], false)
+        ->add([GuestOnlyMiddleware::class]);
 
-    $app->get('/friends', [FriendsController::class, 'getFriends'], true) // not implemented yet
+
+    $app->get('/friends', [FriendsController::class, 'friendsView'], false)
         ->add([AuthRequiredMiddleware::class]);
-
-    $app->post('/removeFriend', [FriendsController::class, 'removeFriend'], false) // not implemented yet
+    $app->delete('/friends/{id}', [FriendsController::class, 'removeFriend'], false) // not implemented yet
         ->add([AuthRequiredMiddleware::class]);
-
     $app->get('/api/friends', [FriendsController::class, 'getFriends'], true) // good
         ->add([AuthRequiredMiddleware::class]);
     $app->post('/api/friends', [FriendsController::class, 'sendRequest'], true) // good
@@ -82,8 +92,5 @@ function registerRoutes(App $app)
     $app->post('/api/posts/', [PostsController::class, 'addPost'], false)
         ->add([AuthRequiredMiddleware::class]);
     $app->post('/api/posts/', [PostsController::class, 'addComment'], true)
-        ->add([AuthRequiredMiddleware::class]);
-
-    $app->post('/api/reports', [ReportController::class, 'sendReport'], true)
         ->add([AuthRequiredMiddleware::class]);
 }

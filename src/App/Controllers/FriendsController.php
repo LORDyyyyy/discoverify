@@ -90,10 +90,11 @@ class FriendsController
         $receiverId = $_SESSION['user'];
         $this->friendModel->declineRequestStatus($receiverId, (int)$_POST['id']);
 
-
         echo json_encode([
             'status' => 'success',
             'code' => HTTP::OK_STATUS_CODE,
+            'message' => 'Request declined successfully',
+            'post' => $_POST
         ]);
     }
 
@@ -114,6 +115,7 @@ class FriendsController
         $userId = intval($_SESSION['user']);
         $currUser = $this->userModel->getCurrUser($userId);
         $friends = $this->friendModel->getFriends($userId);
+        $friendRequests = $this->friendModel->showRequest($userId);
 
         echo $this->view->render(
             'friends.php',
@@ -121,18 +123,19 @@ class FriendsController
                 'title' => 'Friends | Discoverify',
                 'user' => $currUser,
                 'friends' => $friends,
+                'friendRequests' => $friendRequests,
             ]
         );
     }
 
-    public function removeFriend()
+    public function removeFriend(array $params)
     {
         // Middlewares: AuthRequiredMiddleware
 
-        $this->validatorService->VaildateRequest($_POST);
+        $this->validatorService->VaildateRequest($params);
 
         $userId = $_SESSION['user'];
-        $this->friendModel->removeFriend($userId, (int)$_POST['id']);
+        $this->friendModel->removeFriend($userId, (int)$params['id']);
 
         redirectTo('/friends');
     }
