@@ -111,6 +111,14 @@ class ValidatorService
         ], true);
     }
 
+    public function validateReportRequest(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'id' => ['required', 'numeric'],
+            'type' => ['required', 'in:user,post,page']
+        ], true);
+    }
+
     public function chatMessage(array $formData)
     {
         $this->validator->validate($formData, [
@@ -148,6 +156,7 @@ class ValidatorService
 
             $paramsToValidate[] = $type == 'photo' ? $photoRules : $videoRules;
         }
+
         // debug($singleFileInfo);
         if ($type == "photo") {
 
