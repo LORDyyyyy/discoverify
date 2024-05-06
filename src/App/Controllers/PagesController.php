@@ -46,7 +46,6 @@ class PagesController
         
         $this->validator->deletePageValidation($_POST);
         $this->PagesModel->deletePage((int)$_POST['id'], (int)$_SESSION['user']);
-
         redirectTo('/');
     }
 
