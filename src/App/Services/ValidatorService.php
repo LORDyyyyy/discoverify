@@ -111,6 +111,14 @@ class ValidatorService
         ], true);
     }
 
+    public function validateReportRequest(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'id' => ['required', 'numeric'],
+            'type' => ['required', 'in:user,post,page']
+        ], true);
+    }
+
     public function chatMessage(array $formData)
     {
         $this->validator->validate($formData, [
@@ -126,7 +134,7 @@ class ValidatorService
         ]);
     }
 
-    public function Mediavalidator($formData,string $type)
+    public function Mediavalidator($formData, string $type)
     {
         $singleFileInfo = [];
         $paramsToValidate = [];
@@ -150,10 +158,9 @@ class ValidatorService
         }
 
         // debug($singleFileInfo);
-        if($type=="photo"){
-            
-            $this->validator->validate($singleFileInfo,$paramsToValidate);
-        }
+        if ($type == "photo") {
 
+            $this->validator->validate($singleFileInfo, $paramsToValidate);
+        }
     }
 }

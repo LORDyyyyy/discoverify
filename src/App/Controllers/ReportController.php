@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controllers;
@@ -25,7 +26,7 @@ class ReportController
     {
         // Middlewares: AuthRequiredMiddleware
 
-        $this->validatorService->VaildateRequest($_POST);
+        $this->validatorService->validateReportRequest($_POST);
 
         $reporterId = $_SESSION['user'];
 
