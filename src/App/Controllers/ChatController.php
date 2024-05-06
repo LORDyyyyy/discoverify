@@ -49,6 +49,7 @@ class ChatController
         $user = $this->userModel->getCurrUser($userID);
 
         $friends = $this->friendsModel->getFriends($userID);
+        $friendRequests = $this->friendsModel->showRequest($userID);
 
         foreach ($friends as &$friend) {
             $friendId = $friend['sID'] == $userID ? $friend['rID'] : $friend['sID'];
@@ -61,7 +62,8 @@ class ChatController
                 'title' => 'Chat | Discoverify',
                 'user' => $user,
                 'friends' => $friends ?? [],
-                'room' => null
+                'room' => null,
+                'friendRequests' => $friendRequests
             ]
         );
     }
@@ -75,6 +77,7 @@ class ChatController
         $user = $this->userModel->getCurrUser($userID);
 
         $friends = $this->friendsModel->getFriends($userID);
+        $friendRequests = $this->friendsModel->showRequest($userID);
 
         foreach ($friends as &$friend) {
             $friendId = $friend['sID'] == $userID ? $friend['rID'] : $friend['sID'];
@@ -97,6 +100,7 @@ class ChatController
                 'user' => $user,
                 'room' => $params['room'],
                 'friends' => $friends ?? [],
+                'friendRequests' => $friendRequests
             ]
         );
     }

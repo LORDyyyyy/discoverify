@@ -62,7 +62,10 @@ class FriendsModel extends DBStorage implements ModelInterface
 
     public function showRequest(int $receiverId)
     {
-        $query = "SELECT f.*, u.first_name, u.last_name, u.profile_picture 
+        $query = "SELECT f.receiverId as rId, f.senderId as sId, f.timestamp,
+                u.first_name as fname,
+                u.last_name as lname,
+                u.profile_picture as pfp
                 FROM {$this->__tablename__} f 
                 JOIN users u ON f.senderId = u.id 
                 WHERE f.receiverId = :receiverId AND f.status = 1";
@@ -172,8 +175,7 @@ class FriendsModel extends DBStorage implements ModelInterface
         OR (receiverId = :senderId AND senderId = :receiverId)";
         $result = $this->db->query($query, ['receiverId' => $receiverId, 'senderId' => $senderId]);
 
-        if (!$result)
-        {
+        if (!$result) {
             throw new ValidationException([
                 'id' => ['Friend not found']
             ]);
