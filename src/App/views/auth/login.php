@@ -64,7 +64,7 @@
                                 </div>
                                 <div class="d-flex align-items-center">
                                     <span class="ml-auto">
-                                        <a href="#" class="link">Forgot Password?</a>
+                                        <a href="/forgotpass" class="link">Forgot Password?</a>
                                     </span>
                                 </div>
                                 <div class="d-flex mb-3 align-items-center">

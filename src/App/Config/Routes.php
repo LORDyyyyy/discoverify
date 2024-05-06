@@ -25,23 +25,31 @@ function registerRoutes(App $app)
 {
     $app->setErrorHandler([ErrorController::class, 'notFound']);
 
-
     $app->get('/', [HomeController::class, 'homeView'], false)
         ->add([AuthRequiredMiddleware::class]);
-
 
     $app->get('/login', [AuthController::class, 'loginView'], false)
         ->add([GuestOnlyMiddleware::class]);
     $app->post('/login', [AuthController::class, 'login'], false)
         ->add([GuestOnlyMiddleware::class]);
-
     $app->get('/signup', [AuthController::class, 'signupView'], false)
         ->add([GuestOnlyMiddleware::class]);
     $app->post('/signup', [AuthController::class, 'signup'], false)
         ->add([GuestOnlyMiddleware::class]);
-
     $app->get('/logout', [AuthController::class, 'logout'], false)
         ->add([AuthRequiredMiddleware::class]);
+    $app->get('/forgotpass', [AuthController::class, 'forgotPassView'], false)
+        ->add([GuestOnlyMiddleware::class]);
+    $app->post('/forgotpass', [AuthController::class, 'forgotPass'], false)
+        ->add([GuestOnlyMiddleware::class]);
+    $app->get('/verifycode', [AuthController::class, 'verifycodeView'], false)
+        ->add([GuestOnlyMiddleware::class]);
+    $app->post('/verifycode', [AuthController::class, 'verifycode'], false)
+        ->add([GuestOnlyMiddleware::class]);
+    $app->get('/resetpass', [AuthController::class, 'resetPassView'], false)
+        ->add([GuestOnlyMiddleware::class]);
+    $app->post('/resetpass', [AuthController::class, 'resetPass'], false)
+        ->add([GuestOnlyMiddleware::class]);
 
     $app->get('/friends', [FriendsController::class, 'getFriends'], true) // not implemented yet
         ->add([AuthRequiredMiddleware::class]);

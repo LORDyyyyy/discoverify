@@ -7,6 +7,7 @@ namespace App\Controllers;
 use Framework\TemplateEngine;
 use App\Models\UserModel;
 use App\Services\ValidatorService;
+use Framework\Exceptions\ValidationException;
 
 class AuthController
 {
@@ -40,6 +41,9 @@ class AuthController
 
         $user = $this->userModel->login($_POST['email'], $_POST['password']);
 
+        unset($_SESSION['email']);
+        unset($_SESSION['code']);
+
         session_regenerate_id();
 
         $_SESSION['user'] = $user['id'];
@@ -57,6 +61,7 @@ class AuthController
         $this->userModel->isEmailTaken($_POST['email']);
 
         $data = $_POST;
+
         unset($data['confirmPassword']);
         unset($data['token']);
 
@@ -100,6 +105,93 @@ class AuthController
             $params['secure'],
             $params['httponly']
         );
+
+        redirectTo('/login');
+    }
+
+    public function forgotPassView()
+    {
+        // Middlewares: GuestOnlyMiddleware
+
+        echo $this->view->render(
+            'auth/forgotpass.php',
+            ['title' => 'Forgot Password | Discoverify']
+        );
+    }
+
+    public function forgotPass()
+    {
+        // Middlewares: GuestOnlyMiddleware
+
+        $this->validatorService->validateForgotPass($_POST);
+
+        //$this->email->sendResetCode($_POST['email']);
+        $result = $this->userModel->emailExists($_POST['email']);
+
+        if (!$result) {
+            throw new ValidationException([
+                'email' => ['Email does not exist']
+            ]);
+        }
+
+        $_SESSION['email'] = $_POST['email'];
+        $_SESSION['code'] = '123';
+
+        redirectTo('/verifycode');
+    }
+
+    public function verifycodeView($token)
+    {
+        // Middlewares: GuestOnlyMiddleware
+
+        echo $this->view->render(
+            'auth/verify_code.php',
+            ['title' => 'Verify Code | Discoverify']
+        );
+    }
+
+    public function verifycode()
+    {
+        // Middlewares: GuestOnlyMiddleware
+
+        $this->validatorService->validateVerifyCode($_POST);
+
+        // dummy code
+        if ($_POST['code'] !== $_SESSION['code']) {
+            throw new ValidationException([
+                'code' => ['Invalid code']
+            ]);
+        }
+
+        redirectTo('/resetpass');
+    }
+
+    public function resetPassView()
+    {
+        // Middlewares: GuestOnlyMiddleware
+
+        if (!isset($_SESSION['email']) || !isset($_SESSION['code'])) {
+            redirectTo('/forgotpass');
+        }
+
+        echo $this->view->render(
+            'auth/reset_pass.php',
+            ['title' => 'Reset Password | Discoverify']
+        );
+    }
+
+    public function resetPass()
+    {
+        // Middlewares: GuestOnlyMiddleware
+
+        $this->validatorService->validateResetPass($_POST);
+
+        $this->userModel->resetPassword($_SESSION['email'], $_POST['newPassword']);
+
+        unset($_SESSION['email']);
+        unset($_SESSION['code']);
+
+        session_regenerate_id();
 
         redirectTo('/login');
     }

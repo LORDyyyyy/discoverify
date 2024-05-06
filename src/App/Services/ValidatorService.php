@@ -82,6 +82,28 @@ class ValidatorService
         ], false);
     }
 
+    public function validateForgotPass(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'email' => ['required', 'email']
+        ], false);
+    }
+
+    public function validateResetPass(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'newPassword' => ['required', 'minlen:8', 'nospaceatall'],
+            'confirmPassword' => ['required', 'match:newPassword']
+        ], false);
+    }
+
+    public function validateVerifyCode(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'code' => ['required']
+        ], false);
+    }
+
     public function VaildateRequest(array $formData)
     {
         $this->validator->validate($formData, [
@@ -104,16 +126,16 @@ class ValidatorService
         ]);
     }
 
-    public function Mediavalidator($formData,string $type)
+    public function Mediavalidator($formData, string $type)
     {
         $singleFileInfo = [];
         $paramsToValidate = [];
         /* $type = "photo"; */
-        
+
         $length = count($formData["name"]);
         $photoRules = ['filemaxsize:1', 'filealowedtypes:png,jpg,jpeg'];
         $videoRules = ['filemaxsize:1', 'filealowedtypes:png,jpg,jpeg'];
-        
+
         for ($i = 0; $i < $length; $i++) {
             $singleFileInfo["$i"] = [
                 "name" => $formData["name"][$i],
@@ -123,14 +145,13 @@ class ValidatorService
                 "error" => $formData["error"][$i],
                 "size" => $formData["size"][$i]
             ];
-        
+
             $paramsToValidate[] = $type == 'photo' ? $photoRules : $videoRules;
         }
         // debug($singleFileInfo);
-        if($type=="photo"){
-            
-            $this->validator->validate($singleFileInfo,$paramsToValidate);
-        }
+        if ($type == "photo") {
 
+            $this->validator->validate($singleFileInfo, $paramsToValidate);
+        }
     }
 }
