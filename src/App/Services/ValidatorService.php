@@ -108,7 +108,7 @@ class ValidatorService
     {
         $this->validator->validate($formData, [
             'id' => ['required', 'numeric']
-        ], true);
+        ], false);
     }
 
     public function validateReportRequest(array $formData)
@@ -161,6 +161,29 @@ class ValidatorService
 
             $this->validator->validate($singleFileInfo, $paramsToValidate);
         }
+    }
+
+    public function validateUpdate(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'type' => ['required'],
+            'contant' => ['required']
+        ], true);
+    }
+
+    public function validateNotification(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'type' => ['required'],
+            'contant' => ['required']
+        ], true);
+    }
+
+    public function validateSearch(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'query' => ['required', 'nospaceatall']
+        ], true);
     }
     public function commentValidate($formData)
     {
