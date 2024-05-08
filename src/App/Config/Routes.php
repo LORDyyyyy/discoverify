@@ -97,4 +97,7 @@ function registerRoutes(App $app)
         ->add([AuthRequiredMiddleware::class]);
     $app->post('/api/posts/', [PostsController::class, 'addComment'], true)
         ->add([AuthRequiredMiddleware::class]);
+
+
+        
 }
