@@ -109,4 +109,19 @@ class ValidatorService
         ]);
     }
 
+    public function followPageValidation(array $data)
+    {
+        $this->validator->validate($data , [
+            'page_id' => ['required' , 'numeric']
+        ]);
+    }
+
+
+    public function UnfollowPageValidation(array $data)
+    {
+        $this->validator->validate($data , [
+            'page_id' => ['required' , 'numeric'],
+        ]);
+    }
+
 }

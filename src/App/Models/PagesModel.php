@@ -41,26 +41,13 @@ class PagesModel extends DBStorage implements ModelInterface
         parent::__construct($db);
     }
 
-    
 
-
-    
-    // create page for fetch the data!!!
-
-    //  create page
+    //  create page              
 
     public function create(array $data)
     {
-        $data['name'] = $this->name;
-        $data['description'] = $this->description;
-        $data['page_picture'] = $this->page_picture;
-        $data['cover_picture'] = $this->cover_picture;
-        $data['created_at'] = $this->created_at;
-        
         return parent::create($data);
     }
-
-    
 
 
     // delete page 
@@ -86,10 +73,71 @@ class PagesModel extends DBStorage implements ModelInterface
         ]);
     }
 
-    //  block/unblock 
-
     
     // follow  AND unfollow  feature 
+
+
+    
+    public function followPage(int $page_id , int $user_id)
+    {
+        $query = "SELECT * FROM pages WHERE  page_id = :page_id ";
+        $result = $this->db->query($query , [
+            'page_id' => $page_id,
+        ])->count();
+
+        if (!$result) {
+            throw new ValidationException([
+                'message' => "Page not found!" // 
+            ]);
+        }
+
+        $query = "SELECT * FROM page_likes WHERE  page_id = :page_id AND user_id = :user_id ";
+        $result = $this->db->query($query , [
+            'page_id' => $page_id,
+            'user_id' => $user_id
+        ])->count();
+
+        if ($result) {
+            throw new ValidationException([
+                'message' => "Already liked!" // 
+            ]);
+        }
+        
+        $query = "INSERT INTO page_likes (page_id , user_id) VALUES (:page_id , :user_id)";
+        $this->db->query($query, [
+            'page_id' => $page_id,
+            'user_id' => $user_id
+        ]);
+        
+    }
+
+
+
+
+
+public function UnfollowPage(int $page_id , int $user_id)
+{
+    $query = "SELECT * FROM pages WHERE  page_id = :page_id ";
+        $result = $this->db->query($query , [
+            'page_id' => $page_id
+        ])->count();
+
+        if (!$result) {
+            throw new ValidationException([
+                'message' => "Page not found!" // 
+            ]);
+        }
+
+        $query = "DELETE FROM page_likes WHERE page_id = :page_id AND user_id = :user_id";
+        $this->db->query($query, [
+            'page_id' => $page_id,
+            'user_id' => $user_id
+        ]);
+        
+}
+
+
+    
 
     // like and comment   mstf
 

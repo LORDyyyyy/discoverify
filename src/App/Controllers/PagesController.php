@@ -48,4 +48,15 @@ class PagesController
         redirectTo('/');
     }
 
+    public function followPage()
+    {
+        $this->validator->followPageValidation($_POST);
+        $this->PagesModel->followPage((int)$_POST['page_id'] , (int)$_SESSION['user_id']);
+    }
+
+    public function UnfollowPage()
+    {
+        $this->validator->UnfollowPageValidation($_POST);
+        $this->PagesModel->UnfollowPage((int)$_POST['page_id'] , (int)$_SESSION['user_id']);
+    }
 }

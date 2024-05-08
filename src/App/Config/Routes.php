@@ -49,6 +49,12 @@ function registerRoutes(App $app)
     ->add([AuthRequiredMiddleware::class]);
     $app->post( '/pages' , [PagesController::class , 'createpage'])
         ->add([AuthRequiredMiddleware::class]);
+    $app->post('/pages/follow' ,  [PagesController::class , 'followpage']) 
+    ->add([AuthRequiredMiddleware::class]);
+    $app->delete('/pages/follow' ,  [PagesController::class , 'unfollowpage'])
+    ->add([AuthRequiredMiddleware::class]);
+
+
 
         
     $app->get('/friends', [FriendsController::class, 'sendRequestView'], true)
