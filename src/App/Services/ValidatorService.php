@@ -82,10 +82,40 @@ class ValidatorService
         ], false);
     }
 
+    public function validateForgotPass(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'email' => ['required', 'email']
+        ], false);
+    }
+
+    public function validateResetPass(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'newPassword' => ['required', 'minlen:8', 'nospaceatall'],
+            'confirmPassword' => ['required', 'match:newPassword']
+        ], false);
+    }
+
+    public function validateVerifyCode(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'code' => ['required']
+        ], false);
+    }
+
     public function VaildateRequest(array $formData)
     {
         $this->validator->validate($formData, [
             'id' => ['required', 'numeric']
+        ], true);
+    }
+
+    public function validateReportRequest(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'id' => ['required', 'numeric'],
+            'type' => ['required', 'in:user,post,page']
         ], true);
     }
 
@@ -143,6 +173,6 @@ class ValidatorService
     {
         $this->validator->validate($formData, [
             'id' => ['required']
-        ],true);
+        ], true);
     }
 }

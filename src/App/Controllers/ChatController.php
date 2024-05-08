@@ -49,6 +49,7 @@ class ChatController
         $user = $this->userModel->getCurrUser($userID);
 
         $friends = $this->friendsModel->getFriends($userID);
+        $friendRequests = $this->friendsModel->showRequest($userID);
 
         foreach ($friends as &$friend) {
             $friendId = $friend['sID'] == $userID ? $friend['rID'] : $friend['sID'];
@@ -61,7 +62,8 @@ class ChatController
                 'title' => 'Chat | Discoverify',
                 'user' => $user,
                 'friends' => $friends ?? [],
-                'room' => null
+                'room' => null,
+                'friendRequests' => $friendRequests
             ]
         );
     }
@@ -75,6 +77,7 @@ class ChatController
         $user = $this->userModel->getCurrUser($userID);
 
         $friends = $this->friendsModel->getFriends($userID);
+        $friendRequests = $this->friendsModel->showRequest($userID);
 
         foreach ($friends as &$friend) {
             $friendId = $friend['sID'] == $userID ? $friend['rID'] : $friend['sID'];
@@ -97,6 +100,7 @@ class ChatController
                 'user' => $user,
                 'room' => $params['room'],
                 'friends' => $friends ?? [],
+                'friendRequests' => $friendRequests
             ]
         );
     }
@@ -120,6 +124,11 @@ class ChatController
         }
 
         $messages = $this->chatModel->getUsersChat(
+            intval($_SESSION['user']),
+            intval($params['room'])
+        );
+
+        $this->chatModel->markMessagesAsSeen(
             intval($_SESSION['user']),
             intval($params['room'])
         );
@@ -149,8 +158,7 @@ class ChatController
 
         $senderUser = $this->chatModel->getUserInfo($_SESSION['user']);
 
-
-        $insertMessage = $this->chatModel->insertMessage(
+        $this->chatModel->insertMessage(
             intval($_SESSION['user']),
             intval($params['room']),
             $_POST['message'],

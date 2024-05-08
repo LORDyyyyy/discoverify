@@ -177,7 +177,8 @@ class PostsController
             "message" => "success"
         ]);
     }
-    public function countReacts(){
+    public function countReacts()
+    {
         $this->postModel->countReacts($_POST['post_id']);
     }
 }
