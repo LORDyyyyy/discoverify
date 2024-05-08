@@ -51,4 +51,17 @@ class UserController
             'code' => HTTP::OK_STATUS_CODE,
         ]);
     }
+
+    public function showNotifications()
+    {
+        // Middlewares: AuthRequiredMiddleware
+
+        $notifications = $this->userModel->getNotifications($_SESSION['user']);
+
+        echo json_encode([
+            'notifications' => $notifications,
+        ]);
+    }
+
+    
 }

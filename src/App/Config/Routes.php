@@ -105,4 +105,7 @@ function registerRoutes(App $app)
         ->add([AuthRequiredMiddleware::class]);
     $app->post('/profile/{id}', [UserController::class, 'updateProfile'], true)
         ->add([AuthRequiredMiddleware::class]);
+
+    $app->get('/notifications', [UserController::class, 'showNotifications'], true)
+        ->add([AuthRequiredMiddleware::class]);
 }
