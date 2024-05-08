@@ -1,3 +1,8 @@
 body {
     padding-top: 5rem;
+    /* background-color: brown !important; */
+}
+
+.profile_section {
+    background-color: brown !important;
 }

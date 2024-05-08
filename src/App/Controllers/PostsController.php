@@ -15,6 +15,7 @@ use Framework\HTTP;
 use App\Config\Paths;
 use Framework\Exceptions\APIStatusCodeSend;
 use \DateTime;
+use ElephantIO\Engine\SocketIO\Session;
 use Framework\Exceptions\ValidationException;
 
 class PostsController
@@ -58,20 +59,30 @@ class PostsController
         // photo validation 
 
         if (isset($_FILES['image'])) {
-            
-                $this->validatorService->MediaValidator($_FILES['image'],"photo");
-            
+
+            // $this->validatorService->Mediavalidator($_FILES['image'],"photo");
+
             $this->addMedia($_FILES['image'], $newPostID, "photo");
         }
 
         if (isset($_FILES['video'])) {
-            
-                $this->validatorService->MediaValidator($_FILES['video'],"video");
+
+            // $this->validatorService->Mediavalidator($_FILES['video'],"video");
 
             $this->addMedia($_FILES['video'], $newPostID, "video");
         }
 
-        // redirectTo("/");
+        redirectTo("/");
+    }
+
+    public function deletePost()
+    {
+        $this->validatorService->validateIdOnly($_POST);
+        $this->postModel->deletePost((int)$_POST['id'], (int)$_SESSION['user']);
+
+        echo json_encode([
+            "message" => "success"
+        ]);
     }
 
     private function addMedia(array $files, int $newPostID, string $type)
@@ -105,5 +116,69 @@ class PostsController
         }
 
         return $uploadedFiles;
+    }
+    public function viewcomments()
+    { {
+            echo $this->templateEngine->render('comments.php', [
+                'title' => 'Home | Discoverify',
+            ]);
+        }
+    }
+
+
+    public function addComment()
+    {
+        $this->validatorService->commentValidate($_POST);
+
+        $info = [
+            'user_id' =>  $_SESSION['user'],
+            'post_id' => 8,
+            'content' => $_POST['content']
+
+        ];
+        $this->postModel->addComment($info);
+
+        echo json_encode([
+            "message" => "success"
+        ]);
+    }
+
+    public function deleteComment()
+    {
+        $this->validatorService->validateIdOnly($_POST);
+        $this->postModel->deleteComment((int)$_POST['id'], (int)$_SESSION['user']);
+
+        echo json_encode([
+            "message" => "success"
+        ]);
+    }
+    public function sharePost()
+    {
+        $info = [
+            'post_id' => 8,
+            'user_id' => $_SESSION['user'],
+            'content' => $_POST['content']
+        ];
+        $this->postModel->sharePost($info);
+        echo json_encode([
+            "message" => "success"
+        ]);
+    }
+
+    public function addReact()
+    {
+        $info = [
+            'user_id' => $_SESSION['user'],
+            'post_id' => 8,
+            'type' => $_POST['type']
+        ];
+        $this->postModel->addReact($info);
+        echo json_encode([
+            "message" => "success"
+        ]);
+    }
+    public function countReacts()
+    {
+        $this->postModel->countReacts($_POST['post_id']);
     }
 }

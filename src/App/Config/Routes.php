@@ -21,6 +21,10 @@ use App\Middleware\{
     GuestOnlyMiddleware,
 };
 
+use App\Middleware\ControllersMiddlewares\{
+    BlockedUserPageMiddleware
+};
+
 
 function registerRoutes(App $app)
 {
@@ -72,31 +76,52 @@ function registerRoutes(App $app)
         ->add([AuthRequiredMiddleware::class]);
     $app->delete('/api/requests', [FriendsController::class, 'declineRequest'], true)
         ->add([AuthRequiredMiddleware::class]);
-    $app->post('/block', [FriendsController::class, 'blockFriend'], true)
+    /* Block Functions */
+    $app->post('/block/{id}', [FriendsController::class, 'blockFriend'], false)
         ->add([AuthRequiredMiddleware::class]);
-    $app->get('/block', [FriendsController::class, 'showBlocked'], true)
+    $app->get('/block', [FriendsController::class, 'showBlocked'], false)
         ->add([AuthRequiredMiddleware::class]);
-    $app->delete('/block', [FriendsController::class, 'unblockFriend'], true)
+    $app->delete('/block/{id}', [FriendsController::class, 'unblockFriend'], false)
         ->add([AuthRequiredMiddleware::class]);
-    $app->post('/checkBlock', [FriendsController::class, 'checkBlock'], true)
+    $app->post('/checkBlock', [FriendsController::class, 'checkBlock'], true) // unused
         ->add([AuthRequiredMiddleware::class]);
 
     /* ChatController */
     $app->get('/chat', [ChatController::class, 'chatView'])
         ->add([AuthRequiredMiddleware::class]);
     $app->get('/chat/{room}', [ChatController::class, 'chatBoxView'])
-        ->add([AuthRequiredMiddleware::class]);
+        ->add([AuthRequiredMiddleware::class, BlockedUserPageMiddleware::class]);
     $app->post('/api/chat/join/{room}', [ChatController::class, 'joinChatRoom'], true)
-        ->add([AuthRequiredMiddleware::class]);
+        ->add([AuthRequiredMiddleware::class, BlockedUserPageMiddleware::class]);
     $app->post('/api/chat/{room}', [ChatController::class, 'emitToChat'], true)
-        ->add([AuthRequiredMiddleware::class]);
+        ->add([AuthRequiredMiddleware::class, BlockedUserPageMiddleware::class]);
 
 
     /* PostsController */
-    $app->get('/api/posts', [PostsController::class, 'test'], false);
-    $app->post('/api/posts/', [PostsController::class, 'addPost'], false)
+    $app->get('/api/posts', [PostsController::class, 'test'], false)
         ->add([AuthRequiredMiddleware::class]);
-    $app->post('/api/posts/', [PostsController::class, 'addComment'], true)
+
+    $app->post('/api/posts', [PostsController::class, 'addPost'], false)
+        ->add([AuthRequiredMiddleware::class]);
+
+
+    $app->delete('/api/posts', [PostsController::class, 'deletePost'], true)
+        ->add([AuthRequiredMiddleware::class]);
+
+    $app->post('/api/posts/share', [PostsController::class, 'sharePost'], true)
+        ->add([AuthRequiredMiddleware::class]);
+
+    $app->post('/api/posts/reacts', [PostsController::class, 'addReact'], true)
+        ->add([AuthRequiredMiddleware::class]);
+
+
+    $app->get('/api/posts/comments', [PostsController::class, 'viewcomments'], false)
+        ->add([AuthRequiredMiddleware::class]);
+
+    $app->post('/api/posts/comments', [PostsController::class, 'addComment'], true)
+        ->add([AuthRequiredMiddleware::class]);
+
+    $app->delete('/api/posts/comments', [PostsController::class, 'deleteComment'], true)
         ->add([AuthRequiredMiddleware::class]);
 
 

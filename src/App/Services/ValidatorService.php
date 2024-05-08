@@ -108,7 +108,7 @@ class ValidatorService
     {
         $this->validator->validate($formData, [
             'id' => ['required', 'numeric']
-        ], true);
+        ], false);
     }
 
     public function validateReportRequest(array $formData)
@@ -156,14 +156,13 @@ class ValidatorService
 
             $paramsToValidate[] = $type == 'photo' ? $photoRules : $videoRules;
         }
-
         // debug($singleFileInfo);
         if ($type == "photo") {
 
             $this->validator->validate($singleFileInfo, $paramsToValidate);
         }
     }
-    
+
     public function validateUpdate(array $formData)
     {
         $this->validator->validate($formData, [
@@ -183,7 +182,20 @@ class ValidatorService
     public function validateSearch(array $formData)
     {
         $this->validator->validate($formData, [
-            'query' => ['required', 'names']
+            'query' => ['required', 'nospaceatall']
+        ], true);
+    }
+    public function commentValidate($formData)
+    {
+        $this->validator->validate($formData, [
+            'content' => ['required'],
+            'page_id' => ['required', 'numeric']
+        ], true);
+    }
+    public function validateIdOnly($formData)
+    {
+        $this->validator->validate($formData, [
+            'id' => ['required']
         ], true);
     }
 }

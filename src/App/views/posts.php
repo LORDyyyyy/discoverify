@@ -9,8 +9,8 @@
 
 <body>
 
-    <form enctype="multipart/form-data" action ="/api/posts" method="POST" novalidate>
-    <?php include $this->resolve('partials/_csrf.php'); ?>
+    <form enctype="multipart/form-data" action="/api/posts" method="POST" novalidate>
+        <?php include $this->resolve('partials/_csrf.php'); ?>
         <label for="content">Content:</label><br>
         <textarea id="content" name="content" rows="5"></textarea><br><br>
         <div class="invalid-feedback">
@@ -28,10 +28,10 @@
         <label for="video">Upload videos:</label><br>
         <input type="file" id="video" name="video[]" multiple accept="video/*"><br><br>
 
-
         <button type="submit">Submit</button>
     </form>
-
+    <!-- Comment Section -->
+ 
 
 </body>
 
