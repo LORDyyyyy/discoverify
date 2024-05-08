@@ -90,4 +90,17 @@ class UserController
             'code' => HTTP::OK_STATUS_CODE,
         ]);
     }
+
+    public function search()
+    {
+        // Middlewares: AuthRequiredMiddleware
+        $this->validatorService->validateSearch($_POST);
+
+        $results = $this->userModel->search($_SESSION['user'], $_POST['query']);
+
+        echo json_encode([
+            'results' => $results,
+        ]);
+    }
+
 }

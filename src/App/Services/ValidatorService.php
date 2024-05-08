@@ -179,4 +179,11 @@ class ValidatorService
             'contant' => ['required']
         ], true);
     }
+
+    public function validateSearch(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'query' => ['required', 'names']
+        ], true);
+    }
 }

@@ -112,4 +112,6 @@ function registerRoutes(App $app)
         ->add([AuthRequiredMiddleware::class]);
     $app->get('/seeNotifications', [UserController::class, 'markNotificationsAsRead'], true)
         ->add([AuthRequiredMiddleware::class]);
+    $app->post('/search', [UserController::class, 'search'], true)
+        ->add([AuthRequiredMiddleware::class]);
 }
