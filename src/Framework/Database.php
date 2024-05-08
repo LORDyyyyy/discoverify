@@ -90,6 +90,7 @@ class Database
      * Used after calling the Database::query() method.
      *
      * @return array An array containing all rows from the database.
+     array index, column of result 
      */
     public function findAll(): array
     {

@@ -6,3 +6,8 @@ body {
 .profile_section {
     background-color: brown !important;
 }
+.media_section{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

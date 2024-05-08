@@ -42,9 +42,11 @@ class PostsController
     }
     public function test()
     {
+        
         echo $this->templateEngine->render('posts.php', [
             'title' => 'Home | Discoverify',
         ]);
+        
     }
 
     public function addPost()
@@ -106,13 +108,14 @@ class PostsController
 
             $randomName = bin2hex(random_bytes(16)) . "." . $fileExtention;
             $uploadPath = Paths::STORAGE_UPLOADS . "/" . $randomName;
+            $storagePath=  "/storage/uploads/" . $randomName;
             //$file['name'][$key]
             if (!move_uploaded_file($tmp_name, $uploadPath)) {
                 throw new ValidationException(['receipt' => ['failed upload file']]);
             }
 
             // Store the file name and temporary file path in the array
-            $uploadedFiles[$file['name'][$key]] = $uploadPath;
+            $uploadedFiles[$file['name'][$key]] = $storagePath;
         }
 
         return $uploadedFiles;

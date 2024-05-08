@@ -92,10 +92,10 @@ function registerRoutes(App $app)
 
 
     /* PostsController */
-    $app->get('/api/posts', [PostsController::class, 'test'], false)
+    $app->get('/posts', [PostsController::class, 'test'], false)
         ->add([AuthRequiredMiddleware::class]);
 
-    $app->post('/api/posts', [PostsController::class, 'addPost'], false)
+    $app->post('/posts', [PostsController::class, 'addPost'], false)
         ->add([AuthRequiredMiddleware::class]);
 
 

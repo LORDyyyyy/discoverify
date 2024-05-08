@@ -13,6 +13,7 @@ use App\Models\Storage\DBStorage;
 use \DateTime;
 use Framework\Exceptions\APIValidationException;
 use Framework\HTTP;
+use LDAP\Result;
 
 class PostsModel extends DBStorage implements ModelInterface
 {
@@ -163,7 +164,8 @@ class PostsModel extends DBStorage implements ModelInterface
             'type' => $type
         ]);
     }
-    public function countReacts(int $post_id):int {
+    public function countReacts(int $post_id): int
+    {
         $query = "SELECT * FROM posts WHERE id = :id";
         $result = $this->db->query($query, [
             'id' => $post_id,
@@ -175,12 +177,83 @@ class PostsModel extends DBStorage implements ModelInterface
             ], HTTP::FORBIDDEN_STATUS_CODE);
         }
         $query = "SELECT * FROM post_reacts  WHERE post_id =:post_id ";
-        $result = $this->db->query($query,[
-            'post_id'=> $post_id
+        $result = $this->db->query($query, [
+            'post_id' => $post_id
         ])->count();
         return $result;
     }
 
 
 
+    public function dispalyPost(int $user_id)
+    {
+
+        $query = "SELECT p.*
+        FROM posts p
+        JOIN friends f ON (p.user_id = f.senderId OR p.user_id = f.receiverId)
+        WHERE (f.senderId = :currentUserId OR f.receiverId = :currentUserId)
+        AND f.status = 2
+        AND p.is_private = 0;";
+        $results = $this->db->query($query, [
+            'currentUserId' => $user_id
+        ])->findAll();
+
+        foreach ($results as &$result) {
+            $result['owner'] = $this->db->query("SELECT first_name, last_name, profile_picture FROM users WHERE id = :user_id", [
+                'user_id' => $result["user_id"]
+            ])->find();
+
+
+            $result['comments'] = $this->db->query("SELECT * FROM post_comments WHERE post_id = :post_id", [
+                'post_id' => $result["id"]
+            ])->findAll();
+
+            foreach ($result['comments'] as &$comment) {
+                $comment['owner'] = $this->db->query("SELECT first_name, last_name, profile_picture FROM users WHERE id = :user_id", [
+                    'user_id' => $comment["user_id"]
+                ])->find();
+            }
+
+            $result['media'] = $this->db->query("SELECT post_id
+            FROM (
+                SELECT post_id
+                FROM post_photos
+                WHERE post_id = :post_id
+                
+                UNION ALL
+                
+                SELECT post_id
+                FROM post_videos
+                WHERE post_id = :post_id
+            ) AS combined_results;", [
+                'post_id' => $result["id"]
+            ])->findAll();
+
+            foreach ($result['media'] as &$media) {
+                $media['content'] = $this->db->query("SELECT p.id AS post_id,
+                'photo' AS media_type,
+                pp.photo_url AS media_url
+         FROM posts p
+         JOIN post_photos pp ON p.id = pp.post_id
+         WHERE p.id = :post_id
+         
+         UNION ALL
+         
+         SELECT p.id AS post_id,
+                'video' AS media_type,
+                pv.video_url AS media_url
+         FROM posts p
+         JOIN post_videos pv ON p.id = pv.post_id
+         WHERE p.id = :post_id;", [
+                    'post_id' => $media["post_id"]
+                ])->findAll();
+            }
+
+            $result['reacts'] = $this->db->query("SELECT * FROM post_reacts WHERE post_id = :post_id", [
+                'post_id' => $result["id"]
+            ])->findAll();
+        }
+        // debug($results);
+        return $results;
+    }
 }

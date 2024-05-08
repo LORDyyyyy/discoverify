@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-
+<?php include $this->resolve('partials/_header.php'); ?>
+<link rel="stylesheet" href="/assets/css/posts.css">
 <body>
 
-    <form enctype="multipart/form-data" action="/api/posts" method="POST" novalidate>
+    <form enctype="multipart/form-data" action="/posts" method="POST" novalidate>
         <?php include $this->resolve('partials/_csrf.php'); ?>
         <label for="content">Content:</label><br>
         <textarea id="content" name="content" rows="5"></textarea><br><br>

@@ -67,34 +67,47 @@
                 </div>
                 <button class="btn btn-rpimary"><i class="fa-solid fal-pen">Post</i></button>
             </div>
-            <div class="post_section shadow p-3 rounded mb-4">
-                <div class="profile_section border-bottom pb-3 mb-2 clearfix">
-                    <span class="float-end text-muted">1 min</span>
-                    <div class="d-flex align-items-center">
-                        <img src="/assets/img/e2.jpg" class="rounded-circle me-2" width="60" height="60" alt="avatar">
-                        <h5>John Doe</h5>
-                    </div>
-                </div>
-                <p>
 
-                    <!-- <?php debug($user, false); ?> -->
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eveniet vitae iusto ea consequatur,
-                    dolor nesciunt libero eius omnis doloribus iure tenetur quidem, quam veniam natus.
-                </p>
-                <div class="media_section row">
-                    <div class="col-lg-6">
-                        <img src="/assets/img/m1.jpg" alt="p1" class="w-100 mb-3">
-                    </div>
-                    <div class="col-lg-6">
-                        <img src="/assets/img/m2.jpg" alt="p2" class="w-100 mb-3">
-                    </div>
-                </div>
-                <div>
-                    <a href="#!" class="btn btn-primary"><i class="fa-solid fa-thumbs-up me-2"></i>Like</a>
-                    <a href="#!" class="btn btn-primary"><i class="fa-solid fa-comment me-2"></i>Comment</a>
+            <?php foreach ($postContents as $postContent) : ?>
+                <div class="post_section shadow p-3 rounded mb-4">
+                    <div class="profile_section border-bottom pb-3 mb-2 clearfix">
+                        <span class="float-end text-muted"><?php echo "{$postContent['created_at']}" ?></span>
+                        <div class="d-flex align-items-center">
 
+                            <img src="/<?= $postContent['owner']['profile_picture'] ?>" class="rounded-circle me-2" width="60" height="60" alt="avatar">
+                            <h5><?php echo "{$postContent['owner']['first_name']} {$postContent['owner']['last_name']}"    ?></h5>
+                        </div>
+                    </div>
+                    <p>
+
+
+                        <?php echo "{$postContent['content']}" ?>
+                    </p>
+                    <?php foreach ($postContent['media'] as $postMedia) : ?>
+                        <div class="media_section row">
+                            <?php foreach ($postMedia['content'] as $postUrl) : ?>
+                                <div class="col-lg-6 m">
+                                    <?php if ($postUrl['media_type'] == 'photo') :  ?>
+                                        <img src="<?= $postUrl['media_url'] ?>" alt="p1" class="w-100 mb-3">
+
+                                    <?php else : ?>
+                                        <video width="320" height="240" controls>
+                                            <source src="<?= $postUrl['media_url'] ?>" type="video/mp4">
+                                        </video>
+                                </div>
+                            <?php endif ?>
+
+                        <?php endforeach ?>
+
+                        </div>
+                    <?php endforeach ?>
+                    <div>
+                        <a href="#!" class="btn btn-primary"><i class="fa-solid fa-thumbs-up me-2"></i>Like</a>
+                        <a href="/comments" class="btn btn-primary"><i class="fa-solid fa-comment me-2"></i>Comment</a>
+
+                    </div>
                 </div>
-            </div>
+            <?php endforeach ?>
             <!-- <div  class="post_section shadow p-3 rounded mb-4">
                 <div class="profile_section border-bottom pb-2 mb-2 clearfix">
                     <span class="float-end text-muted">16 </span>
