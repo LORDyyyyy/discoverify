@@ -13,6 +13,7 @@ use App\Controllers\{
     PostsController,
     AuthController,
     FriendsController,
+    UserController,
 };
 
 use App\Middleware\{
@@ -96,5 +97,21 @@ function registerRoutes(App $app)
     $app->post('/api/posts/', [PostsController::class, 'addPost'], false)
         ->add([AuthRequiredMiddleware::class]);
     $app->post('/api/posts/', [PostsController::class, 'addComment'], true)
+        ->add([AuthRequiredMiddleware::class]);
+
+
+    /* UserController */
+    $app->get('/profile/{id}', [UserController::class, 'showProfile'], true)
+        ->add([AuthRequiredMiddleware::class]);
+    $app->post('/profile/{id}', [UserController::class, 'updateProfile'], true)
+        ->add([AuthRequiredMiddleware::class]);
+
+    $app->get('/notifications', [UserController::class, 'showNotifications'], true)
+        ->add([AuthRequiredMiddleware::class]);
+    $app->post('/sendNotifications', [UserController::class, 'sendNotifications'], true)
+        ->add([AuthRequiredMiddleware::class]);
+    $app->get('/seeNotifications', [UserController::class, 'markNotificationsAsRead'], true)
+        ->add([AuthRequiredMiddleware::class]);
+    $app->post('/search', [UserController::class, 'search'], true)
         ->add([AuthRequiredMiddleware::class]);
 }

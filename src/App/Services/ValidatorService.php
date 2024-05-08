@@ -163,4 +163,27 @@ class ValidatorService
             $this->validator->validate($singleFileInfo, $paramsToValidate);
         }
     }
+    
+    public function validateUpdate(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'type' => ['required'],
+            'contant' => ['required']
+        ], true);
+    }
+
+    public function validateNotification(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'type' => ['required'],
+            'contant' => ['required']
+        ], true);
+    }
+
+    public function validateSearch(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'query' => ['required', 'names']
+        ], true);
+    }
 }
