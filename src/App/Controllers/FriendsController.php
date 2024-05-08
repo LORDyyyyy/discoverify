@@ -140,37 +140,41 @@ class FriendsController
         redirectTo('/friends');
     }
 
-    public function blockFriend()
-    {
-        $this->validatorService->VaildateRequest($_POST);
-        $blockedBy = $_SESSION['user'];
-        $this->friendModel->blockFriend((int)$blockedBy, (int)$_POST['id']);
-
-        echo json_encode([
-            'status' => 'success',
-            'code' => HTTP::OK_STATUS_CODE,
-        ]);
-    }
-
     public function showBlocked()
     {
+        $blockedBy = $userId = $_SESSION['user'];
+        $results = $this->friendModel->showBlocked($blockedBy);
+
+        $currUser = $this->userModel->getCurrUser($userId);
+        $friendRequests = $this->friendModel->showRequest($userId);
+
+        echo $this->view->render(
+            'blocked.php',
+            [
+                'title' => 'Blocked Users | Discoverify',
+                'blocks' => $results,
+                'user' => $currUser,
+                'friendRequests' => $friendRequests,
+            ]
+        );
+    }
+    public function blockFriend(array $params)
+    {
+        $this->validatorService->VaildateRequest($params);
         $blockedBy = $_SESSION['user'];
-        $resurlts = $this->friendModel->showBlocked($blockedBy);
-        echo json_encode([
-            'resurlt' => $resurlts,
-        ]);
+        $this->friendModel->blockFriend((int)$blockedBy, (int)$params['id']);
+
+        redirectTo('/friends');
     }
 
-    public function unblockFriend()
-    {
-        $this->validatorService->VaildateRequest($_POST);
-        $blockedBy = $_SESSION['user'];
-        $this->friendModel->unblockFriend((int)$blockedBy, (int)$_POST['id']);
 
-        echo json_encode([
-            'status' => 'success',
-            'code' => HTTP::OK_STATUS_CODE,
-        ]);
+    public function unblockFriend(array $params)
+    {
+        $this->validatorService->VaildateRequest($params);
+        $blockedBy = $_SESSION['user'];
+        $this->friendModel->unblockFriend((int)$blockedBy, (int)$params['id']);
+
+        redirectTo('/block');
     }
 
     public function checkBlock()
@@ -182,5 +186,4 @@ class FriendsController
             'results' => $results,
         ]);
     }
-
 }

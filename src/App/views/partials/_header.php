@@ -8,9 +8,13 @@
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/lib/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous">
     <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
+    <!-- <link rel="stylesheet" href="/assets/css/bootstrap-icons.css"> -->
     <?php
-    if (($title ?? '') == 'Friends | Discoverify') {
+    if (($title ?? '') == 'Friends | Discoverify'
+        || ($title ?? '') == 'Blocked Users | Discoverify'
+    ) {
         echo '<link rel="stylesheet" href="/assets/css/friends_list.css">';
     }
     ?>
@@ -44,6 +48,12 @@
                         <a class="nav-link" href="/friends">
                             <i class="fa-solid fa-user fa-lg d-none d-lg-inline"></i>
                             <span class="d-lg-none">Friends</span>
+                        </a>
+                    </li>
+                    <li class="nav-item me-2">
+                        <a class="nav-link" href="/block">
+                            <i class="bi bi-ban fa-lg d-none d-lg-inline"></i>
+                            <span class="d-lg-none">Blocked</span>
                         </a>
                     </li>
                     <li class="nav-item me-2">

@@ -185,7 +185,7 @@ class FriendsModel extends DBStorage implements ModelInterface
     public function blockFriend(int $blockedBy, int $blocked)
     {
         if ($blockedBy === $blocked) {
-            throw new APIValidationException([
+            throw new ValidationException([
                 'id' => ['You can not block yourself']
             ]);
         }
@@ -202,7 +202,9 @@ class FriendsModel extends DBStorage implements ModelInterface
 
     public function showBlocked(int $blocked_by)
     {
-        $query = "SELECT  u.first_name as fname,
+        $query = "SELECT
+                u.id as blockedId,
+                u.first_name as fname,
                 u.last_name as lname,
                 u.profile_picture as pfp FROM users u
                 JOIN blocked_users b ON u.id = b.blocked WHERE b.blocked_by = :blocked_by";
@@ -217,7 +219,10 @@ class FriendsModel extends DBStorage implements ModelInterface
 
     public function checkBlock(int $blocked_by, int $blocked)
     {
-        $query = "SELECT * FROM blocked_users WHERE (blocked = :blocked AND blocked_by = :blocked_by) OR (blocked = :blocked_by AND blocked_by = :blocked)";
-        return $this->db->query($query, ['blocked_by' => $blocked_by, 'blocked' => $blocked])->findAll();
+        $query = "SELECT * FROM blocked_users
+        WHERE (blocked = :blocked AND blocked_by = :blocked_by)
+        OR (blocked = :blocked_by AND blocked_by = :blocked)";
+
+        return $this->db->query($query, ['blocked_by' => $blocked_by, 'blocked' => $blocked])->count();
     }
 }

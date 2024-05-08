@@ -108,7 +108,7 @@ class ValidatorService
     {
         $this->validator->validate($formData, [
             'id' => ['required', 'numeric']
-        ], true);
+        ], false);
     }
 
     public function validateReportRequest(array $formData)

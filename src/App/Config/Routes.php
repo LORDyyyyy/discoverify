@@ -20,6 +20,10 @@ use App\Middleware\{
     GuestOnlyMiddleware,
 };
 
+use App\Middleware\ControllersMiddlewares\{
+    BlockedUserPageMiddleware
+};
+
 
 function registerRoutes(App $app)
 {
@@ -71,24 +75,25 @@ function registerRoutes(App $app)
         ->add([AuthRequiredMiddleware::class]);
     $app->delete('/api/requests', [FriendsController::class, 'declineRequest'], true)
         ->add([AuthRequiredMiddleware::class]);
-    $app->post('/block', [FriendsController::class, 'blockFriend'], true)
+    /* Block Functions */
+    $app->post('/block/{id}', [FriendsController::class, 'blockFriend'], false)
         ->add([AuthRequiredMiddleware::class]);
-    $app->get('/block', [FriendsController::class, 'showBlocked'], true)
+    $app->get('/block', [FriendsController::class, 'showBlocked'], false)
         ->add([AuthRequiredMiddleware::class]);
-    $app->delete('/block', [FriendsController::class, 'unblockFriend'], true)
+    $app->delete('/block/{id}', [FriendsController::class, 'unblockFriend'], false)
         ->add([AuthRequiredMiddleware::class]);
-    $app->post('/checkBlock', [FriendsController::class, 'checkBlock'], true)
+    $app->post('/checkBlock', [FriendsController::class, 'checkBlock'], true) // unused
         ->add([AuthRequiredMiddleware::class]);
 
     /* ChatController */
     $app->get('/chat', [ChatController::class, 'chatView'])
         ->add([AuthRequiredMiddleware::class]);
     $app->get('/chat/{room}', [ChatController::class, 'chatBoxView'])
-        ->add([AuthRequiredMiddleware::class]);
+        ->add([AuthRequiredMiddleware::class, BlockedUserPageMiddleware::class]);
     $app->post('/api/chat/join/{room}', [ChatController::class, 'joinChatRoom'], true)
-        ->add([AuthRequiredMiddleware::class]);
+        ->add([AuthRequiredMiddleware::class, BlockedUserPageMiddleware::class]);
     $app->post('/api/chat/{room}', [ChatController::class, 'emitToChat'], true)
-        ->add([AuthRequiredMiddleware::class]);
+        ->add([AuthRequiredMiddleware::class, BlockedUserPageMiddleware::class]);
 
 
     /* PostsController */
