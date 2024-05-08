@@ -14,6 +14,7 @@ use App\Models\{
     ChatModel,
     PostsModel,
     ReportModel,
+    NotificationsModel,
 };
 
 use Framework\{
@@ -44,4 +45,5 @@ return [
     ChatModel::class => fn (Container $container) => new ChatModel($container->get(Database::class)),
     PostsModel::class => fn (Container $container) => new PostsModel($container->get(Database::class)),
     ReportModel::class => fn (Container $container) => new ReportModel($container->get(Database::class)),
+    NotificationsModel::class => fn (Container $container) => new NotificationsModel($container->get(Database::class)),
 ];

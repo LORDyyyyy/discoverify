@@ -147,12 +147,4 @@ class UserModel extends DBStorage implements ModelInterface
         $query = "UPDATE {$this->__tablename__} SET {$type} = :contant WHERE id = :id";
         $this->db->query($query, ['id' => $id, 'contant' => $contant]);
     }
-
-    public function getNotifications(int $id)
-    {
-        $query = "SELECT * FROM notifications WHERE user_id = :id";
-        $result = $this->db->query($query, ['id' => $id])->find();
-
-        return $result;
-    }
 }
