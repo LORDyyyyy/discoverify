@@ -57,6 +57,14 @@ class FriendsModel extends DBStorage implements ModelInterface
             'uuid_socket_secret_key' => gen_uuid(),
         ]);
 
+        $query = "SELECT first_name, last_name FROM users WHERE id = :id";
+        $name = $this->db->query($query, ['id' => $senderId])->find();
+
+        $contant = "{$name} sent you a friend request";
+        $query = "INSERT INTO notifications (user_id, content, timestamp)
+                  VALUES (:user_id, :content, NOW())";
+        $this->db->query($query, ['user_id' => $receiverId, 'content' => $contant]);
+
         return true;
     }
 
