@@ -67,8 +67,8 @@
                 </div>
                 <button class="btn btn-rpimary"><i class="fa-solid fal-pen">Post</i></button>
             </div>
-            <div class="shadow p-3 rounded mb-4">
-                <div class="border-bottom pb-3 mb-2 clearfix">
+            <div class="post_section shadow p-3 rounded mb-4">
+                <div class="profile_section border-bottom pb-3 mb-2 clearfix">
                     <span class="float-end text-muted">1 min</span>
                     <div class="d-flex align-items-center">
                         <img src="/assets/img/e2.jpg" class="rounded-circle me-2" width="60" height="60" alt="avatar">
@@ -77,11 +77,11 @@
                 </div>
                 <p>
 
-                    <?php debug($user, false); ?>
+                    <!-- <?php debug($user, false); ?> -->
                     Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eveniet vitae iusto ea consequatur,
                     dolor nesciunt libero eius omnis doloribus iure tenetur quidem, quam veniam natus.
                 </p>
-                <div class="row">
+                <div class="media_section row">
                     <div class="col-lg-6">
                         <img src="/assets/img/m1.jpg" alt="p1" class="w-100 mb-3">
                     </div>
@@ -95,10 +95,10 @@
 
                 </div>
             </div>
-            <div class="shadow p-3 rounded mb-4">
-                <div class="border-bottom pb-2 mb-2 clearfix">
-                    <span class="float-end text-muted">16 min</span>
-                    <div class="d-flex align-items-center">
+            <!-- <div  class="post_section shadow p-3 rounded mb-4">
+                <div class="profile_section border-bottom pb-2 mb-2 clearfix">
+                    <span class="float-end text-muted">16 </span>
+                    <div class=" d-flex align-items-center">
                         <img src="/assets/img/k2.jpg" class="rounded-circle me-2" width="60" height="60" alt="avatar">
                         <h5>Jane Doe</h5>
                     </div>
@@ -126,7 +126,7 @@
                     <a href="#!" class="btn btn-primary"><i class="fa-solid fa-thumbs-up me-2"></i>Like</a>
                     <a href="#!" class="btn btn-primary"><i class="fa-solid fa-comment me-2"></i>Comment</a>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="col-lg-2">
             <div class="shadow p-3 rounded mb-4 text-center">

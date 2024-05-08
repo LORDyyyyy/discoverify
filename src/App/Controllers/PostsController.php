@@ -152,4 +152,32 @@ class PostsController
             "message" => "success"
         ]);
     }
+    public function sharePost()
+    {
+        $info = [
+            'post_id' => 8,
+            'user_id' => $_SESSION['user'],
+            'content' => $_POST['content']
+        ];
+        $this->postModel->sharePost($info);
+        echo json_encode([
+            "message" => "success"
+        ]);
+    }
+
+    public function addReact()
+    {
+        $info = [
+            'user_id' => $_SESSION['user'],
+            'post_id' => 8,
+            'type' => $_POST['type']
+        ];
+        $this->postModel->addReact($info);
+        echo json_encode([
+            "message" => "success"
+        ]);
+    }
+    public function countReacts(){
+        $this->postModel->countReacts($_POST['post_id']);
+    }
 }

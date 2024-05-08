@@ -35,7 +35,7 @@ class PostsModel extends DBStorage implements ModelInterface
 
         return parent::create($postContent);
     }
-    public function deletePost(int $id, int $user_id )
+    public function deletePost(int $id, int $user_id)
     {
         $query = "SELECT * FROM posts WHERE id = :post_id AND user_id = :user_id";
         $result = $this->db->query($query, [
@@ -46,7 +46,7 @@ class PostsModel extends DBStorage implements ModelInterface
         if (!$result) {
             throw new APIValidationException([
                 'message' => "unothorized user"
-            ],HTTP::FORBIDDEN_STATUS_CODE);
+            ], HTTP::FORBIDDEN_STATUS_CODE);
         }
 
         $query = "DELETE FROM posts WHERE id =:id";
@@ -101,11 +101,86 @@ class PostsModel extends DBStorage implements ModelInterface
         if (!$result) {
             throw new APIValidationException([
                 'message' => "unothorized user"
-            ],HTTP::FORBIDDEN_STATUS_CODE);
+            ], HTTP::FORBIDDEN_STATUS_CODE);
         }
         $query = "DELETE FROM post_comments WHERE id =:id";
         $this->db->query($query, [
             'id' => $id
         ]);
     }
+
+    public function sharePost(array $info)
+    {
+        $id = $info['post_id'];
+        $query = "SELECT * FROM posts WHERE id = :id";
+        $result = $this->db->query($query, [
+            'id' => $id,
+        ])->count();
+
+        if (!$result) {
+            throw new APIValidationException([
+                'message' => "post doesn't exist"
+            ], HTTP::FORBIDDEN_STATUS_CODE);
+        }
+
+
+        $post_id = intval($info['post_id']);
+        $user_id = intval($info['user_id']);
+        $content = $info['content'];
+        $query = "INSERT INTO post_shares (post_id, user_id, content)
+        VALUES (:post_id,:user_id, :content)";
+
+        $this->db->query($query, [
+            'post_id' => $post_id,
+            'user_id' => $user_id,
+            'content' => $content
+        ]);
+    }
+
+    public function addReact($info)
+    {
+        $id = $info['post_id'];
+        $query = "SELECT * FROM posts WHERE id = :id";
+        $result = $this->db->query($query, [
+            'id' => $id,
+        ])->count();
+
+        if (!$result) {
+            throw new APIValidationException([
+                'message' => "post doesn't exist"
+            ], HTTP::FORBIDDEN_STATUS_CODE);
+        }
+
+        $user_id = intval($info['user_id']);
+        $post_id = intval($info['post_id']);
+        $type = intval($info['type']);
+        $query = "INSERT INTO post_reacts (user_id, post_id, type)
+        VALUES (:user_id,:post_id, :type)";
+
+        $this->db->query($query, [
+            'post_id' => $post_id,
+            'user_id' => $user_id,
+            'type' => $type
+        ]);
+    }
+    public function countReacts(int $post_id):int {
+        $query = "SELECT * FROM posts WHERE id = :id";
+        $result = $this->db->query($query, [
+            'id' => $post_id,
+        ])->count();
+
+        if (!$result) {
+            throw new APIValidationException([
+                'message' => "post doesn't exist"
+            ], HTTP::FORBIDDEN_STATUS_CODE);
+        }
+        $query = "SELECT * FROM post_reacts  WHERE post_id =:post_id ";
+        $result = $this->db->query($query,[
+            'post_id'=> $post_id
+        ])->count();
+        return $result;
+    }
+
+
+
 }
