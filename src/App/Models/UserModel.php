@@ -9,6 +9,7 @@ use Framework\Exceptions\ValidationException;
 
 use App\Interfaces\ModelInterface;
 use App\Models\Storage\DBStorage;
+use App\Config\Paths;
 
 use \DateTime;
 
@@ -23,8 +24,8 @@ class UserModel extends DBStorage implements ModelInterface
     private string $first_name;
     private string $last_name;
     private string $password;
-    private string $profile_picture;
-    private string $cover_picture;
+    private string $profile_picture = 'storage/defaults/pfp.jpg';
+    private string $cover_picture = 'storage/defaults/cover.jpg';
     private DateTime $created_at;
     private DateTime $date_of_birth;
     private string $bio;
@@ -71,7 +72,7 @@ class UserModel extends DBStorage implements ModelInterface
         }
     }
 
-    public function create(array $data)
+    public function create(array $data): string|false
     {
         $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
@@ -84,7 +85,31 @@ class UserModel extends DBStorage implements ModelInterface
         $data['date_of_birth'] = $data['dateOfBirth'];
         unset($data['dateOfBirth']);
 
+        $data['profile_picture'] = $this->profile_picture;
+        $data['cover_picture'] = $this->cover_picture;
+
         return parent::create($data);
+    }
+
+    public function emailExists(string $email): bool
+    {
+        $query = "SELECT * FROM {$this->__tablename__} WHERE email = :email";
+        $user = $this->db->query($query, [
+            'email' => $email
+        ])->find();
+
+        return $user ? true : false;
+    }
+
+    public function resetPassword(string $email, string $password): void
+    {
+        $password = password_hash($password, PASSWORD_DEFAULT);
+
+        $query = "UPDATE {$this->__tablename__} SET password = :password WHERE email = :email";
+        $this->db->query($query, [
+            'email' => $email,
+            'password' => $password
+        ]);
     }
 
     public function getCurrUser(string|int $id)
@@ -93,7 +118,7 @@ class UserModel extends DBStorage implements ModelInterface
         first_name as fname,
         last_name as lname,
         email,
-        profile_picture as profilePicture,
+        profile_picture as pfp,
         cover_picture as coverPicture,
         bio,
         DATE_FORMAT(date_of_birth, '%Y-%m-%d') as dateOfBirth,
@@ -101,6 +126,8 @@ class UserModel extends DBStorage implements ModelInterface
         lives_in as livesIn
         FROM {$this->__tablename__} WHERE id = :id";
 
-        return $this->db->query($query, ['id' => intVal($id)])->find();
+        $result = $this->db->query($query, ['id' => intVal($id)])->find();
+
+        return $result;
     }
 }

@@ -18,19 +18,11 @@ class ErrorController
 
     public function notFound(array $params)
     {
-        /*
-        if (strpos($_SERVER['REQUEST_URI'], '/api/') === 0) {
-            $this->apiError();
-        } else {
-            $this->routeError();
-        }
-        */
 
-        if ($params['isAPI']) {
+        if ($params['isAPI'])
             $this->apiError();
-        } else {
+        else
             $this->routeError();
-        }
     }
 
     public function apiError()

@@ -82,10 +82,40 @@ class ValidatorService
         ], false);
     }
 
+    public function validateForgotPass(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'email' => ['required', 'email']
+        ], false);
+    }
+
+    public function validateResetPass(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'newPassword' => ['required', 'minlen:8', 'nospaceatall'],
+            'confirmPassword' => ['required', 'match:newPassword']
+        ], false);
+    }
+
+    public function validateVerifyCode(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'code' => ['required']
+        ], false);
+    }
+
     public function VaildateRequest(array $formData)
     {
         $this->validator->validate($formData, [
-            'id' => ['required', 'nospaceatall']
+            'id' => ['required', 'numeric']
+        ], true);
+    }
+
+    public function validateReportRequest(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'id' => ['required', 'numeric'],
+            'type' => ['required', 'in:user,post,page']
         ], true);
     }
 
@@ -96,32 +126,70 @@ class ValidatorService
         ], true);
     }
 
-    public function validatepage(array $formData) {
-        $this->validator->validate($formData , [
-            'name' => ['required' , 'nospaces']
+    public function validatepage(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'name' => ['required', 'nospaces']
         ]);
     }
 
     public function deletePageValidation(array $data)
     {
-        $this->validator->validate($data , [
-            'id' => ['required' , 'numeric']
+        $this->validator->validate($data, [
+            'id' => ['required', 'numeric']
         ]);
     }
 
     public function followPageValidation(array $data)
     {
-        $this->validator->validate($data , [
-            'page_id' => ['required' , 'numeric']
+        $this->validator->validate($data, [
+            'page_id' => ['required', 'numeric']
         ]);
     }
 
 
     public function UnfollowPageValidation(array $data)
     {
-        $this->validator->validate($data , [
-            'page_id' => ['required' , 'numeric'],
+        $this->validator->validate($data, [
+            'page_id' => ['required', 'numeric'],
         ]);
     }
 
+
+    public function postsValidation($formData)
+    {
+        $this->validator->validate($formData, [
+            'content' => ['required']
+        ]);
+    }
+
+    public function Mediavalidator($formData, string $type)
+    {
+        $singleFileInfo = [];
+        $paramsToValidate = [];
+        /* $type = "photo"; */
+
+        $length = count($formData["name"]);
+        $photoRules = ['filemaxsize:1', 'filealowedtypes:png,jpg,jpeg'];
+        $videoRules = ['filemaxsize:1', 'filealowedtypes:png,jpg,jpeg'];
+
+        for ($i = 0; $i < $length; $i++) {
+            $singleFileInfo["$i"] = [
+                "name" => $formData["name"][$i],
+                "full_path" => $formData["full_path"][$i],
+                "type" => $formData["type"][$i],
+                "tmp_name" => $formData["tmp_name"][$i],
+                "error" => $formData["error"][$i],
+                "size" => $formData["size"][$i]
+            ];
+
+            $paramsToValidate[] = $type == 'photo' ? $photoRules : $videoRules;
+        }
+
+        // debug($singleFileInfo);
+        if ($type == "photo") {
+
+            $this->validator->validate($singleFileInfo, $paramsToValidate);
+        }
+    }
 }

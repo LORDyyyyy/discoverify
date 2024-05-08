@@ -23,7 +23,7 @@ class NumericRule implements RuleInterface
      */
     public function validate(array $data, string $field, array $params): bool
     {
-        return is_numeric($data[$field]);
+        return is_numeric($data[$field] ?? '');
     }
 
     /**
