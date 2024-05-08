@@ -24,13 +24,13 @@ use \DateTime;
 class PagesModel extends DBStorage implements ModelInterface
 {
     protected Database $db;
-    public string $__tablename__ = "pages" ;
+    public string $__tablename__ = "pages";
 
     public int  $id;
     public int  $user_id;
     public string  $name;
     public string  $page_picture;
-    public string  $cover_picture;   
+    public string  $cover_picture;
     public string  $description;
     public DateTime  $created_at;
 
@@ -44,7 +44,7 @@ class PagesModel extends DBStorage implements ModelInterface
 
     //  create page              
 
-    public function create(array $data)
+    public function createPage(array $data)
     {
         return parent::create($data);
     }
@@ -53,7 +53,7 @@ class PagesModel extends DBStorage implements ModelInterface
     // delete page 
 
 
-    public function deletePage(int $id, int $user_id )
+    public function deletePage(int $id, int $user_id)
     {
         $query = "SELECT * FROM pages WHERE id = :id AND user_id = :user_id";
         $result = $this->db->query($query, [
@@ -73,15 +73,15 @@ class PagesModel extends DBStorage implements ModelInterface
         ]);
     }
 
-    
+
     // follow  AND unfollow  feature 
 
 
-    
-    public function followPage(int $page_id , int $user_id)
+
+    public function followPage(int $page_id, int $user_id)
     {
         $query = "SELECT * FROM pages WHERE  page_id = :page_id ";
-        $result = $this->db->query($query , [
+        $result = $this->db->query($query, [
             'page_id' => $page_id,
         ])->count();
 
@@ -92,7 +92,7 @@ class PagesModel extends DBStorage implements ModelInterface
         }
 
         $query = "SELECT * FROM page_likes WHERE  page_id = :page_id AND user_id = :user_id ";
-        $result = $this->db->query($query , [
+        $result = $this->db->query($query, [
             'page_id' => $page_id,
             'user_id' => $user_id
         ])->count();
@@ -102,23 +102,22 @@ class PagesModel extends DBStorage implements ModelInterface
                 'message' => "Already liked!" // 
             ]);
         }
-        
+
         $query = "INSERT INTO page_likes (page_id , user_id) VALUES (:page_id , :user_id)";
         $this->db->query($query, [
             'page_id' => $page_id,
             'user_id' => $user_id
         ]);
-        
     }
 
 
 
 
 
-public function UnfollowPage(int $page_id , int $user_id)
-{
-    $query = "SELECT * FROM pages WHERE  page_id = :page_id ";
-        $result = $this->db->query($query , [
+    public function UnfollowPage(int $page_id, int $user_id)
+    {
+        $query = "SELECT * FROM pages WHERE  page_id = :page_id ";
+        $result = $this->db->query($query, [
             'page_id' => $page_id
         ])->count();
 
@@ -133,19 +132,18 @@ public function UnfollowPage(int $page_id , int $user_id)
             'page_id' => $page_id,
             'user_id' => $user_id
         ]);
-        
-}
+    }
 
 
-    
+
 
     // like and comment   mstf
 
     //  create post....    mstf
 
-    
-    
-    
+
+
+
 
 
 }
