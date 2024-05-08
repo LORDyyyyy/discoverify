@@ -13,6 +13,7 @@ use App\Controllers\{
     PostsController,
     AuthController,
     FriendsController,
+    UserController,
 };
 
 use App\Middleware\{
@@ -99,5 +100,9 @@ function registerRoutes(App $app)
         ->add([AuthRequiredMiddleware::class]);
 
 
-        
+    /* UserController */
+    $app->get('/profile/{id}', [UserController::class, 'showProfile'], true)
+        ->add([AuthRequiredMiddleware::class]);
+    $app->post('/profile/{id}', [UserController::class, 'updateProfile'], true)
+        ->add([AuthRequiredMiddleware::class]);
 }

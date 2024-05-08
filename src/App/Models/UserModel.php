@@ -130,4 +130,21 @@ class UserModel extends DBStorage implements ModelInterface
 
         return $result;
     }
+
+    public function getUserById(int $id)
+    {
+        $query = "SELECT id, first_name, last_name, profile_picture, cover_picture, date_of_birth, bio, gender, lives_in, works_at
+        FROM {$this->__tablename__} WHERE id = :id";
+
+        $result = $this->db->query($query, ['id' => intVal($id)])->find();
+
+        return $result;
+    }
+
+
+    public function updateUser(int $id, string $type, string $contant): void
+    {
+        $query = "UPDATE {$this->__tablename__} SET {$type} = :contant WHERE id = :id";
+        $this->db->query($query, ['id' => $id, 'contant' => $contant]);
+    }
 }
