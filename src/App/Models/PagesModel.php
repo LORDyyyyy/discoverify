@@ -44,8 +44,25 @@ class PagesModel extends DBStorage implements ModelInterface
 
     //  create page              
 
+
+//     DROP TABLE IF EXISTS `pages`;
+// CREATE TABLE `pages` (
+//   `id` int unsigned NOT NULL AUTO_INCREMENT,
+//   `user_id` int unsigned NOT NULL,
+//   `name` varchar(50) NOT NULL,
+//   `page_picture` varchar(256),
+//   `cover_picture` varchar(256),
+//   `description` varchar(256),
+//   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+//   PRIMARY KEY (`id`),
+//   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
+// );
     public function createPage(array $data)
     {
+        // $data['name'] = $data['pname'];
+        // $data['page_picture'] = $data['page_pic'];
+        // $data['cover_picture'] = $data['coverPic'];
+        // $data['description'] = $data['dis'];
         return parent::create($data);
     }
 
@@ -135,6 +152,34 @@ class PagesModel extends DBStorage implements ModelInterface
     }
 
 
+    // DROP TABLE IF EXISTS `pages`;
+    // CREATE TABLE `pages` (
+    //   `id` int unsigned NOT NULL AUTO_INCREMENT,
+    //   `user_id` int unsigned NOT NULL,
+    //   `name` varchar(50) NOT NULL,
+    //   `page_picture` varchar(256),
+    //   `cover_picture` varchar(256),
+    //   `description` varchar(256),
+    //   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+    //   PRIMARY KEY (`id`),
+    //   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
+    // );
+
+public function displayContents($page_id)
+{
+    $query = "SELECT * FROM pages WHERE id = :page_id";
+    $result = $this->db->query($query , [
+        'page_id' => $page_id
+    ])->find();
+
+    if(!$result)
+    {
+        throw new ValidationException([
+            'message' => "Page not found!" 
+        ]);
+    }
+    return $result;
+}
 
 
     // like and comment   mstf

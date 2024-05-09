@@ -60,12 +60,13 @@ function registerRoutes(App $app)
     /* PagesController */
     $app->get('/pages/{id}', [PagesController::class, 'pagesview'], false)
         ->add([AuthRequiredMiddleware::class]);
-    $app->post('/pages', [PagesController::class, 'createpage'])
+    $app->post('/pagesForm', [PagesController::class, 'createpage'])
         ->add([AuthRequiredMiddleware::class]);
     $app->post('/pages/follow',  [PagesController::class, 'followpage'])
         ->add([AuthRequiredMiddleware::class]);
     $app->delete('/pages/follow',  [PagesController::class, 'unfollowpage'])
         ->add([AuthRequiredMiddleware::class]);
+    $app->get('/pagesForm' , [PagesController::class, 'PageForm']);
 
 
 

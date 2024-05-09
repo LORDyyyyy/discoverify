@@ -112,7 +112,7 @@ class FriendsController
     {
         // Middlewares: AuthRequiredMiddleware
 
-        $userId = intval($_SESSION['user']);
+        $userId = intval($_SESSION['user']); // string to int
         $currUser = $this->userModel->getCurrUser($userId);
         $friends = $this->friendModel->getFriends($userId);
         $friendRequests = $this->friendModel->showRequest($userId);

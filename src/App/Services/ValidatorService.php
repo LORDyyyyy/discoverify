@@ -129,9 +129,14 @@ class ValidatorService
     public function validatepage(array $formData)
     {
         $this->validator->validate($formData, [
-            'name' => ['required', 'nospaces']
+            'pname' => ['required', 'nospaceatall'],
+            'dis' => ['required' , 'nospaceatall']
         ]);
+
+
     }
+    
+    
 
     public function deletePageValidation(array $data)
     {
@@ -153,6 +158,8 @@ class ValidatorService
         $this->validator->validate($data, [
             'page_id' => ['required', 'numeric'],
         ]);
+
+
     }
 
 
@@ -171,7 +178,7 @@ class ValidatorService
 
         $length = count($formData["name"]);
         $photoRules = ['filemaxsize:1', 'filealowedtypes:png,jpg,jpeg'];
-        $videoRules = ['filemaxsize:1', 'filealowedtypes:png,jpg,jpeg'];
+        $videoRules = ['filemaxsize:1', 'filealowedtypes:png,jpg,jpeg'];   // 
 
         for ($i = 0; $i < $length; $i++) {
             $singleFileInfo["$i"] = [

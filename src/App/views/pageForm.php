@@ -29,28 +29,28 @@
 </head>
 
 <body>
-
     <div class="container mt-5 mb-5"> 
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="form-container">
                     <h2 class="text-center mb-4">Page Profile</h2>
-                    <form>
+                    <form action="/pagesForm" method="post" novalidate>
+                        <?php include $this->resolve('partials/_csrf.php');?>
                         <div class="form-group">
                             <label for="name">Name</label>
-                            <input type="text" class="form-control" id="name" placeholder="Enter name">
+                            <input type="text" class="form-control" id="name" placeholder="Enter name"  name="pname" >
                         </div>
                         <div class="form-group">
                             <label for="profilePic">Page Picture</label>
-                            <input type="file" class="form-control-file" id="profilePic">
+                            <input type="file" class="form-control-file" id="profilePic" name="page_pic">
                         </div>
                         <div class="form-group">
                             <label for="coverPic">Cover Picture</label>
-                            <input type="file" class="form-control-file" id="coverPic">
+                            <input type="file" class="form-control-file" id="coverPic" name="coverPic">
                         </div>
                         <div class="form-group">
                             <label for="bio">Description</label>
-                            <textarea class="form-control" id="bio" rows="3" placeholder="Enter your Description"></textarea>
+                            <textarea class="form-control" id="bio" rows="3" placeholder="Enter your Description" name="dis"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary btn-block">Create</button>
                     </form>

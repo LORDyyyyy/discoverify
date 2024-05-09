@@ -1,0 +1,7 @@
+.cover-photo {
+    /* background-image: url('<?php echo $imageURL; ?>'); */
+    background-image: url('/storage/uploads/messi.jpg');
+    /* background-image: url('/storage/uploads/worldcup.jpg'); */
+    background-size: cover;
+    background-position: center;
+    height: 500px;}

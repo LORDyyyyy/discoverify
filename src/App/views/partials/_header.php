@@ -9,11 +9,13 @@
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/lib/fontawesome/css/all.min.css">
     <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/css/pages.css">
     <?php
     if (($title ?? '') == 'Friends | Discoverify') {
         echo '<link rel="stylesheet" href="/assets/css/friends_list.css">';
     }
     ?>
+    
 
     <script src="/assets/js/dev/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/dev/jquery.min.js"></script>
