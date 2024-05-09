@@ -1,4 +1,5 @@
 <?php include $this->resolve('partials/_header.php'); ?>
+<?php debug($notifications) ?>
 <main class="container mt-3 mb-5">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
     <div class="content">

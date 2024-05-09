@@ -183,7 +183,7 @@ class ValidatorService
     {
         $this->validator->validate($formData, [
             'query' => ['required', 'nospaceatall']
-        ], true);
+        ], false);
     }
     public function commentValidate($formData)
     {

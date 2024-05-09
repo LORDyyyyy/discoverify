@@ -66,7 +66,7 @@ function registerRoutes(App $app)
         ->add([AuthRequiredMiddleware::class]);
     $app->get('/api/friends', [FriendsController::class, 'getFriends'], true)
         ->add([AuthRequiredMiddleware::class]);
-    $app->post('/api/friends', [FriendsController::class, 'sendRequest'], true)
+    $app->post('/friends/{id}', [FriendsController::class, 'sendRequest'], false)
         ->add([AuthRequiredMiddleware::class]);
     $app->get('/api/requests/{id}', [FriendsController::class, 'checkStatus'], true)
         ->add([AuthRequiredMiddleware::class]);
@@ -100,27 +100,18 @@ function registerRoutes(App $app)
     /* PostsController */
     $app->get('/posts', [PostsController::class, 'test'], false)
         ->add([AuthRequiredMiddleware::class]);
-
     $app->post('/posts', [PostsController::class, 'addPost'], false)
         ->add([AuthRequiredMiddleware::class]);
-
-
     $app->delete('/api/posts', [PostsController::class, 'deletePost'], true)
         ->add([AuthRequiredMiddleware::class]);
-
     $app->post('/api/posts/share', [PostsController::class, 'sharePost'], true)
         ->add([AuthRequiredMiddleware::class]);
-
     $app->post('/api/posts/reacts', [PostsController::class, 'addReact'], true)
         ->add([AuthRequiredMiddleware::class]);
-
-
     $app->get('/api/posts/comments', [PostsController::class, 'viewcomments'], false)
         ->add([AuthRequiredMiddleware::class]);
-
     $app->post('/api/posts/comments', [PostsController::class, 'addComment'], true)
         ->add([AuthRequiredMiddleware::class]);
-
     $app->delete('/api/posts/comments', [PostsController::class, 'deleteComment'], true)
         ->add([AuthRequiredMiddleware::class]);
 
@@ -130,13 +121,16 @@ function registerRoutes(App $app)
         ->add([AuthRequiredMiddleware::class]);
     $app->post('/profile/{id}', [UserController::class, 'updateProfile'], true)
         ->add([AuthRequiredMiddleware::class]);
-
-    $app->get('/notifications', [UserController::class, 'showNotifications'], true)
+    /* Notifications Function */
+    $app->get('/notifications', [UserController::class, 'showNotifications'], false)
         ->add([AuthRequiredMiddleware::class]);
     $app->post('/sendNotifications', [UserController::class, 'sendNotifications'], true)
         ->add([AuthRequiredMiddleware::class]);
     $app->get('/seeNotifications', [UserController::class, 'markNotificationsAsRead'], true)
         ->add([AuthRequiredMiddleware::class]);
-    $app->post('/search', [UserController::class, 'search'], true)
+    /* Search Function */
+    $app->get('/search', [HomeController::class, 'searchView'], false)
+        ->add([AuthRequiredMiddleware::class]);
+    $app->post('/search', [HomeController::class, 'search'], false)
         ->add([AuthRequiredMiddleware::class]);
 }

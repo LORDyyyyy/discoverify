@@ -9,23 +9,27 @@
     <!-- <link rel="stylesheet" href="/assets/css/posts.css"> -->
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/lib/fontawesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous">
-    <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
     <!-- <link rel="stylesheet" href="/assets/css/bootstrap-icons.css"> -->
+
+    <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
+
     <?php
     if (($title ?? '') == 'Friends | Discoverify'
         || ($title ?? '') == 'Blocked Users | Discoverify'
+        || ($title ?? '') == 'Search | Discoverify'
     ) {
         echo '<link rel="stylesheet" href="/assets/css/friends_list.css">';
     }
     ?>
 
+    <script defer src="/assets/js/main.js"></script>
+    <script defer src="/assets/js/friendRequestList.js"></script>
+    <script defer type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="/assets/js/dev/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/dev/jquery.min.js"></script>
     <script src="/assets/js/dev/socket.io.min.js"></script>
-    <script defer src="/assets/js/friendRequestList.js"></script>
-    <!-- <script src="/assets/js/dev/socket.io.min.js.map"></script> -->
-
 
     <title> <?= $title ?? 'Discoverify' ?> </title>
 </head>
@@ -37,6 +41,7 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
@@ -107,6 +112,10 @@
                         </ul>
                     </li>
                 </ul>
+                <form class="d-flex" action="/search?" method="GET" role="search" id="serachForm">
+                    <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search" name="s" value="<?= esc($oldSearchForm ?? '') ?>">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
                 <ul class="navbar-nav  mb-2 mb-lg-0">
                     <li class="nav-item me-2">
                         <a class="nav-link" href="#">
