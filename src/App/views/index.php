@@ -58,78 +58,53 @@
                 <p class="mb-0">People are looking at your profile.</p>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-
         </div>
         <div class="col-lg-7">
             <div class="shadow p-3 rounded mb-4">
                 <div class="mb-2">
-                    <input type="text" class="form-control" placeholder="Status: Feeling Blue">
+                    <a class="btn btn-primary" href="/posts"><i class="fa-solid fal-pen">Post</i></a>
                 </div>
-                <button class="btn btn-rpimary"><i class="fa-solid fal-pen">Post</i></button>
             </div>
-
             <?php foreach ($postContents as $postContent) : ?>
                 <div class="post_section shadow p-3 rounded mb-4">
                     <div class="profile_section border-bottom pb-3 mb-2 clearfix">
                         <span class="float-end text-muted"><?php echo "{$postContent['created_at']}" ?></span>
                         <div class="d-flex align-items-center">
-
                             <img src="/<?= $postContent['owner']['profile_picture'] ?>" class="rounded-circle me-2" width="60" height="60" alt="avatar">
                             <h5><?php echo "{$postContent['owner']['first_name']} {$postContent['owner']['last_name']}"    ?></h5>
                         </div>
                     </div>
                     <p>
-
-
                         <?php echo "{$postContent['content']}" ?>
                     </p>
-                    <?php  $i=0  ?>
+                    <?php $i = 0  ?>
                     <?php foreach ($postContent['media'] as $postMedia) : ?>
                         <div class="media_section row">
                             <?php foreach ($postMedia['content'] as $postUrl) : ?>
-                                <?php  $i+=1  ?>
+                                <?php $i += 1  ?>
                                 <div class="row-lg-6 ">
                                     <?php if ($postUrl['media_type'] == 'photo') :  ?>
                                         <img src="<?= $postUrl['media_url'] ?>" alt="p1" class=" mb-3" style="width: 400px; ">
-
                                     <?php else : ?>
                                         <video width=" 320" height="240" controls>
                                             <source src="<?= $postUrl['media_url'] ?>" type="video/mp4">
                                         </video>
                                     <?php endif ?>
                                 </div>
-                                
-                                <?php if($i==sizeof($postContent['media'])/2) {break;}?>
                             <?php endforeach ?>
-
                         </div>
+                        <?php if ($i == sizeof($postContent['media'])) {
+                            break;
+                        } ?>
                     <?php endforeach ?>
                     <div>
-                        <a href="#!" class="btn btn-primary"><i class="fa-solid fa-thumbs-up me-2"></i>Like</a>
-                        <a href="/posts/<?= $postContent['id'] ?>/comments" class="btn btn-primary"><i class="fa-solid fa-comment me-2"></i>Comment</a>
-
+                        <a href="/posts/<?= $postContent['id'] ?>/comments" class="btn btn-primary"><i class="fa-solid fa-comment me-2"></i>Explore</a>
                     </div>
                 </div>
             <?php endforeach ?>
 
         </div>
         <div class="col-lg-2">
-            <div class="shadow p-3 rounded mb-4 text-center">
-                <h5>Upcoming Events</h5>
-                <img src="/assets/img/m3.jpg" alt="bridge" class="w-100 mb-3">
-                <p class="fw-bold">Holiday</p>
-                <p>Friday 15:00</p>
-                <a href="#!" class="btn btn-primary w-100">Info</a>
-            </div>
-            <div class="shadow p-3 rounded mb-4 text-center">
-                <h5>Friend Request</h5>
-                <img src="/assets/img/k1.jpg" alt="avatar" class="w-75 mb-1">
-                <p class="fw-bold">Jane Doe</p>
-                <div class="btn-group d-flex">
-                    <a href="#!" class="btn btn-success "><i class="fa-solid fa-check"></i></a>
-                    <a href="#!" class="btn btn-danger "><i class="fa-solid fa-times"></i></a>
-                </div>
-            </div>
             <div class="shadow p-3 rounded mb-4 text-center">
                 <p class="my-4">ADS</p>
             </div>

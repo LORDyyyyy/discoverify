@@ -45,33 +45,33 @@ class PostsController
     }
     public function test()
     {
-        
+
         echo $this->templateEngine->render('posts.php', [
             'title' => 'Home | Discoverify',
         ]);
-        
     }
 
     public function addPost()
     {
+
         $this->validatorService->postsValidation($_POST);
+
         $postContent = [
             'user_id' => $_SESSION['user'],
             'page_id' => null,
             'content' => $_POST['content'],
         ];
-        $newPostID = (int)$this->postModel->addPost($postContent);
-        // photo validation 
+
+        $newPostID = (int) $this->postModel->addPost($postContent);
 
         if (isset($_FILES['image'])) {
-
-           
+            echo "IMAGE UPLOADED";
 
             $this->addMedia($_FILES['image'], $newPostID, "photo");
         }
 
         if (isset($_FILES['video'])) {
-
+            echo "VID UPLOADED";
 
             $this->addMedia($_FILES['video'], $newPostID, "video");
         }
@@ -100,39 +100,38 @@ class PostsController
             $this->postModel->addMedia($info, $type);
         }
     }
+
     private function upload(array $file)
     {
         $uploadedFiles = [];
 
-        // Loop through each uploaded file
         foreach ($file['tmp_name'] as $key => $tmp_name) {
             $fileExtention = pathinfo($file['name'][$key], PATHINFO_EXTENSION);
 
             $randomName = bin2hex(random_bytes(16)) . "." . $fileExtention;
             $uploadPath = Paths::STORAGE_UPLOADS . "/" . $randomName;
-            $storagePath=  "/storage/uploads/" . $randomName;
-            //$file['name'][$key]
+            $storagePath =  "/storage/uploads/" . $randomName;
             if (!move_uploaded_file($tmp_name, $uploadPath)) {
                 throw new ValidationException(['receipt' => ['failed upload file']]);
             }
 
-            // Store the file name and temporary file path in the array
             $uploadedFiles[$file['name'][$key]] = $storagePath;
         }
 
         return $uploadedFiles;
     }
     public function viewcomments(array $params)
-    { 
+    {
         $user = $this->userModel->getCurrUser(intval($_SESSION['user']));
         $friendRequests = $this->friendModel->showRequest($user['id']);
-        $postContents= $this->postModel->dispalyPost($_SESSION['user']);
-      
-        $post =[];
-        foreach($postContents as $content){
-            if($content['id']==$params['id']){
+        $postContents = $this->postModel->dispalyPost($_SESSION['user']);
+        $isLiked = $this->postModel->isLiked($user['id'], (int) $params['id']);
+        $likeCount = $this->postModel->countReacts((int)$params['id']);
+
+        $post = [];
+        foreach ($postContents as $content) {
+            if ($content['id'] == $params['id']) {
                 $post[] = $content;
-                
                 break;
             }
         }
@@ -140,35 +139,37 @@ class PostsController
             'title' => 'Home | Discoverify',
             'user' => $user,
             'friendRequests' => $friendRequests,
-            'postContents'=>$post[0]
+            'postContents' => $post[0],
+            'id' => $params['id'],
+            'isLiked' => $isLiked ?? false,
+            'likeCount' => $likeCount
         ]);
     }
 
 
-    public function addComment()
+    public function addComment(array $params)
     {
         $this->validatorService->commentValidate($_POST);
 
         $info = [
             'user_id' =>  $_SESSION['user'],
-            'post_id' => 8,
+            'post_id' => $params['id'],
             'content' => $_POST['content']
 
         ];
         $this->postModel->addComment($info);
 
-      
+        redirectTo('.');
     }
 
-    public function deleteComment()
+    public function deleteComment(array $params)
     {
-        $this->validatorService->validateIdOnly($_POST);
-        $this->postModel->deleteComment((int)$_POST['id'], (int)$_SESSION['user']);
+        $this->validatorService->validateIdOnly($params);
+        $this->postModel->deleteComment((int)$params['id'], (int)$_SESSION['user']);
 
-        echo json_encode([
-            "message" => "success"
-        ]);
+        redirectTo('.');
     }
+
     public function sharePost()
     {
         $info = [
@@ -177,23 +178,28 @@ class PostsController
             'content' => $_POST['content']
         ];
         $this->postModel->sharePost($info);
+
         echo json_encode([
             "message" => "success"
         ]);
     }
 
-    public function addReact()
+    public function addReact(array $params)
     {
         $info = [
-            'user_id' => $_SESSION['user'],
-            'post_id' => 8,
-            'type' => $_POST['type']
+            'user_id' => (int) $_SESSION['user'],
+            'post_id' => (int) $params['id'],
+            'type' => 1
         ];
-        $this->postModel->addReact($info);
-        echo json_encode([
-            "message" => "success"
-        ]);
+
+        if ($_POST['action'] == 1) {
+            $this->postModel->delReact((int)$_SESSION['user'], (int)$params['id']);
+        } else
+            $this->postModel->addReact($info);
+
+        redirectTo('.');
     }
+
     public function countReacts()
     {
         $this->postModel->countReacts($_POST['post_id']);

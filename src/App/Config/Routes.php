@@ -111,7 +111,7 @@ function registerRoutes(App $app)
     $app->post('/api/posts/share', [PostsController::class, 'sharePost'], true)
         ->add([AuthRequiredMiddleware::class]);
 
-    $app->post('/api/posts/reacts', [PostsController::class, 'addReact'], true)
+    $app->post('/api/posts/{id}/reacts', [PostsController::class, 'addReact'], false)
         ->add([AuthRequiredMiddleware::class]);
 
 
@@ -121,7 +121,7 @@ function registerRoutes(App $app)
     $app->post('/posts/{id}/comments', [PostsController::class, 'addComment'], false)
         ->add([AuthRequiredMiddleware::class]);
 
-    $app->delete('/api/posts/comments', [PostsController::class, 'deleteComment'], true)
+    $app->delete('/posts/{id}/comments', [PostsController::class, 'deleteComment'], false)
         ->add([AuthRequiredMiddleware::class]);
 
 

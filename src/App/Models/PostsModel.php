@@ -64,16 +64,15 @@ class PostsModel extends DBStorage implements ModelInterface
         $this->db->query($query, [
             'post_id' => $post_id,
             "url" => $media_url,
-
         ]);
     }
 
     public function addComment(array $info)
     {
-        $post_id = intval($info['post_id']); 
+        $post_id = intval($info['post_id']);
 
         $query = "INSERT INTO post_comments (user_id, post_id, content)
-         VALUES (:user_id,:post_id, :content)";
+        VALUES (:user_id,:post_id, :content)";
         $this->db->query($query, [
             'user_id' => $info['user_id'],
             'post_id' => $info['post_id'],
@@ -94,6 +93,7 @@ class PostsModel extends DBStorage implements ModelInterface
                 'message' => "unothorized user"
             ], HTTP::FORBIDDEN_STATUS_CODE);
         }
+
         $query = "DELETE FROM post_comments WHERE id =:id";
         $this->db->query($query, [
             'id' => $id
@@ -130,6 +130,10 @@ class PostsModel extends DBStorage implements ModelInterface
 
     public function addReact($info)
     {
+        $user_id = intval($info['user_id']);
+        $post_id = intval($info['post_id']);
+        $type = intval($info['type']);
+
         $id = $info['post_id'];
         $query = "SELECT * FROM posts WHERE id = :id";
         $result = $this->db->query($query, [
@@ -137,23 +141,79 @@ class PostsModel extends DBStorage implements ModelInterface
         ])->count();
 
         if (!$result) {
-            throw new APIValidationException([
+            throw new ValidationException([
                 'message' => "post doesn't exist"
-            ], HTTP::FORBIDDEN_STATUS_CODE);
+            ]);
         }
 
-        $user_id = intval($info['user_id']);
-        $post_id = intval($info['post_id']);
-        $type = intval($info['type']);
+        $query = "SELECT * FROM post_reacts WHERE user_id = :user_id AND post_id = :post_id";
+        $result = $this->db->query($query, [
+            'post_id' => $post_id,
+            'user_id' => $user_id,
+        ])->count();
+
+
+        if ($result) {
+            throw new ValidationException([
+                'message' => "Like already exist"
+            ]);
+        }
+
         $query = "INSERT INTO post_reacts (user_id, post_id, type)
         VALUES (:user_id,:post_id, :type)";
 
         $this->db->query($query, [
             'post_id' => $post_id,
             'user_id' => $user_id,
-            'type' => $type
+            'type' => 1
         ]);
     }
+
+    public function delReact(int $user_id, int $post_id)
+    {
+        $query = "SELECT * FROM posts WHERE id = :id";
+        $result = $this->db->query($query, [
+            'id' => $post_id,
+        ])->count();
+
+        if (!$result) {
+            throw new ValidationException([
+                'message' => "post doesn't exist"
+            ]);
+        }
+
+        $query = "SELECT * FROM post_reacts WHERE user_id = :user_id AND post_id = :post_id";
+        $result = $this->db->query($query, [
+            'post_id' => $post_id,
+            'user_id' => $user_id,
+        ])->count();
+
+        if (!$result) {
+            throw new ValidationException([
+                'message' => "Like does not exist"
+            ]);
+        }
+
+        $query = "DELETE from post_reacts
+        WHERE user_id = :user_id AND post_id = :post_id ";
+
+        $this->db->query($query, [
+            'post_id' => $post_id,
+            'user_id' => $user_id,
+        ]);
+    }
+
+    public function isLiked(int $user_id, int $post_id)
+    {
+        $query = "SELECT * FROM post_reacts WHERE user_id = :user_id AND post_id = :post_id";
+        $result = $this->db->query($query, [
+            'post_id' => $post_id,
+            'user_id' => $user_id,
+        ])->count();
+
+        return $result;
+    }
+
     public function countReacts(int $post_id): int
     {
         $query = "SELECT * FROM posts WHERE id = :id";
@@ -162,15 +222,17 @@ class PostsModel extends DBStorage implements ModelInterface
         ])->count();
 
         if (!$result) {
-            throw new APIValidationException([
+            throw new ValidationException([
                 'message' => "post doesn't exist"
-            ], HTTP::FORBIDDEN_STATUS_CODE);
+            ]);
         }
-        $query = "SELECT * FROM post_reacts  WHERE post_id =:post_id ";
+
+        $query = "SELECT * FROM post_reacts WHERE post_id = :post_id";
         $result = $this->db->query($query, [
             'post_id' => $post_id
-        ])->count();
-        return $result;
+        ])->findAll();
+
+        return sizeof($result ?? []);
     }
 
 
@@ -199,7 +261,7 @@ class PostsModel extends DBStorage implements ModelInterface
             ])->findAll();
 
             foreach ($result['comments'] as &$comment) {
-                $comment['owner'] = $this->db->query("SELECT first_name, last_name, profile_picture FROM users WHERE id = :user_id", [
+                $comment['owner'] = $this->db->query("SELECT first_name, last_name, profile_picture, id FROM users WHERE id = :user_id", [
                     'user_id' => $comment["user_id"]
                 ])->find();
             }

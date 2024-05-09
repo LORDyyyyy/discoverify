@@ -127,40 +127,11 @@ class ValidatorService
     }
 
 
-    public function postsValidation($formData)
+    public function postsValidation(array $formData)
     {
         $this->validator->validate($formData, [
-            'content' => ['required']
+            'content' => ['required', 'nospaces']
         ]);
-    }
-
-    public function Mediavalidator($formData, string $type)
-    {
-        $singleFileInfo = [];
-        $paramsToValidate = [];
-        /* $type = "photo"; */
-
-        $length = count($formData["name"]);
-        $photoRules = ['filemaxsize:1', 'filealowedtypes:png,jpg,jpeg'];
-        $videoRules = ['filemaxsize:1', 'filealowedtypes:png,jpg,jpeg'];
-
-        for ($i = 0; $i < $length; $i++) {
-            $singleFileInfo["$i"] = [
-                "name" => $formData["name"][$i],
-                "full_path" => $formData["full_path"][$i],
-                "type" => $formData["type"][$i],
-                "tmp_name" => $formData["tmp_name"][$i],
-                "error" => $formData["error"][$i],
-                "size" => $formData["size"][$i]
-            ];
-
-            $paramsToValidate[] = $type == 'photo' ? $photoRules : $videoRules;
-        }
-        // debug($singleFileInfo);
-        if ($type == "photo") {
-
-            $this->validator->validate($singleFileInfo, $paramsToValidate);
-        }
     }
 
     public function validateUpdate(array $formData)
@@ -185,17 +156,18 @@ class ValidatorService
             'query' => ['required', 'nospaceatall']
         ], true);
     }
+
     public function commentValidate($formData)
     {
         $this->validator->validate($formData, [
-            'content' => ['required'],
-            'page_id' => ['required', 'numeric']
+            'content' => ['required', 'nospaces'],
         ], false);
     }
+
     public function validateIdOnly($formData)
     {
         $this->validator->validate($formData, [
             'id' => ['required']
-        ], true);
+        ], false);
     }
 }
