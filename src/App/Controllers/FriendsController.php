@@ -75,7 +75,7 @@ class FriendsController
 
         $this->validatorService->VaildateRequest($_POST);
         $receiverId = $_SESSION['user'];
-        $this->friendModel->acceptRequestStatus($receiverId, (int)$_POST['id']);
+        $this->friendModel->acceptRequestStatus((int)$receiverId, (int)$_POST['id']);
 
         echo json_encode([
             'status' => 'success',
@@ -143,10 +143,10 @@ class FriendsController
     public function showBlocked()
     {
         $blockedBy = $userId = $_SESSION['user'];
-        $results = $this->friendModel->showBlocked($blockedBy);
+        $results = $this->friendModel->showBlocked((int)$blockedBy);
 
-        $currUser = $this->userModel->getCurrUser($userId);
-        $friendRequests = $this->friendModel->showRequest($userId);
+        $currUser = $this->userModel->getCurrUser((int)$userId);
+        $friendRequests = $this->friendModel->showRequest((int)$userId);
 
         echo $this->view->render(
             'blocked.php',

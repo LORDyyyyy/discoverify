@@ -35,8 +35,8 @@ class HomeController
         // Middlewares: AuthRequiredMiddleware
 
         $user = $this->userModel->getCurrUser(intval($_SESSION['user']));
-        $friendRequests = $this->friendModel->showRequest($user['id']);
-        $postContents= $this->postModel->dispalyPost($_SESSION['user']);
+        $friendRequests = $this->friendModel->showRequest((int)$user['id']);
+        $postContents= $this->postModel->dispalyPost((int)$_SESSION['user']);
 
         echo $this->view->render('index.php', [
             'title' => 'Home | Discoverify',

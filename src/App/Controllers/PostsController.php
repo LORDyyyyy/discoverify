@@ -123,8 +123,8 @@ class PostsController
     public function viewcomments(array $params)
     {
         $user = $this->userModel->getCurrUser(intval($_SESSION['user']));
-        $friendRequests = $this->friendModel->showRequest($user['id']);
-        $postContents = $this->postModel->dispalyPost($_SESSION['user']);
+        $friendRequests = $this->friendModel->showRequest((int)$user['id']);
+        $postContents = $this->postModel->dispalyPost((int)$_SESSION['user']);
         $isLiked = $this->postModel->isLiked($user['id'], (int) $params['id']);
         $likeCount = $this->postModel->countReacts((int)$params['id']);
 
