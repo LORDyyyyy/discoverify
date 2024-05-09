@@ -83,63 +83,35 @@
 
                         <?php echo "{$postContent['content']}" ?>
                     </p>
+                    <?php  $i=0  ?>
                     <?php foreach ($postContent['media'] as $postMedia) : ?>
                         <div class="media_section row">
                             <?php foreach ($postMedia['content'] as $postUrl) : ?>
-                                <div class="col-lg-6 m">
+                                <?php  $i+=1  ?>
+                                <div class="row-lg-6 ">
                                     <?php if ($postUrl['media_type'] == 'photo') :  ?>
-                                        <img src="<?= $postUrl['media_url'] ?>" alt="p1" class="w-100 mb-3">
+                                        <img src="<?= $postUrl['media_url'] ?>" alt="p1" class=" mb-3" style="width: 400px; ">
 
                                     <?php else : ?>
-                                        <video width="320" height="240" controls>
+                                        <video width=" 320" height="240" controls>
                                             <source src="<?= $postUrl['media_url'] ?>" type="video/mp4">
                                         </video>
+                                    <?php endif ?>
                                 </div>
-                            <?php endif ?>
-
-                        <?php endforeach ?>
+                                
+                                <?php if($i==sizeof($postContent['media'])/2) {break;}?>
+                            <?php endforeach ?>
 
                         </div>
                     <?php endforeach ?>
                     <div>
                         <a href="#!" class="btn btn-primary"><i class="fa-solid fa-thumbs-up me-2"></i>Like</a>
-                        <a href="/comments" class="btn btn-primary"><i class="fa-solid fa-comment me-2"></i>Comment</a>
+                        <a href="/posts/<?= $postContent['id'] ?>/comments" class="btn btn-primary"><i class="fa-solid fa-comment me-2"></i>Comment</a>
 
                     </div>
                 </div>
             <?php endforeach ?>
-            <!-- <div  class="post_section shadow p-3 rounded mb-4">
-                <div class="profile_section border-bottom pb-2 mb-2 clearfix">
-                    <span class="float-end text-muted">16 </span>
-                    <div class=" d-flex align-items-center">
-                        <img src="/assets/img/k2.jpg" class="rounded-circle me-2" width="60" height="60" alt="avatar">
-                        <h5>Jane Doe</h5>
-                    </div>
-                </div>
-                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eveniet vitae iusto ea consequatur,
-                    dolor nesciunt libero eius omnis doloribus iure tenetur quidem, quam veniam natus.</p>
-                <div>
-                    <a href="#!" class="btn btn-primary"><i class="fa-solid fa-thumbs-up me-2"></i>Like</a>
-                    <a href="#!" class="btn btn-primary"><i class="fa-solid fa-comment me-2"></i>Comment</a>
-                </div>
-            </div>
-            <div class="shadow p-3 rounded mb-4">
-                <div class="border-bottom pb-2 mb-2 clearfix">
-                    <span class="float-end text-muted">32 min</span>
-                    <div class="d-flex align-items-center">
-                        <img src="/assets/img/k3.jpg" class="rounded-circle me-2" width="60" height="60" alt="avatar">
-                        <h5>Angie Jane</h5>
-                    </div>
-                </div>
-                <p>Have you seen this</p>
-                <div>
-                    <img src="/assets/img/m4.jpg" alt="photo" class="w-100 mb-3">
-                </div>
-                <div>
-                    <a href="#!" class="btn btn-primary"><i class="fa-solid fa-thumbs-up me-2"></i>Like</a>
-                    <a href="#!" class="btn btn-primary"><i class="fa-solid fa-comment me-2"></i>Comment</a>
-                </div>
-            </div> -->
+
         </div>
         <div class="col-lg-2">
             <div class="shadow p-3 rounded mb-4 text-center">

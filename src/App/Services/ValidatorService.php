@@ -190,7 +190,7 @@ class ValidatorService
         $this->validator->validate($formData, [
             'content' => ['required'],
             'page_id' => ['required', 'numeric']
-        ], true);
+        ], false);
     }
     public function validateIdOnly($formData)
     {

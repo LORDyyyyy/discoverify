@@ -8,7 +8,8 @@ use Framework\TemplateEngine;
 use App\Services\ValidatorService;
 use App\Models\{
     UserModel,
-    PostsModel
+    PostsModel,
+    FriendsModel
 };
 
 use Framework\HTTP;
@@ -25,19 +26,21 @@ class PostsController
     private UserModel $userModel;
     private PostsModel $postModel;
     private DateTime $date;
-
+    private FriendsModel $friendModel;
 
     public function __construct(
         TemplateEngine $templateEngine,
         ValidatorService $validatorService,
         UserModel $userModel,
         PostsModel $postModel,
+        FriendsModel $friendModel
 
     ) {
         $this->templateEngine = $templateEngine;
         $this->validatorService = $validatorService;
         $this->userModel = $userModel;
         $this->postModel = $postModel;
+        $this->friendModel = $friendModel;
         $this->date = new DateTime();
     }
     public function test()
@@ -62,14 +65,13 @@ class PostsController
 
         if (isset($_FILES['image'])) {
 
-            // $this->validatorService->Mediavalidator($_FILES['image'],"photo");
+           
 
             $this->addMedia($_FILES['image'], $newPostID, "photo");
         }
 
         if (isset($_FILES['video'])) {
 
-            // $this->validatorService->Mediavalidator($_FILES['video'],"video");
 
             $this->addMedia($_FILES['video'], $newPostID, "video");
         }
@@ -120,12 +122,26 @@ class PostsController
 
         return $uploadedFiles;
     }
-    public function viewcomments()
-    { {
-            echo $this->templateEngine->render('comments.php', [
-                'title' => 'Home | Discoverify',
-            ]);
+    public function viewcomments(array $params)
+    { 
+        $user = $this->userModel->getCurrUser(intval($_SESSION['user']));
+        $friendRequests = $this->friendModel->showRequest($user['id']);
+        $postContents= $this->postModel->dispalyPost($_SESSION['user']);
+      
+        $post =[];
+        foreach($postContents as $content){
+            if($content['id']==$params['id']){
+                $post[] = $content;
+                
+                break;
+            }
         }
+        echo $this->templateEngine->render('comments.php', [
+            'title' => 'Home | Discoverify',
+            'user' => $user,
+            'friendRequests' => $friendRequests,
+            'postContents'=>$post[0]
+        ]);
     }
 
 
@@ -141,9 +157,7 @@ class PostsController
         ];
         $this->postModel->addComment($info);
 
-        echo json_encode([
-            "message" => "success"
-        ]);
+      
     }
 
     public function deleteComment()

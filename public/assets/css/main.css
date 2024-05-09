@@ -3,11 +3,28 @@ body {
     /* background-color: brown !important; */
 }
 
-.profile_section {
-    background-color: brown !important;
-}
+/* .profile_section {
+    
+} */
 .media_section{
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 50%;
+}
+/* Additional custom styles */
+.profile-picture {
+    width: 100%;
+    max-width: 80px;
+    border-radius: 50%;
+}
+
+.username {
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+.comment {
+    margin-top: 5px;
+    font-size: 16px;
 }

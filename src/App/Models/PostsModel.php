@@ -70,17 +70,7 @@ class PostsModel extends DBStorage implements ModelInterface
 
     public function addComment(array $info)
     {
-        $post_id = intval($info['post_id']);
-        $query = "SELECT * FROM posts WHERE id = :post_id ";
-        $result = $this->db->query($query, [
-            'post_id' => $post_id
-        ])->count();
-
-        if (!$result) {
-            throw new APIValidationException([
-                'error' => ['post id was not found']
-            ], HTTP::BAD_REQUEST_STATUS_CODE);
-        }
+        $post_id = intval($info['post_id']); 
 
         $query = "INSERT INTO post_comments (user_id, post_id, content)
          VALUES (:user_id,:post_id, :content)";
@@ -235,10 +225,8 @@ class PostsModel extends DBStorage implements ModelInterface
                 pp.photo_url AS media_url
          FROM posts p
          JOIN post_photos pp ON p.id = pp.post_id
-         WHERE p.id = :post_id
-         
+         WHERE p.id = :post_id 
          UNION ALL
-         
          SELECT p.id AS post_id,
                 'video' AS media_type,
                 pv.video_url AS media_url
