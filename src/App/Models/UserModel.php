@@ -151,9 +151,15 @@ class UserModel extends DBStorage implements ModelInterface
     public function search(int $id, string $query)
     {
         $searchQuery = "%{$query}%";
-        $query = "SELECT id, first_name, last_name, profile_picture
-        FROM {$this->__tablename__} 
-        WHERE (first_name LIKE :searchQuery OR last_name LIKE :searchQuery) AND id != :id";
+        $query = "SELECT id,
+        first_name as fname,
+        last_name as lname,
+        profile_picture as pfp,
+        bio, lives_in
+        FROM {$this->__tablename__}
+        WHERE
+        (first_name LIKE :searchQuery OR last_name LIKE :searchQuery) AND id != :id";
+
         $result = $this->db->query($query, ['id' => $id, 'searchQuery' => $searchQuery])->findAll();
 
         return $result;

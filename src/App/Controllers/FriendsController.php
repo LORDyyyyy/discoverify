@@ -7,6 +7,7 @@ namespace App\Controllers;
 use App\Models\{
     FriendsModel,
     UserModel,
+    NotificationsModel
 };
 use Framework\TemplateEngine;
 use App\Services\ValidatorService;
@@ -18,32 +19,33 @@ class FriendsController
     private FriendsModel $friendModel;
     private ValidatorService $validatorService;
     private UserModel $userModel;
+    private NotificationsModel $notificationsModel;
 
     public function __construct(
         TemplateEngine $view,
         FriendsModel $friendModel,
         ValidatorService $validatorService,
-        UserModel $userModel
+        UserModel $userModel,
+        NotificationsModel $notificationsModel
     ) {
         $this->view = $view;
         $this->userModel = $userModel;
         $this->friendModel = $friendModel;
         $this->validatorService = $validatorService;
+        $this->notificationsModel = $notificationsModel;
     }
 
-    public function sendRequest()
+    public function sendRequest(array $params)
     {
         // Middlewares: AuthRequiredMiddleware
 
-        $this->validatorService->VaildateRequest($_POST);
+        $this->validatorService->VaildateRequest($params);
 
         $senderId = $_SESSION['user'];
 
-        $results = $this->friendModel->sendRequest((int)$_POST['id'], (int)$senderId);
+        $results = $this->friendModel->sendRequest((int)$params['id'], (int)$senderId);
 
-        echo json_encode([
-            'results' => $results,
-        ]);
+        redirectTo('/friends');
     }
 
     public function showRequests()
@@ -116,6 +118,7 @@ class FriendsController
         $currUser = $this->userModel->getCurrUser($userId);
         $friends = $this->friendModel->getFriends($userId);
         $friendRequests = $this->friendModel->showRequest($userId);
+        $notifications = $this->notificationsModel->getNotifications($userId);
 
         echo $this->view->render(
             'friends.php',
@@ -124,6 +127,7 @@ class FriendsController
                 'user' => $currUser,
                 'friends' => $friends,
                 'friendRequests' => $friendRequests,
+                'notifications' => $notifications,
             ]
         );
     }
