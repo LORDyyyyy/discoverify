@@ -156,19 +156,9 @@ class UserModel extends DBStorage implements ModelInterface
         last_name as lname,
         profile_picture as pfp,
         bio, lives_in
-        FROM {$this->__tablename__} INNER JOIN blocked_users ON (blocked != id OR blocked_by != id)
+        FROM {$this->__tablename__}
         WHERE
-        (first_name LIKE :searchQuery OR last_name LIKE :searchQuery) AND id != :id 
-        AND id != :id
-        AND id NOT IN (SELECT senderId FROM friends WHERE senderId = :id)";
-
-        // -- first_name as fname,
-        // -- last_name as lname,
-        // -- profile_picture as pfp,
-        // -- bio, lives_in
-        // -- FROM {$this->__tablename__}
-        // -- WHERE
-        // -- (first_name LIKE :searchQuery OR last_name LIKE :searchQuery) AND id != :id";
+        (first_name LIKE :searchQuery OR last_name LIKE :searchQuery) AND id != :id";
 
         $result = $this->db->query($query, ['id' => $id, 'searchQuery' => $searchQuery])->findAll();
 
